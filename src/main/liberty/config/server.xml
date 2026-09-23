@@ -1,0 +1,33 @@
+<server description="Open Liberty Server">
+    
+    <featureManager>
+        <feature>jakartaee-11.0</feature>
+        <feature>jdbc-4.3</feature>  
+    </featureManager>
+    <include location="configDropins/primefaces-lib.xml"/>
+    <include location="configDropins/postgresql-driver.xml"/>
+    <include location="configDropins/fontawesome-lib.xml"/>
+    
+    <!-- Configuración para acceso desde otras PC -->
+    <host id="defaultHost" name="*">
+        <!-- configuración del host -->
+    </host>
+
+    <!-- Datasource -->
+    <dataSource id="pos-postgresql-ds" 
+                jndiName="jdbc/pgdb" 
+                jdbcDriverRef="postgresql-driver" 
+                type="javax.sql.ConnectionPoolDataSource" 
+                transactional="true">
+        <properties serverName="localhost" 
+                    portNumber="5433" 
+                    databaseName="pos_ppi115_2026" 
+                    user="postgres" 
+                    password="abc123"/>
+    </dataSource>
+    
+    <application id="cafefe-app" name="Cafefe" type="war" location="cafefe-1.0-SNAPSHOT.war" >
+        <classloader commonLibraryRef="global" />
+    </application>
+
+</server>

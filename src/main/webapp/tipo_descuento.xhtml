@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+        <h:head>
+            <!-- Librería de FontAwesome para íconos. Agregar a cada página -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+            <title>Plantilla Básica</title>
+        </h:head>
+
+        <h:body class="ui-g main_body">
+            <header class="ui-g-2 side_menu">
+                <!-- TODO: Reemplazar por el logo de la app -->
+                <h2>Menu lateral</h2>
+                <p:commandButton value="Test" icon="fa-brands fa-debian"/>
+                
+                <nav class='menu_nav'>
+                    <a href="#">
+                        <i class="fa-solid fa-house"></i>
+                        Opcion
+                    </a>
+                </nav>
+                
+                <section class="menu_copy">
+                    <p>&copy; 2026 Todos los derechos reservados</p>
+                </section>
+            </header>
+
+            <main class="ui-g-10">
+                <section class="ui-g-10 main_header">
+                    <h2>Cabecera</h2>
+                </section>
+
+                <section class="ui-g-10 work_area">
+                    <h2>Workarea</h2>
+                </section>
+            </main>
+        </h:body>
+    </f:view>
+</html>
