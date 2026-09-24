@@ -1,95 +1,92 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RepositoryInterface;
-
+import java.util.ArrayList;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
 
 /**
  * Clase abstracta base para los Model (Boundary JSF).
  *
  * @param <T> Entidad gestionada
+ * @param <ID> Tipo del ID/PK de la Entidad (ej: UUID)
+
  */
-public abstract class DefaultModel<T> implements Serializable {
+public abstract class DefaultModel<T,ID> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    protected List<T> registros;
     protected T registro;
-    protected UUID idRegistro;
-    protected List<T> lista;
+    protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
-    protected abstract RepositoryInterface<T> getDAO();
+    // Métodos abstractos que implementa cada modelo hijo
+    public abstract T instanciarRegistro();
+    public abstract T getRegistroById(Object id);
+    public abstract Object getIdByRegistro(T dato);
+
+    // Conexión genérica con tu DefaultDAO
+    public abstract DefaultRepository<T, ID> getDao();
 
     @PostConstruct
     public void init() {
-        instanciarRegistro();
-        cargarLista();
+        this.cargarRegistros();
+        this.limpiar();
     }
 
-    public void instanciarRegistro() {
-        try {
-            this.registro = nuevaInstancia();
-            this.idRegistro = null;
-        } catch (Exception e) {
-            throw new RuntimeException("No se pudo instanciar la entidad", e);
+    public void cargarRegistros() {
+        if (getDao() != null) {
+            this.registros = getDao().findAll();
+        } else {
+            this.registros = new ArrayList<>();
         }
     }
 
-    protected abstract T nuevaInstancia();
+    public void limpiar() {
+        this.registro = this.instanciarRegistro();
+        this.estado = ESTADO_CRUD.CREAR;
+    }
+   public void btnNuevoHandler() {
+        this.limpiar();
+    }
 
-    public void guardar() {
-        try {
-            getDAO().crear(registro);
-            addMessage(FacesMessage.SEVERITY_INFO, "Registro creado", "Operación exitosa");
-            instanciarRegistro();
-            cargarLista();
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error al crear", e.getMessage());
+    public void btnGuardarHandler() {
+        if (this.registro != null && getDao() != null) {
+            getDao().crear(this.registro);
+            this.cargarRegistros();
+            this.limpiar();
         }
     }
 
-    public void actualizar() {
-        try {
-            getDAO().modificar(registro);
-            addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "Operación exitosa");
-            instanciarRegistro();
-            cargarLista();
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar", e.getMessage());
+    public void btnModificarHandler() {
+        if (this.registro != null && getDao() != null) {
+            getDao().modificar(this.registro);
+            this.cargarRegistros();
+            this.limpiar();
         }
     }
 
-    public void eliminar() {
-        try {
-            getDAO().eliminar(registro);
-            addMessage(FacesMessage.SEVERITY_INFO, "Registro eliminado", "Operación exitosa");
-            instanciarRegistro();
-            cargarLista();
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar", e.getMessage());
+    public void btnEliminarHandler() {
+        if (this.registro != null && getDao() != null) {
+            getDao().eliminar(this.registro);
+            this.cargarRegistros();
+            this.limpiar();
         }
     }
 
-    public void cargarLista() {
-        this.lista = getDAO().findAll();
+    public void seleccionarRegistro(T r) {
+        this.registro = r;
+        this.estado = ESTADO_CRUD.MODIFICAR;
     }
 
-    public void setIdRegistro(UUID id) {
-        this.idRegistro = id;
-        if (idValido(id)) {
-            T encontrado = getDAO().findById(id);
-            if (encontrado != null) {
-                this.registro = encontrado;
-            }
-        }
+    // Getters y Setters
+    public List<T> getRegistros() {
+        return registros;
     }
 
-    public UUID getIdRegistro() {
-        return idRegistro;
+    public void setRegistros(List<T> registros) {
+        this.registros = registros;
     }
 
     public T getRegistro() {
@@ -100,20 +97,11 @@ public abstract class DefaultModel<T> implements Serializable {
         this.registro = registro;
     }
 
-    public List<T> getLista() {
-        return lista;
+    public ESTADO_CRUD getEstado() {
+        return estado;
     }
 
-    public void setLista(List<T> lista) {
-        this.lista = lista;
-    }
-
-    protected boolean idValido(UUID id) {
-        return id != null;
-    }
-
-    protected void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(severity, summary, detail));
+    public void setEstado(ESTADO_CRUD estado) {
+        this.estado = estado;
     }
 }

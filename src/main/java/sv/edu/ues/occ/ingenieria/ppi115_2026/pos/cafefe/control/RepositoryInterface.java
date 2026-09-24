@@ -1,18 +1,17 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  *
  * @author mikelb
  */
-public interface RepositoryInterface<T> {
+public interface RepositoryInterface<T, ID> {
     void crear(T registro);
 
     List<T> findAll();
 
-    T findById(UUID id);
+    T findById(ID id);
 
     List<T> getRange(int first, int last);
 
