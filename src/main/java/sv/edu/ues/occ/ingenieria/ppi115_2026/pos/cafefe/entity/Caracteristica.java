@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -19,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -37,8 +34,8 @@ public class Caracteristica implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Lob
     @Column(name = "id_caracteristica", nullable = false)
+    @Convert(converter = UUIDConverter.class)
     private UUID idCaracteristica;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)

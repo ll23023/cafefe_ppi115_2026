@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -20,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -37,8 +34,8 @@ public class ProductoTipoProducto implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Lob
     @Column(name = "id_producto_tipo_producto", nullable = false)
+    @Convert(converter = UUIDConverter.class)
     private UUID idProductoTipoProducto;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)

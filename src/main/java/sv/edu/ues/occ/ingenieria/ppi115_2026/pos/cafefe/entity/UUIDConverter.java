@@ -7,7 +7,7 @@ import jakarta.persistence.Converter;
  * @author mil
  */
 @Converter(autoApply = true)
-public class UUID implements AttributeConverter<java.util.UUID, java.util.UUID> {
+public class UUIDConverter implements AttributeConverter<java.util.UUID, java.util.UUID> {
     
     @Override
     public java.util.UUID convertToDatabaseColumn(java.util.UUID attribute) {
@@ -19,7 +19,7 @@ public class UUID implements AttributeConverter<java.util.UUID, java.util.UUID> 
         return dbData;
     }
 
-    public UUID() {
+    public UUIDConverter() {
     }
     
 }
