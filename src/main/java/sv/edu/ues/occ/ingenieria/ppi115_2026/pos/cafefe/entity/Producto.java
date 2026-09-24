@@ -39,7 +39,7 @@ public class Producto implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_producto", nullable = false)
-    private Object idProducto;
+    private UUID idProducto;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -65,20 +65,20 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(Object idProducto) {
+    public Producto(UUID idProducto) {
         this.idProducto = idProducto;
     }
 
-    public Producto(Object idProducto, BigDecimal precioSugerido) {
+    public Producto(UUID idProducto, BigDecimal precioSugerido) {
         this.idProducto = idProducto;
         this.precioSugerido = precioSugerido;
     }
 
-    public Object getIdProducto() {
+    public UUID getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Object idProducto) {
+    public void setIdProducto(UUID idProducto) {
         this.idProducto = idProducto;
     }
 

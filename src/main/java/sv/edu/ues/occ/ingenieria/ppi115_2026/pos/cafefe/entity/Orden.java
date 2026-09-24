@@ -39,7 +39,7 @@ public class Orden implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_orden", nullable = false)
-    private Object idOrden;
+    private UUID idOrden;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -52,15 +52,15 @@ public class Orden implements Serializable {
     public Orden() {
     }
 
-    public Orden(Object idOrden) {
+    public Orden(UUID idOrden) {
         this.idOrden = idOrden;
     }
 
-    public Object getIdOrden() {
+    public UUID getIdOrden() {
         return idOrden;
     }
 
-    public void setIdOrden(Object idOrden) {
+    public void setIdOrden(UUID idOrden) {
         this.idOrden = idOrden;
     }
 

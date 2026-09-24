@@ -39,7 +39,7 @@ public class PagoDetalle implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_pago_detalle", nullable = false)
-    private Object idPagoDetalle;
+    private UUID idPagoDetalle;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto", precision = 8, scale = 2)
     private BigDecimal monto;
@@ -59,15 +59,15 @@ public class PagoDetalle implements Serializable {
     public PagoDetalle() {
     }
 
-    public PagoDetalle(Object idPagoDetalle) {
+    public PagoDetalle(UUID idPagoDetalle) {
         this.idPagoDetalle = idPagoDetalle;
     }
 
-    public Object getIdPagoDetalle() {
+    public UUID getIdPagoDetalle() {
         return idPagoDetalle;
     }
 
-    public void setIdPagoDetalle(Object idPagoDetalle) {
+    public void setIdPagoDetalle(UUID idPagoDetalle) {
         this.idPagoDetalle = idPagoDetalle;
     }
 

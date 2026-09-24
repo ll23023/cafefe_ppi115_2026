@@ -39,7 +39,7 @@ public class OrdenProducto implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_orden_producto", nullable = false)
-    private Object idOrdenProducto;
+    private UUID idOrdenProducto;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precio", precision = 8, scale = 2)
     private BigDecimal precio;
@@ -58,15 +58,15 @@ public class OrdenProducto implements Serializable {
     public OrdenProducto() {
     }
 
-    public OrdenProducto(Object idOrdenProducto) {
+    public OrdenProducto(UUID idOrdenProducto) {
         this.idOrdenProducto = idOrdenProducto;
     }
 
-    public Object getIdOrdenProducto() {
+    public UUID getIdOrdenProducto() {
         return idOrdenProducto;
     }
 
-    public void setIdOrdenProducto(Object idOrdenProducto) {
+    public void setIdOrdenProducto(UUID idOrdenProducto) {
         this.idOrdenProducto = idOrdenProducto;
     }
 

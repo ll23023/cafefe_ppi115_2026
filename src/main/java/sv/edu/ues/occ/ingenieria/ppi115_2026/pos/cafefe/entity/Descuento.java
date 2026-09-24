@@ -43,7 +43,7 @@ public class Descuento implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_descuento", nullable = false)
-    private Object idDescuento;
+    private UUID idDescuento;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -65,15 +65,15 @@ public class Descuento implements Serializable {
     public Descuento() {
     }
 
-    public Descuento(Object idDescuento) {
+    public Descuento(UUID idDescuento) {
         this.idDescuento = idDescuento;
     }
 
-    public Object getIdDescuento() {
+    public UUID getIdDescuento() {
         return idDescuento;
     }
 
-    public void setIdDescuento(Object idDescuento) {
+    public void setIdDescuento(UUID idDescuento) {
         this.idDescuento = idDescuento;
     }
 

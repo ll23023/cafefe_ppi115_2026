@@ -38,7 +38,7 @@ public class Empleado implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_empleado", nullable = false)
-    private Object idEmpleado;
+    private UUID idEmpleado;
     @Size(max = 255)
     @Column(name = "nombre", length = 255)
     private String nombre;
@@ -56,15 +56,15 @@ public class Empleado implements Serializable {
     public Empleado() {
     }
 
-    public Empleado(Object idEmpleado) {
+    public Empleado(UUID idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
-    public Object getIdEmpleado() {
+    public UUID getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Object idEmpleado) {
+    public void setIdEmpleado(UUID idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 

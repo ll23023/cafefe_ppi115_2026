@@ -37,7 +37,7 @@ public class Rol implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_rol", nullable = false)
-    private Object idRol;
+    private UUID idRol;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -52,15 +52,15 @@ public class Rol implements Serializable {
     public Rol() {
     }
 
-    public Rol(Object idRol) {
+    public Rol(UUID idRol) {
         this.idRol = idRol;
     }
 
-    public Object getIdRol() {
+    public UUID getIdRol() {
         return idRol;
     }
 
-    public void setIdRol(Object idRol) {
+    public void setIdRol(UUID idRol) {
         this.idRol = idRol;
     }
 

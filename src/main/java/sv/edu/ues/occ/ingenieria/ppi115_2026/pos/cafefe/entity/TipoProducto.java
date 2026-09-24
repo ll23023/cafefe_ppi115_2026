@@ -37,7 +37,7 @@ public class TipoProducto implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_tipo_producto", nullable = false)
-    private Object idTipoProducto;
+    private UUID idTipoProducto;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -52,15 +52,15 @@ public class TipoProducto implements Serializable {
     public TipoProducto() {
     }
 
-    public TipoProducto(Object idTipoProducto) {
+    public TipoProducto(UUID idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
 
-    public Object getIdTipoProducto() {
+    public UUID getIdTipoProducto() {
         return idTipoProducto;
     }
 
-    public void setIdTipoProducto(Object idTipoProducto) {
+    public void setIdTipoProducto(UUID idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
 

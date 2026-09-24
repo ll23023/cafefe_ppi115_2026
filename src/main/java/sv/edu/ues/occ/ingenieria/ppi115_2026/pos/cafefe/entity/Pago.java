@@ -38,7 +38,7 @@ public class Pago implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_pago", nullable = false)
-    private Object idPago;
+    private UUID idPago;
     @Size(max = 20)
     @Column(name = "estado", length = 20)
     private String estado;
@@ -54,15 +54,15 @@ public class Pago implements Serializable {
     public Pago() {
     }
 
-    public Pago(Object idPago) {
+    public Pago(UUID idPago) {
         this.idPago = idPago;
     }
 
-    public Object getIdPago() {
+    public UUID getIdPago() {
         return idPago;
     }
 
-    public void setIdPago(Object idPago) {
+    public void setIdPago(UUID idPago) {
         this.idPago = idPago;
     }
 

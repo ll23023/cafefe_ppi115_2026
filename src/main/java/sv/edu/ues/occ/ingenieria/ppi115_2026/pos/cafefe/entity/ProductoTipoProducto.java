@@ -39,7 +39,7 @@ public class ProductoTipoProducto implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_producto_tipo_producto", nullable = false)
-    private Object idProductoTipoProducto;
+    private UUID idProductoTipoProducto;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -56,15 +56,15 @@ public class ProductoTipoProducto implements Serializable {
     public ProductoTipoProducto() {
     }
 
-    public ProductoTipoProducto(Object idProductoTipoProducto) {
+    public ProductoTipoProducto(UUID idProductoTipoProducto) {
         this.idProductoTipoProducto = idProductoTipoProducto;
     }
 
-    public Object getIdProductoTipoProducto() {
+    public UUID getIdProductoTipoProducto() {
         return idProductoTipoProducto;
     }
 
-    public void setIdProductoTipoProducto(Object idProductoTipoProducto) {
+    public void setIdProductoTipoProducto(UUID idProductoTipoProducto) {
         this.idProductoTipoProducto = idProductoTipoProducto;
     }
 

@@ -39,7 +39,7 @@ public class Caracteristica implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_caracteristica", nullable = false)
-    private Object idCaracteristica;
+    private UUID idCaracteristica;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -57,15 +57,15 @@ public class Caracteristica implements Serializable {
     public Caracteristica() {
     }
 
-    public Caracteristica(Object idCaracteristica) {
+    public Caracteristica(UUID idCaracteristica) {
         this.idCaracteristica = idCaracteristica;
     }
 
-    public Object getIdCaracteristica() {
+    public UUID getIdCaracteristica() {
         return idCaracteristica;
     }
 
-    public void setIdCaracteristica(Object idCaracteristica) {
+    public void setIdCaracteristica(UUID idCaracteristica) {
         this.idCaracteristica = idCaracteristica;
     }
 

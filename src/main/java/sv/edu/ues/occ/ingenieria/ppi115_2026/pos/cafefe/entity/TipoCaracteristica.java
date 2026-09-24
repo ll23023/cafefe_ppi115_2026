@@ -38,7 +38,7 @@ public class TipoCaracteristica implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_tipo_caracteristica", nullable = false)
-    private Object idTipoCaracteristica;
+    private UUID idTipoCaracteristica;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
     private String nombre;
@@ -56,15 +56,15 @@ public class TipoCaracteristica implements Serializable {
     public TipoCaracteristica() {
     }
 
-    public TipoCaracteristica(Object idTipoCaracteristica) {
+    public TipoCaracteristica(UUID idTipoCaracteristica) {
         this.idTipoCaracteristica = idTipoCaracteristica;
     }
 
-    public Object getIdTipoCaracteristica() {
+    public UUID getIdTipoCaracteristica() {
         return idTipoCaracteristica;
     }
 
-    public void setIdTipoCaracteristica(Object idTipoCaracteristica) {
+    public void setIdTipoCaracteristica(UUID idTipoCaracteristica) {
         this.idTipoCaracteristica = idTipoCaracteristica;
     }
 

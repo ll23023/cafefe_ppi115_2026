@@ -38,7 +38,7 @@ public class EmpleadoRol implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_empleado_rol", nullable = false)
-    private Object idEmpleadoRol;
+    private UUID idEmpleadoRol;
     @Column(name = "activo")
     private Boolean activo;
     @Size(max = 2147483647)
@@ -58,15 +58,15 @@ public class EmpleadoRol implements Serializable {
     public EmpleadoRol() {
     }
 
-    public EmpleadoRol(Object idEmpleadoRol) {
+    public EmpleadoRol(UUID idEmpleadoRol) {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 
-    public Object getIdEmpleadoRol() {
+    public UUID getIdEmpleadoRol() {
         return idEmpleadoRol;
     }
 
-    public void setIdEmpleadoRol(Object idEmpleadoRol) {
+    public void setIdEmpleadoRol(UUID idEmpleadoRol) {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 

@@ -43,7 +43,7 @@ public class Factura implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_factura", nullable = false)
-    private Object idFactura;
+    private UUID idFactura;
     @Size(max = 155)
     @Column(name = "cliente", length = 155)
     private String cliente;
@@ -70,15 +70,15 @@ public class Factura implements Serializable {
     public Factura() {
     }
 
-    public Factura(Object idFactura) {
+    public Factura(UUID idFactura) {
         this.idFactura = idFactura;
     }
 
-    public Object getIdFactura() {
+    public UUID getIdFactura() {
         return idFactura;
     }
 
-    public void setIdFactura(Object idFactura) {
+    public void setIdFactura(UUID idFactura) {
         this.idFactura = idFactura;
     }
 

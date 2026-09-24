@@ -41,7 +41,7 @@ public class DescuentoProducto implements Serializable {
     @NotNull
     @Lob
     @Column(name = "id_descuento_producto", nullable = false)
-    private Object idDescuentoProducto;
+    private UUID idDescuentoProducto;
     @Column(name = "fecha_desde")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDesde;
@@ -63,15 +63,15 @@ public class DescuentoProducto implements Serializable {
     public DescuentoProducto() {
     }
 
-    public DescuentoProducto(Object idDescuentoProducto) {
+    public DescuentoProducto(UUID idDescuentoProducto) {
         this.idDescuentoProducto = idDescuentoProducto;
     }
 
-    public Object getIdDescuentoProducto() {
+    public UUID getIdDescuentoProducto() {
         return idDescuentoProducto;
     }
 
-    public void setIdDescuentoProducto(Object idDescuentoProducto) {
+    public void setIdDescuentoProducto(UUID idDescuentoProducto) {
         this.idDescuentoProducto = idDescuentoProducto;
     }
 
