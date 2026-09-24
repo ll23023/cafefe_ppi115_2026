@@ -10,6 +10,7 @@ import java.util.UUID;
 /**
  *
  * @author mikelb
+ * @param <T>
  */
 public abstract class DefaultRepository<T> implements RepositoryInterface<T>{
     

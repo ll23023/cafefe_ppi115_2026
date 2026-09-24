@@ -22,8 +22,8 @@
         <properties serverName="localhost" 
                     portNumber="5433" 
                     databaseName="pos_ppi115_2026" 
-                    user="postgres" 
-                    password="abc123"/>
+                    user="" 
+                    password=""/>
     </dataSource>
     
     <application id="cafefe-app" name="Cafefe" type="war" location="cafefe-1.0-SNAPSHOT.war" >

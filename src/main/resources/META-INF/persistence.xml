@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
-  <!-- Define Persistence Unit -->
-  <persistence-unit name="my_persistence_unit">
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.PagoDetalle</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoCaracteristica</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Pago</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.FacturaOrdenProducto</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica</class>
-    <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto</class>
-  </persistence-unit>
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    <!-- Define Persistence Unit -->
+    <persistence-unit name="Cafefe-PU" transaction-type="JTA">
+        <jta-data-source>jdbc/pgdb</jta-data-source>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.PagoDetalle</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoCaracteristica</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Pago</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.FacturaOrdenProducto</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica</class>
+        <class>sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto</class>
+    </persistence-unit>
 </persistence>
