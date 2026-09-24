@@ -10,7 +10,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
  * Clase abstracta base para los Model (Boundary JSF).
  *
  * @param <T> Entidad gestionada
- * @param <ID> Tipo del ID/PK de la Entidad (ej: UUID)
+ * @param <ID> Tipo del ID
 
  */
 public abstract class DefaultModel<T,ID> implements Serializable {

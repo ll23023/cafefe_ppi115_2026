@@ -27,7 +27,12 @@ import java.util.UUID;
     @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Producto.findByActivo", query = "SELECT p FROM Producto p WHERE p.activo = :activo"),
     @NamedQuery(name = "Producto.findByComentarios", query = "SELECT p FROM Producto p WHERE p.comentarios = :comentarios"),
-    @NamedQuery(name = "Producto.findByPrecioSugerido", query = "SELECT p FROM Producto p WHERE p.precioSugerido = :precioSugerido")})
+    @NamedQuery(name = "Producto.findByPrecioSugerido", query = "SELECT p FROM Producto p WHERE p.precioSugerido = :precioSugerido"),
+    @NamedQuery(name = "Producto.findActivos", query = "SELECT p FROM Producto p WHERE p.activo = true"),
+    @NamedQuery(name = "Producto.findByNombreLike", query = "SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(:nombre)"),
+    @NamedQuery(name = "Producto.findByPrecioRange", query = "SELECT p FROM Producto p WHERE p.precioSugerido BETWEEN :min AND :max")
+
+})
 public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -167,5 +172,5 @@ public class Producto implements Serializable {
     public String toString() {
         return "sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto[ idProducto=" + idProducto + " ]";
     }
-    
+
 }
