@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -18,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -30,15 +27,20 @@ import java.util.List;
     @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Producto.findByActivo", query = "SELECT p FROM Producto p WHERE p.activo = :activo"),
     @NamedQuery(name = "Producto.findByComentarios", query = "SELECT p FROM Producto p WHERE p.comentarios = :comentarios"),
-    @NamedQuery(name = "Producto.findByPrecioSugerido", query = "SELECT p FROM Producto p WHERE p.precioSugerido = :precioSugerido")})
+    @NamedQuery(name = "Producto.findByPrecioSugerido", query = "SELECT p FROM Producto p WHERE p.precioSugerido = :precioSugerido"),
+    @NamedQuery(name = "Producto.findActivos", query = "SELECT p FROM Producto p WHERE p.activo = true"),
+    @NamedQuery(name = "Producto.findByNombreLike", query = "SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(:nombre)"),
+    @NamedQuery(name = "Producto.findByPrecioRange", query = "SELECT p FROM Producto p WHERE p.precioSugerido BETWEEN :min AND :max")
+
+})
 public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Lob
     @Column(name = "id_producto", nullable = false)
+    @Convert(converter = UUIDConverter.class)
     private UUID idProducto;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
@@ -170,5 +172,5 @@ public class Producto implements Serializable {
     public String toString() {
         return "sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto[ idProducto=" + idProducto + " ]";
     }
-    
+
 }

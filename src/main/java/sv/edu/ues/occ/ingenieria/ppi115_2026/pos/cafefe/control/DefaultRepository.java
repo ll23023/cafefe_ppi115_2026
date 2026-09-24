@@ -5,18 +5,18 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
-import java.util.UUID;
 
 /**
  *
  * @author mikelb
- * @param <T>
+ * @param <T>  para la entidad
+ * @param <ID> para el tipo de dato del ID
  */
-public abstract class DefaultRepository<T> implements RepositoryInterface<T>{
+public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, ID>{
     
     public  Class<T> defaultClass;
     
-    public DefaultRepository(Class defaultClass) {
+    public DefaultRepository(Class<T> defaultClass) {
         this.defaultClass = defaultClass;
     }
     
@@ -33,8 +33,7 @@ public abstract class DefaultRepository<T> implements RepositoryInterface<T>{
         return result;
     }
 
-    @Override
-    public T findById(UUID id) {
+    public T findById(ID id) {
         return this.getEntityManager().find(this.defaultClass, id);
     }
 
