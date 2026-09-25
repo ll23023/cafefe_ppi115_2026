@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 
+/**
+ *
+ * @author mil
+ */
 @Stateless
 @LocalBean
 public class ProductoRepository extends DefaultRepository<Producto, UUID> {

@@ -9,6 +9,10 @@ import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
+/**
+ *
+ * @author mil
+ */
 @Named
 @ViewScoped
 public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implements Serializable {
@@ -64,7 +68,4 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implemen
     public List<TipoProducto> getRegistros() {
         return super.getRegistros(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
-    
 }
-
