@@ -2,7 +2,6 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
@@ -34,7 +33,6 @@ public class Empleado implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_empleado", nullable = false)
-    //@Convert(converter = UUIDConverter.class)
     private UUID idEmpleado;
     @Size(max = 255)
     @Column(name = "nombre", length = 255)
