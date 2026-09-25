@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      template="/resources/templates/basic.xhtml"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+    <!--Para usar una plantilla debes agregar exactamente todo como está arriba y usas las etiquetas define para poder cambiar el conenido de la página-->
+    
+        <ui:define name="page_title">Prueba de plantilla</ui:define>
+        <ui:define name="header_title">Test</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- Formulario 1: Entrada y Edición -->
+        <div class="card">
+            <h:form id="frmTipoProducto">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="nombre" value="Nombre del Producto:" />
+                    <p:inputText id="nombre" value="#{tipoProductoModel.registro.nombre}" required="true" />
+                    <p:messages for="nombre" />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
+
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}"
+                                             itemLabel="Activo" />
+                    <h:panelGroup />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <!-- AJAX: actualiza formulario y tabla sin recargar la página -->
+                    <p:commandButton value="Guardar" action="#{tipoProductoModel.btnGuardarHandler}"
+                                     update="frmTipoProducto frmTablaProducto" styleClass="btn btn-primary" />
+                    &#160;
+                    <p:commandButton value="Nuevo / Limpiar" action="#{tipoProductoModel.btnNuevoHandler}"
+                                     immediate="true" update="frmTipoProducto" styleClass="btn" />
+                </div>
+            </h:form>
+        </div>
+
+        <!-- Formulario 2: Tabla con todos los campos de la entidad -->
+        <div class="card">
+            <h3>Lista de Tipos de Producto</h3>
+            <h:form id="frmTablaProducto">
+                <p:dataTable value="#{tipoProductoModel.registros}" var="item" styleClass="tabla"
+                             selectionMode="single" selection="#{tipoProductoModel.registro}"
+                             rowKey="#{item.idTipoProducto}"
+                             paginator="true" rows="10" emptyMessage="No hay registros">
+                    <!-- AJAX: al hacer clic en una fila se selecciona (row select) -->
+                    <p:ajax event="rowSelect" update="botonera" />
+                    <p:ajax event="rowUnselect" update="botonera" />
+                    <p:column headerText="ID" style="font-size: 0.8em;">
+                        #{item.idTipoProducto}
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        #{item.nombre}
+                    </p:column>
+                    <p:column headerText="Estado">
+                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
+                    </p:column>
+                    <p:column headerText="Observaciones">
+                        #{item.observaciones}
+                    </p:column>
+                </p:dataTable>
+
+                <!-- Botones FUERA de la tabla, debajo -->
+                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
+                    <p:commandButton value="Editar" action="#{tipoProductoModel.btnModificarHandler()}"
+                                     disabled="#{empty tipoProductoModel.registro}"
+                                     update="frmTipoProducto" styleClass="btn btn-edit" />
+                    &#160;
+                    <p:commandButton value="Eliminar" action="#{tipoProductoModel.btnEliminarHandler}"
+                                     disabled="#{empty tipoProductoModel.registro}"
+                                     update="frmTablaProducto frmTipoProducto"
+                                     onclick="return confirm('¿Eliminar este registro?');" styleClass="btn btn-danger">
+                        <f:setPropertyActionListener value="#{tipoProductoModel.registro}"
+                                                     target="#{tipoProductoModel.registro}" />
+                    </p:commandButton>
+                    &#160;
+                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
+                                  rendered="#{empty tipoProductoModel.registro}"
+                                  style="color:#777; font-style: italic;" />
+                </h:panelGroup>
+            </h:form>
+        </div>
+        </ui:define>
+</ui:composition>

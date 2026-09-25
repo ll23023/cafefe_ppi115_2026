@@ -29,8 +29,12 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
 
     @Override
     public List<T> findAll() {
-        List<T> result = this.getEntityManager().createQuery(buildQuery()).getResultList();
-        return result;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(defaultClass);
+        cq.select(cq.from(defaultClass));
+        return em.createQuery(cq).getResultList();
+
     }
 
     public T findById(ID id) {

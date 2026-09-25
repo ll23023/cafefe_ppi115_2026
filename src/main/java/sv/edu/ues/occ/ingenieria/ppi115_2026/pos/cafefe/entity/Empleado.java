@@ -34,7 +34,7 @@ public class Empleado implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_empleado", nullable = false)
-    @Convert(converter = UUIDConverter.class)
+    //@Convert(converter = UUIDConverter.class)
     private UUID idEmpleado;
     @Size(max = 255)
     @Column(name = "nombre", length = 255)

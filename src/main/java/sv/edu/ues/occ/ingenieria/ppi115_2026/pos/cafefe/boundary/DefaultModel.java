@@ -27,17 +27,17 @@ public abstract class DefaultModel<T,ID> implements Serializable {
     public abstract Object getIdByRegistro(T dato);
 
     // Conexión genérica con tu DefaultDAO
-    public abstract DefaultRepository<T, ID> getDao();
+    public abstract DefaultRepository<T, ID> getRepository();
 
     @PostConstruct
     public void init() {
-        this.cargarRegistros();
-        this.limpiar();
+        cargarRegistros();
+        limpiar();
     }
 
     public void cargarRegistros() {
-        if (getDao() != null) {
-            this.registros = getDao().findAll();
+        if (getRepository() != null) {
+            this.registros = getRepository().findAll();
         } else {
             this.registros = new ArrayList<>();
         }
@@ -52,24 +52,24 @@ public abstract class DefaultModel<T,ID> implements Serializable {
     }
 
     public void btnGuardarHandler() {
-        if (this.registro != null && getDao() != null) {
-            getDao().crear(this.registro);
-            this.cargarRegistros();
-            this.limpiar();
+        if (registro != null && getRepository() != null) {
+            getRepository().crear(registro);
+            cargarRegistros();
+            limpiar();
         }
     }
 
     public void btnModificarHandler() {
-        if (this.registro != null && getDao() != null) {
-            getDao().modificar(this.registro);
+        if (this.registro != null && getRepository() != null) {
+            getRepository().modificar(this.registro);
             this.cargarRegistros();
             this.limpiar();
         }
     }
 
     public void btnEliminarHandler() {
-        if (this.registro != null && getDao() != null) {
-            getDao().eliminar(this.registro);
+        if (this.registro != null && getRepository() != null) {
+            getRepository().eliminar(this.registro);
             this.cargarRegistros();
             this.limpiar();
         }

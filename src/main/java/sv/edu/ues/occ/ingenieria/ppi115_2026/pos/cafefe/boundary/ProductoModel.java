@@ -41,7 +41,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> implements Seria
     }
 
     @Override
-    public ProductoRepository getDao() {
+    public ProductoRepository getRepository() {
         return productoRepository;
     }
 

@@ -35,7 +35,7 @@ public class RolModel extends DefaultModel<Rol, UUID> implements Serializable {
     }
 
     @Override
-    public RolRepository getDao() {
+    public RolRepository getRepository() {
         return rolRepository;
     }
 

@@ -33,7 +33,7 @@ public class TipoProducto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_tipo_producto", nullable = false)
-    @Convert(converter = UUIDConverter.class)
+    @Convert(converter = UUIDConverter.class) 
     private UUID idTipoProducto;
     @Size(max = 155)
     @Column(name = "nombre", length = 155)
