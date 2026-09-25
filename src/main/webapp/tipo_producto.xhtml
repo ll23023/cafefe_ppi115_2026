@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets"
-      template="/resources/templates/basic.xhtml"
-      xmlns:p="primefaces"
-      xmlns:f="jakarta.faces.core">
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core">
 
     <!--Para usar una plantilla debes agregar exactamente todo como está arriba y usas las etiquetas define para poder cambiar el conenido de la página-->
-    
-        <ui:define name="page_title">Prueba de plantilla</ui:define>
-        <ui:define name="header_title">Test</ui:define>
-        
-        <ui:define name="content">
-            
-            <!-- Formulario 1: Entrada y Edición -->
+    <ui:define name="page_title">Prueba de plantilla</ui:define>
+    <ui:define name="header_title">Test</ui:define>
+
+    <ui:define name="content">
+        <!-- Formulario 1: Entrada y Edición -->
         <div class="card">
+            <h2>Administración de Tipos de Producto</h2>
+
             <h:form id="frmTipoProducto">
                 <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="nombre" value="Nombre del Producto:" />
@@ -49,11 +49,14 @@
             <h3>Lista de Tipos de Producto</h3>
             <h:form id="frmTablaProducto">
                 <p:dataTable value="#{tipoProductoModel.registros}" var="item" styleClass="tabla"
-                             selectionMode="single" selection="#{tipoProductoModel.registro}"
+                             selectionMode="single" selection="#{tipoProductoModel.seleccion}"
                              rowKey="#{item.idTipoProducto}"
                              paginator="true" rows="10" emptyMessage="No hay registros">
                     <!-- AJAX: al hacer clic en una fila se selecciona (row select) -->
-                    <p:ajax event="rowSelect" update="botonera" />
+                    <p:ajax event="rowSelect" 
+                            listener="#{tipoProductoModel.seleccionarRegistro(tipoProductoModel.seleccion)}" 
+                            update="frmTipoProducto :frmTablaProducto:botonera" />
+
                     <p:ajax event="rowUnselect" update="botonera" />
                     <p:column headerText="ID" style="font-size: 0.8em;">
                         #{item.idTipoProducto}
@@ -71,23 +74,26 @@
 
                 <!-- Botones FUERA de la tabla, debajo -->
                 <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <p:commandButton value="Editar" action="#{tipoProductoModel.btnModificarHandler()}"
-                                     disabled="#{empty tipoProductoModel.registro}"
-                                     update="frmTipoProducto" styleClass="btn btn-edit" />
+                    <p:commandButton value="Editar" action="#{tipoProductoModel.seleccionarRegistro(tipoProductoModel.seleccion)}"
+                                     disabled="#{empty tipoProductoModel.seleccion}"
+                                     update="frmTipoProducto" styleClass="btn btn-edit">
+                        <f:setPropertyActionListener value="#{tipoProductoModel.seleccion}"
+                                                     target="#{tipoProductoModel.registro}" />
+                    </p:commandButton>
                     &#160;
                     <p:commandButton value="Eliminar" action="#{tipoProductoModel.btnEliminarHandler}"
-                                     disabled="#{empty tipoProductoModel.registro}"
+                                     disabled="#{empty tipoProductoModel.seleccion}"
                                      update="frmTablaProducto frmTipoProducto"
                                      onclick="return confirm('¿Eliminar este registro?');" styleClass="btn btn-danger">
-                        <f:setPropertyActionListener value="#{tipoProductoModel.registro}"
+                        <f:setPropertyActionListener value="#{tipoProductoModel.seleccion}"
                                                      target="#{tipoProductoModel.registro}" />
                     </p:commandButton>
                     &#160;
                     <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
-                                  rendered="#{empty tipoProductoModel.registro}"
+                                  rendered="#{empty tipoProductoModel.seleccion}"
                                   style="color:#777; font-style: italic;" />
                 </h:panelGroup>
             </h:form>
         </div>
-        </ui:define>
+    </ui:define>
 </ui:composition>

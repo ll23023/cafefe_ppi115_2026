@@ -13,7 +13,7 @@ public interface RepositoryInterface<T, ID> {
 
     T findById(ID id);
 
-    List<T> getRange(int first, int last);
+    List<T> findRange(int first, int last);
 
     Long count();
 

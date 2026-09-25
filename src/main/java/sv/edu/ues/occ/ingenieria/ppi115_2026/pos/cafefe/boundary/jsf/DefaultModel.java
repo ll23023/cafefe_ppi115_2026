@@ -26,18 +26,16 @@ public abstract class DefaultModel<T,ID> implements Serializable {
     protected T registro;
     protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
-    // Métodos abstractos que implementa cada modelo hijo
     public abstract T instanciarRegistro();
     public abstract T getRegistroById(Object id);
     public abstract Object getIdByRegistro(T dato);
 
-    // Conexión genérica con tu DefaultDAO
     public abstract DefaultRepository<T, ID> getRepository();
 
     @PostConstruct
     public void init() {
-        cargarRegistros();
-        limpiar();
+        this.cargarRegistros();
+        this.limpiar();
     }
 
     public void cargarRegistros() {
@@ -52,15 +50,20 @@ public abstract class DefaultModel<T,ID> implements Serializable {
         this.registro = this.instanciarRegistro();
         this.estado = ESTADO_CRUD.CREAR;
     }
-   public void btnNuevoHandler() {
+
+    public void btnNuevoHandler() {
         this.limpiar();
     }
 
     public void btnGuardarHandler() {
-        if (registro != null && getRepository() != null) {
-            getRepository().crear(registro);
-            cargarRegistros();
-            limpiar();
+        if (this.registro != null && getRepository() != null) {
+            if (this.estado == ESTADO_CRUD.MODIFICAR) {
+                getRepository().modificar(this.registro);
+            } else {
+                getRepository().crear(this.registro);
+            }
+            this.cargarRegistros();
+            this.limpiar();
         }
     }
 

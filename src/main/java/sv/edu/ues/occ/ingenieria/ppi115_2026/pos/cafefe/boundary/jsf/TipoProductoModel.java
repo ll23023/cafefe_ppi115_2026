@@ -55,9 +55,22 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implemen
         return null;
     }
 
+    private TipoProducto seleccion;
+
+    public TipoProducto getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(TipoProducto seleccion) {
+        this.seleccion = seleccion;
+    }
+
     /**
-     * Debes agregar estos dos métodos para que te autocomplete NetBeans a la hora de crear la tabla, si no, lo tendrás que hacer a mano y da espacio a errores.
-     * @return 
+     * Debes agregar estos dos métodos para que te autocomplete NetBeans a la
+     * hora de crear la tabla, si no, lo tendrás que hacer a mano y da espacio a
+     * errores.
+     *
+     * @return
      */
     @Override
     public TipoProducto getRegistro() {
