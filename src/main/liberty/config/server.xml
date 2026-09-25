@@ -19,8 +19,8 @@
                 jdbcDriverRef="postgresql-driver" 
                 type="javax.sql.ConnectionPoolDataSource" 
                 transactional="true">
-        <properties serverName="localhost" 
-                    portNumber="5433" 
+        <properties serverName="127.0.0.1" 
+                    portNumber="5432" 
                     databaseName="pos_ppi115_2026" 
                     user="" 
                     password=""/>
