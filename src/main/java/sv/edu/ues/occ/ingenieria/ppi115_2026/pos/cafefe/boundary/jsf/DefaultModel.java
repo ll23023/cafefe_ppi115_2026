@@ -9,16 +9,14 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
 /**
  *
  * @author mil
- */
-
-/**
+ *
  * Clase abstracta base para los Model (Boundary JSF).
  *
  * @param <T> Entidad gestionada
  * @param <ID> Tipo del ID
-
+ *
  */
-public abstract class DefaultModel<T,ID> implements Serializable {
+public abstract class DefaultModel<T, ID> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +26,9 @@ public abstract class DefaultModel<T,ID> implements Serializable {
 
     // Métodos abstractos que implementa cada modelo hijo
     public abstract T instanciarRegistro();
+
     public abstract T getRegistroById(Object id);
+
     public abstract Object getIdByRegistro(T dato);
 
     // Conexión genérica con tu DefaultDAO
@@ -48,12 +48,22 @@ public abstract class DefaultModel<T,ID> implements Serializable {
         }
     }
 
+    /**
+     * Limpia la selección y el formulario. NO instancia un registro nuevo. El
+     * registro nuevo se crea solo cuando el usuario presiona "Nuevo".
+     */
     public void limpiar() {
-        this.registro = this.instanciarRegistro();
-        this.estado = ESTADO_CRUD.CREAR;
+        this.registro = null;
+        this.estado = ESTADO_CRUD.NINGUNO;
     }
-   public void btnNuevoHandler() {
-        this.limpiar();
+
+    /**
+     * Crea un registro nuevo en memoria y lo pone en el formulario, cambiando
+     * el estado a CREAR. Aquí SÍ se usa instanciarRegistro().
+     */
+    public void btnNuevoHandler() {
+         this.registro = this.instanciarRegistro();
+        this.estado = ESTADO_CRUD.CREAR;
     }
 
     public void btnGuardarHandler() {
@@ -71,6 +81,20 @@ public abstract class DefaultModel<T,ID> implements Serializable {
             this.limpiar();
         }
     }
+    
+    public void btnEditarHandler() {
+    if (this.registro == null) return;
+
+    if (this.estado == ESTADO_CRUD.MODIFICAR) {
+        // Segundo clic → guardar cambios
+        getRepository().modificar(this.registro);
+        cargarRegistros();
+        limpiar();
+    } else {
+        // Primer clic → entrar en modo edición
+        this.estado = ESTADO_CRUD.MODIFICAR;
+    }
+}
 
     public void btnEliminarHandler() {
         if (this.registro != null && getRepository() != null) {

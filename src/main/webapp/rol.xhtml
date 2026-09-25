@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Gestión de Roles</ui:define>
+    <ui:define name="header_title">Roles</ui:define>
+
+    <ui:define name="content">
+
+        <!-- Formulario 1-->
+        <div class="card">
+            <h:form id="frmRol">
+
+                <h:panelGroup rendered="#{not empty rolModel.registro}">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <h:outputLabel for="nombre" value="Nombre del Rol:" />
+                        <p:inputText id="nombre" value="#{rolModel.registro.nombre}" required="true" />
+                        <p:messages for="nombre" />
+
+                        <h:outputLabel for="observaciones" value="Observaciones:" />
+                        <p:inputTextarea id="observaciones" value="#{rolModel.registro.observaciones}"
+                                         rows="3" cols="50" />
+                        <p:messages for="observaciones" />
+
+                        <h:outputLabel for="activo" value="Estado:" />
+                        <p:selectBooleanCheckbox id="activo" value="#{rolModel.registro.activo}"
+                                                 itemLabel="Activo" />
+                        <h:panelGroup />
+                    </h:panelGrid>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{empty rolModel.registro}">
+                    <p style="color:#777; font-style: italic;">
+                        Presione "Nuevo" para crear un rol, o seleccione una fila de la tabla para editar.
+                    </p>
+                </h:panelGroup>
+
+                <div style="margin-top: 10px;">
+                    <p:commandButton value="Guardar" action="#{rolModel.btnGuardarHandler}"
+                                     disabled="#{empty rolModel.registro or rolModel.estado == 'MODIFICAR'}"
+                                     update="frmRol frmTablaRol" styleClass="btn btn-primary" />
+                    &#160;
+                    <p:commandButton value="Nuevo" action="#{rolModel.btnNuevoHandler}"
+                                     immediate="true" disabled="#{rolModel.estado == 'MODIFICAR'}" update="frmRol" styleClass="btn" />
+                </div>
+            </h:form>
+        </div>
+
+        <!-- Formulario 2-->
+        <div class="card">
+            <h3>Lista de Roles</h3>
+            <h:form id="frmTablaRol">
+                <p:dataTable value="#{rolModel.registros}" var="item" styleClass="tabla"
+                             selectionMode="single" selection="#{rolModel.registro}"
+                             rowKey="#{item.idRol}"
+                             paginator="true" rows="10" emptyMessage="No hay registros">
+                    <!-- Actualizamos botonera Y el formulario de edición al seleccionar -->
+                    <p:ajax event="rowSelect" update="botonera :frmRol" />
+                    <p:ajax event="rowUnselect" update="botonera :frmRol" />
+
+                    <p:column headerText="ID" style="font-size: 0.8em;">
+                        #{item.idRol}
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        #{item.nombre}
+                    </p:column>
+                    <p:column headerText="Estado">
+                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
+                    </p:column>
+                    <p:column headerText="Observaciones">
+                        #{item.observaciones}
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
+                    <p:commandButton action="#{rolModel.btnEditarHandler()}"
+                                     value="#{rolModel.estado == 'MODIFICAR' ? 'Guardar Edición' : 'Editar'}"
+                                     disabled="#{empty rolModel.registro}"
+                                     update="frmRol frmTablaRol botonera" 
+                                     styleClass="btn btn-edit" />
+                    &#160;
+                    <p:commandButton value="Eliminar" action="#{rolModel.btnEliminarHandler}"
+                                     disabled="#{empty rolModel.registro or rolModel.estado == 'MODIFICAR'}"
+                                     update="frmTablaRol frmRol botonera"
+                                     onclick="return confirm('¿Eliminar este registro?');" styleClass="btn btn-danger">
+                        <f:setPropertyActionListener value="#{rolModel.registro}"
+                                                     target="#{rolModel.registro}" />
+                    </p:commandButton>
+                    &#160;
+                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
+                                  rendered="#{empty rolModel.registro}"
+                                  style="color:#777; font-style: italic;" />
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
