@@ -7,6 +7,10 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
+/**
+ *
+ * @author mil
+ */
 @Stateless
 @LocalBean
 public class RolRepository extends DefaultRepository<Rol, java.util.UUID> {

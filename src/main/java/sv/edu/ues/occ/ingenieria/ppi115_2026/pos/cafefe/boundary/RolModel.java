@@ -9,6 +9,10 @@ import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
+/**
+ *
+ * @author mil
+ */
 @Named
 @ViewScoped
 public class RolModel extends DefaultModel<Rol, UUID> implements Serializable {
@@ -21,7 +25,11 @@ public class RolModel extends DefaultModel<Rol, UUID> implements Serializable {
 
     @Override
     public Rol instanciarRegistro() {
-        return new Rol();
+        Rol r = new Rol(UUID.randomUUID());
+        r.setActivo(Boolean.TRUE);
+        r.setObservaciones("");
+
+        return r;
     }
 
     @Override

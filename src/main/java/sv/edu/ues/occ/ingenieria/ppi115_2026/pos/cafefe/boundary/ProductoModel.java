@@ -10,6 +10,10 @@ import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 
+/**
+ *
+ * @author mil
+ */
 @Named
 @ViewScoped
 public class ProductoModel extends DefaultModel<Producto, UUID> implements Serializable {
@@ -17,7 +21,6 @@ public class ProductoModel extends DefaultModel<Producto, UUID> implements Seria
     @Inject
     private ProductoRepository productoRepository;
 
-    // Filtros opcionales para la vista
     private String filtroNombre;
     private BigDecimal filtroPrecioMin;
     private BigDecimal filtroPrecioMax;

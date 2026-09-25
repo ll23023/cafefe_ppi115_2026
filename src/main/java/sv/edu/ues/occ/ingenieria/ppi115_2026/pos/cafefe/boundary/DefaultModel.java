@@ -7,6 +7,11 @@ import java.util.List;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
 
 /**
+ *
+ * @author mil
+ */
+
+/**
  * Clase abstracta base para los Model (Boundary JSF).
  *
  * @param <T> Entidad gestionada
