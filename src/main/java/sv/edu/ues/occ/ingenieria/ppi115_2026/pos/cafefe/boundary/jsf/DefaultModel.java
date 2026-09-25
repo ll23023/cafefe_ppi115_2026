@@ -1,4 +1,4 @@
-package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary;
+package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;

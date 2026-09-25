@@ -15,7 +15,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 @LocalBean
 public class TipoDescuentoRepository extends DefaultRepository<TipoDescuento, UUID> {
 
-    @PersistenceContext(unitName = "cafefe-PU")
+    @PersistenceContext(unitName = "Cafefe-PU")
     private EntityManager em;
 
     public TipoDescuentoRepository() {
