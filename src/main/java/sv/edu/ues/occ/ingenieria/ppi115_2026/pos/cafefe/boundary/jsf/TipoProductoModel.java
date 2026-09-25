@@ -65,6 +65,34 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implemen
         this.seleccion = seleccion;
     }
 
+    @Override
+    public void btnNuevoHandler() {
+        super.btnNuevoHandler();
+        this.seleccion = null;
+    }
+
+    @Override
+    public void btnGuardarHandler() {
+        super.btnGuardarHandler();
+        this.seleccion = null;
+    }
+
+    @Override
+    public void btnEliminarHandler() {
+        super.btnEliminarHandler();
+        this.seleccion = null;
+    }
+
+    public void btnEditarHandler() {
+        if (this.seleccion != null) {
+            this.seleccionarRegistro(this.seleccion);
+        }
+    }
+
+    public boolean isEditando() {
+        return this.estado == ESTADO_CRUD.MODIFICAR;
+    }
+
     /**
      * Debes agregar estos dos métodos para que te autocomplete NetBeans a la
      * hora de crear la tabla, si no, lo tendrás que hacer a mano y da espacio a

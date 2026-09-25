@@ -6,7 +6,7 @@
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
                 xmlns:f="jakarta.faces.core">
-
+                                                                                                                                                                                                                                                                                                                           
     <!--Para usar una plantilla debes agregar exactamente todo como está arriba y usas las etiquetas define para poder cambiar el conenido de la página-->
     <ui:define name="page_title">Prueba de plantilla</ui:define>
     <ui:define name="header_title">Test</ui:define>
@@ -35,11 +35,16 @@
 
                 <div style="margin-top: 10px;">
                     <!-- AJAX: actualiza formulario y tabla sin recargar la página -->
-                    <p:commandButton value="Guardar" action="#{tipoProductoModel.btnGuardarHandler}"
+                    <p:commandButton value="#{tipoProductoModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{tipoProductoModel.btnGuardarHandler}"
                                      update="frmTipoProducto frmTablaProducto" styleClass="btn btn-primary" />
                     &#160;
-                    <p:commandButton value="Nuevo / Limpiar" action="#{tipoProductoModel.btnNuevoHandler}"
-                                     immediate="true" update="frmTipoProducto" styleClass="btn" />
+                    <p:commandButton value="#{tipoProductoModel.editando ? 'Cancelar' : 'Nuevo'}"
+                                     action="#{tipoProductoModel.btnNuevoHandler}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update="frmTipoProducto frmTablaProducto"
+                                     styleClass="btn" />
                 </div>
             </h:form>
         </div>
@@ -53,9 +58,7 @@
                              rowKey="#{item.idTipoProducto}"
                              paginator="true" rows="10" emptyMessage="No hay registros">
                     <!-- AJAX: al hacer clic en una fila se selecciona (row select) -->
-                    <p:ajax event="rowSelect" 
-                            listener="#{tipoProductoModel.seleccionarRegistro(tipoProductoModel.seleccion)}" 
-                            update="frmTipoProducto :frmTablaProducto:botonera" />
+                        <p:ajax event="rowSelect" update="botonera" />
 
                     <p:ajax event="rowUnselect" update="botonera" />
                     <p:column headerText="ID" style="font-size: 0.8em;">
@@ -72,9 +75,8 @@
                     </p:column>
                 </p:dataTable>
 
-                <!-- Botones FUERA de la tabla, debajo -->
                 <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <p:commandButton value="Editar" action="#{tipoProductoModel.seleccionarRegistro(tipoProductoModel.seleccion)}"
+                    <p:commandButton value="Editar" action="#{tipoProductoModel.btnEditarHandler}"
                                      disabled="#{empty tipoProductoModel.seleccion}"
                                      update="frmTipoProducto" styleClass="btn btn-edit">
                         <f:setPropertyActionListener value="#{tipoProductoModel.seleccion}"
