@@ -24,6 +24,7 @@ public abstract class DefaultModel<T,ID> implements Serializable {
 
     protected List<T> registros;
     protected T registro;
+    protected T seleccion;
     protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
     public abstract T instanciarRegistro();
@@ -48,6 +49,7 @@ public abstract class DefaultModel<T,ID> implements Serializable {
 
     public void limpiar() {
         this.registro = this.instanciarRegistro();
+        this.seleccion = null;
         this.estado = ESTADO_CRUD.CREAR;
     }
 
@@ -84,8 +86,18 @@ public abstract class DefaultModel<T,ID> implements Serializable {
     }
 
     public void seleccionarRegistro(T r) {
-        this.registro = r;
-        this.estado = ESTADO_CRUD.MODIFICAR;
+        if (r != null) {
+            this.registro = r;
+            this.estado = ESTADO_CRUD.MODIFICAR;
+        }
+    }
+
+    public void btnEditarHandler() {
+        this.seleccionarRegistro(this.seleccion);
+    }
+
+    public boolean isEditando() {
+        return this.estado == ESTADO_CRUD.MODIFICAR;
     }
 
     // Getters y Setters
@@ -103,6 +115,14 @@ public abstract class DefaultModel<T,ID> implements Serializable {
 
     public void setRegistro(T registro) {
         this.registro = registro;
+    }
+
+    public T getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(T seleccion) {
+        this.seleccion = seleccion;
     }
 
     public ESTADO_CRUD getEstado() {

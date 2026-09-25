@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:cc="jakarta.faces.composite"
+              xmlns:p="primefaces"
+              xmlns:f="jakarta.faces.core">
+    <cc:interface>
+        <cc:attribute name="model" required="true" />
+        <cc:attribute name="editUpdate" required="true" />
+        <cc:attribute name="deleteUpdate" required="true" />
+    </cc:interface>
+    <cc:implementation>
+        <p:commandButton value="Editar"
+                         action="#{cc.attrs.model.btnEditarHandler}"
+                         disabled="#{empty cc.attrs.model.seleccion}"
+                         update="#{cc.attrs.editUpdate}"
+                         styleClass="btn btn-edit">
+            <f:setPropertyActionListener value="#{cc.attrs.model.seleccion}"
+                                         target="#{cc.attrs.model.registro}" />
+        </p:commandButton>
+        &#160;
+        <p:commandButton value="Eliminar"
+                         action="#{cc.attrs.model.btnEliminarHandler}"
+                         disabled="#{empty cc.attrs.model.seleccion}"
+                         update="#{cc.attrs.deleteUpdate}"
+                         onclick="return confirm('¿Eliminar este registro?');"
+                         styleClass="btn btn-danger">
+            <f:setPropertyActionListener value="#{cc.attrs.model.seleccion}"
+                                         target="#{cc.attrs.model.registro}" />
+        </p:commandButton>
+    </cc:implementation>
+</ui:component>

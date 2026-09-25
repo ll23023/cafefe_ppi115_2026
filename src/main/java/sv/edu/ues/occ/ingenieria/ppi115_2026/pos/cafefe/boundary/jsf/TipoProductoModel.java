@@ -3,19 +3,17 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
-/**
+/** 
  *
  * @author mil
  */
 @Named
 @ViewScoped
-public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implements Serializable {
+public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,60 +51,5 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> implemen
             return dato.getIdTipoProducto();
         }
         return null;
-    }
-
-    private TipoProducto seleccion;
-
-    public TipoProducto getSeleccion() {
-        return seleccion;
-    }
-
-    public void setSeleccion(TipoProducto seleccion) {
-        this.seleccion = seleccion;
-    }
-
-    @Override
-    public void btnNuevoHandler() {
-        super.btnNuevoHandler();
-        this.seleccion = null;
-    }
-
-    @Override
-    public void btnGuardarHandler() {
-        super.btnGuardarHandler();
-        this.seleccion = null;
-    }
-
-    @Override
-    public void btnEliminarHandler() {
-        super.btnEliminarHandler();
-        this.seleccion = null;
-    }
-
-    public void btnEditarHandler() {
-        if (this.seleccion != null) {
-            this.seleccionarRegistro(this.seleccion);
-        }
-    }
-
-    public boolean isEditando() {
-        return this.estado == ESTADO_CRUD.MODIFICAR;
-    }
-
-    /**
-     * Debes agregar estos dos métodos para que te autocomplete NetBeans a la
-     * hora de crear la tabla, si no, lo tendrás que hacer a mano y da espacio a
-     * errores.
-     *
-     * @return
-     */
-    @Override
-    public TipoProducto getRegistro() {
-        return super.getRegistro(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public List<TipoProducto> getRegistros() {
-        return super.getRegistros(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
 }

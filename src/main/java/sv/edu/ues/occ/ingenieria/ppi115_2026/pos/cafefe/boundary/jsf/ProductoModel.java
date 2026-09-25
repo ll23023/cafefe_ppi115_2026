@@ -3,9 +3,7 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
@@ -16,7 +14,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
  */
 @Named
 @ViewScoped
-public class ProductoModel extends DefaultModel<Producto, UUID> implements Serializable {
+public class ProductoModel extends DefaultModel<Producto, UUID> {
 
     @Inject
     private ProductoRepository productoRepository;

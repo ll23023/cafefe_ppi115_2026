@@ -87,7 +87,7 @@
                 <version>3.12.2</version>
                 
                 <configuration>
-                    <installDirectory>/usr/local/openliberty/wlp_26.0.0.9</installDirectory>
+                    <installDirectory>/usr/local/openliberty/wlp_26.0.0.8</installDirectory>
                     <serverName>pos_ppi115_2026</serverName>
                 </configuration>
             </plugin>
