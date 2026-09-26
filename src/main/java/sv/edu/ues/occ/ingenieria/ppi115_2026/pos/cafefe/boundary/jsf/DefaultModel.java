@@ -9,16 +9,14 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
 /**
  *
  * @author mil
- */
-
-/**
+ *
  * Clase abstracta base para los Model (Boundary JSF).
  *
  * @param <T> Entidad gestionada
  * @param <ID> Tipo del ID
-
+ *
  */
-public abstract class DefaultModel<T,ID> implements Serializable {
+public abstract class DefaultModel<T, ID> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +26,9 @@ public abstract class DefaultModel<T,ID> implements Serializable {
     protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
     public abstract T instanciarRegistro();
+
     public abstract T getRegistroById(Object id);
+
     public abstract Object getIdByRegistro(T dato);
 
     public abstract DefaultRepository<T, ID> getRepository();
