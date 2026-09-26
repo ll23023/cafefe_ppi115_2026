@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core"
+                xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
+
+    <ui:define name="page_title">Gestión de Productos</ui:define>
+    <ui:define name="header_title">Productos</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Productos</h2>
+
+            <h:form id="frmProducto">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{productoModel.registro.nombre}" required="true" />
+                    <p:messages for="nombre" />
+
+                    <h:outputLabel for="precio" value="Precio Sugerido:" />
+                    <p:inputText id="precio" value="#{productoModel.registro.precioSugerido}" required="true">
+                        <f:convertNumber type="currency" currencySymbol="$" />
+                    </p:inputText>
+                    <p:messages for="precio" />
+
+                    <h:outputLabel for="comentarios" value="Comentarios:" />
+                    <p:inputTextarea id="comentarios" value="#{productoModel.registro.comentarios}"
+                                     rows="3" cols="50" />
+                    <p:messages for="comentarios" />
+
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo" value="#{productoModel.registro.activo}"
+                                             itemLabel="Activo" />
+                    <h:panelGroup />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:formActions model="#{productoModel}"
+                                   saveUpdate="frmProducto frmTablaProducto"
+                                   newUpdate="frmProducto frmTablaProducto" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Productos</h3>
+            <h:form id="frmTablaProducto">
+                <p:dataTable value="#{productoModel.registros}" var="item" styleClass="tabla"
+                             selectionMode="single" selection="#{productoModel.seleccion}"
+                             rowKey="#{item.idProducto}"
+                             paginator="true" rows="10" emptyMessage="No hay registros">
+                    <p:ajax event="rowSelect" update="botonera" />
+                    <p:ajax event="rowUnselect" update="botonera" />
+
+                    <p:column headerText="ID" style="font-size: 0.8em;">
+                        #{item.idProducto}
+                    </p:column>
+                    <p:column headerText="Nombre">#{item.nombre}</p:column>
+                    <p:column headerText="Precio Sugerido">
+                        <h:outputText value="#{item.precioSugerido}">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
+                    </p:column>
+                    <p:column headerText="Comentarios">#{item.comentarios}</p:column>
+                </p:dataTable>
+
+                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
+                    <c:crudActions model="#{productoModel}"
+                                   editUpdate="frmProducto"
+                                   deleteUpdate="frmTablaProducto frmProducto" />
+                    &#160;
+                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
+                                  rendered="#{empty productoModel.seleccion}"
+                                  style="color:#777; font-style: italic;" />
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

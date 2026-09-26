@@ -4,6 +4,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
@@ -16,6 +17,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 @ViewScoped
 public class ProductoModel extends DefaultModel<Producto, UUID> {
 
+    private static final long serialVersionUID = 1L;
+    
     @Inject
     private ProductoRepository productoRepository;
 
@@ -23,12 +26,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     private BigDecimal filtroPrecioMin;
     private BigDecimal filtroPrecioMax;
 
-    public ProductoModel() {
-    }
-
-    @Override
+     @Override
     public Producto instanciarRegistro() {
-        return new Producto();
+        Producto p = new Producto(UUID.randomUUID());
+        p.setActivo(Boolean.TRUE);
+        return p;
     }
 
     @Override
