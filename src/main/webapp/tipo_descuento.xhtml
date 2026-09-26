@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Tipos de Descuento</ui:define>
+    <ui:define name="header_title">Administración de Tipos de Descuento</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Tipos de Descuento</h2>
+
+            <h:form id="frmTipoDescuento">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{tipoDescuentoModel.registro.nombre}"
+                                 required="true" />
+                    <p:messages for="nombre" />
+
+                    <h:outputLabel for="descuentoMaximo" value="Descuento Máximo:" />
+                    <p:selectOneMenu id="descuentoMaximo"
+                                     value="#{tipoDescuentoModel.registro.descuentoMaximo}"
+                                     required="true">
+                        <f:selectItems value="#{tipoDescuentoModel.opcionesDescuento}"
+                                       var="d"
+                                       itemLabel="#{d}%"
+                                       itemValue="#{d}" />
+                    </p:selectOneMenu>
+                    <p:messages for="descuentoMaximo" />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{tipoDescuentoModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
+
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo"
+                                             value="#{tipoDescuentoModel.registro.activo}"
+                                             itemLabel="Activo" />
+                    <h:panelGroup />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:formActions model="#{tipoDescuentoModel}"
+                                   saveUpdate="frmTipoDescuento frmTablaDescuento"
+                                   newUpdate="frmTipoDescuento frmTablaDescuento" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Tipos de Descuento</h3>
+            <h:form id="frmTablaDescuento">
+                <p:dataTable value="#{tipoDescuentoModel.registros}" var="item" styleClass="tabla"
+                             selectionMode="single" selection="#{tipoDescuentoModel.seleccion}"
+                             rowKey="#{item.idTipoDescuento}"
+                             paginator="true" rows="10" emptyMessage="No hay registros">
+                    <p:ajax event="rowSelect" update="botonera" />
+                    <p:ajax event="rowUnselect" update="botonera" />
+
+                    <p:column headerText="ID" style="font-size: 0.8em;">
+                        #{item.idTipoDescuento}
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        #{item.nombre}
+                    </p:column>
+                    <p:column headerText="Descuento Máximo">
+                        #{item.descuentoMaximo}
+                    </p:column>
+                    <p:column headerText="Estado">
+                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
+                    </p:column>
+                    <p:column headerText="Observaciones">
+                        #{item.observaciones}
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
+                    <c:crudActions model="#{tipoDescuentoModel}"
+                                   editUpdate="frmTipoDescuento"
+                                   deleteUpdate="frmTablaDescuento frmTipoDescuento" />
+                    &#160;
+                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
+                                  rendered="#{empty tipoDescuentoModel.seleccion}"
+                                  style="color:#777; font-style: italic;" />
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

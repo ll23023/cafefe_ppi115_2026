@@ -3,9 +3,9 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 
@@ -16,7 +16,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 @Named("tipoDescuentoModel")
 @ViewScoped
 
-public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> implements Serializable {
+public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,6 +55,14 @@ public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> implem
     @Override
     public TipoDescuentoRepository getRepository() {
         return tipoDescuentoRepository;
+    }
+
+    public List<Integer> getOpcionesDescuento() {
+        List<Integer> opciones = new ArrayList<>();
+        for (int i = 5; i <= 90; i += 5) {
+            opciones.add(i);
+        }
+        return opciones;
     }
 
 }
