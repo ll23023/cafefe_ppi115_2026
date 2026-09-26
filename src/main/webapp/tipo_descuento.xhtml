@@ -23,14 +23,12 @@
                     <p:messages for="nombre" />
 
                     <h:outputLabel for="descuentoMaximo" value="Descuento Máximo:" />
-                    <p:selectOneMenu id="descuentoMaximo"
-                                     value="#{tipoDescuentoModel.registro.descuentoMaximo}"
-                                     required="true">
-                        <f:selectItems value="#{tipoDescuentoModel.opcionesDescuento}"
-                                       var="d"
-                                       itemLabel="#{d}%"
-                                       itemValue="#{d}" />
-                    </p:selectOneMenu>
+                    <p:spinner id="descuentoMaximo"
+                               value="#{tipoDescuentoModel.registro.descuentoMaximo}"
+                               min="5"
+                               max="90"
+                               stepFactor="5"
+                               required="true" />
                     <p:messages for="descuentoMaximo" />
 
                     <h:outputLabel for="observaciones" value="Observaciones:" />
