@@ -5,7 +5,7 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+                xmlns:c="jakarta.faces.composite/components"
                 xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Administración de Empleado-Rol</ui:define>
@@ -22,13 +22,14 @@
                                      value="#{empleadoRolModel.registro.idEmpleado}"
                                      required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        
                         <f:selectItems value="#{empleadoRolModel.empleados}"
                                        var="emp"
                                        itemLabel="#{emp.nombre} #{emp.apellido}"
                                        itemValue="#{emp}" />
                     </p:selectOneMenu>
-                    
+                    <p:messages for="empleado" />
+
+                    <h:outputLabel for="rol" value="Rol:" />
                     <p:selectOneMenu id="rol"
                                      value="#{empleadoRolModel.registro.idRol}"
                                      required="true">
@@ -51,13 +52,12 @@
                                      value="#{empleadoRolModel.registro.observaciones}"
                                      rows="3" cols="50" />
                     <p:messages for="observaciones" />
-
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
                     <c:btnsForm model="#{empleadoRolModel}"
-                                   saveUpdate="frmEmpleadoRol frmTablaEmpleadoRol"
-                                   newUpdate="frmEmpleadoRol frmTablaEmpleadoRol" />
+                                saveUpdate="frmEmpleadoRol frmTablaEmpleadoRol"
+                                newUpdate="frmEmpleadoRol frmTablaEmpleadoRol" />
                 </div>
             </h:form>
         </div>
@@ -65,10 +65,6 @@
         <div class="card">
             <h3>Lista de Empleado-Rol</h3>
             <h:form id="frmTablaEmpleadoRol">
-                <!-- 
-                    Para usar el componente se debe pasar el módelo que usará, las columnas de este, su fila identificadora 
-                    y los IDs que ctualizará después de editar o eliminar. 
-                -->
                 <c:tablaDinamica model="#{empleadoRolModel}"
                                     columns="#{empleadoRolModel.columnas}"
                                     rowKey="idEmpleadoRol"

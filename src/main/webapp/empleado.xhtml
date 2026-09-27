@@ -5,10 +5,11 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
 
-    <ui:define name="page_title">Empleados</ui:define>
-    <ui:define name="header_title">Administración de Empleados</ui:define>
+    <ui:define name="page_title">Administración de Empleados</ui:define>
+    <ui:define name="header_title">Empleados</ui:define>
 
     <ui:define name="content">
         <div class="card">
@@ -17,29 +18,36 @@
             <h:form id="frmEmpleado">
                 <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{empleadoModel.registro.nombre}" required="true" />
+                    <p:inputText id="nombre"
+                                 value="#{empleadoModel.registro.nombre}"
+                                 required="true"
+                                 maxlength="255" />
                     <p:messages for="nombre" />
 
                     <h:outputLabel for="apellido" value="Apellido:" />
-                    <p:inputText id="apellido" value="#{empleadoModel.registro.apellido}" required="true" />
+                    <p:inputText id="apellido"
+                                 value="#{empleadoModel.registro.apellido}"
+                                 required="true"
+                                 maxlength="255" />
                     <p:messages for="apellido" />
 
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo"
+                                              value="#{empleadoModel.registro.activo}"
+                                              itemLabel="Activo" />
+                    <h:panelGroup />
+
                     <h:outputLabel for="comentarios" value="Comentarios:" />
-                    <p:inputTextarea id="comentarios" value="#{empleadoModel.registro.comentarios}"
+                    <p:inputTextarea id="comentarios"
+                                     value="#{empleadoModel.registro.comentarios}"
                                      rows="3" cols="50" />
                     <p:messages for="comentarios" />
-
-                    <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo" value="#{empleadoModel.registro.activo}"
-                                             itemLabel="Activo" />
-                    <h:panelGroup />
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <!-- Botones del formulario: Nuevo y Guardar -->
                     <c:btnsForm model="#{empleadoModel}"
-                                   saveUpdate="frmEmpleado frmTablaEmpleado"
-                                   newUpdate="frmEmpleado frmTablaEmpleado" />
+                                saveUpdate="frmEmpleado frmTablaEmpleado"
+                                newUpdate="frmEmpleado frmTablaEmpleado" />
                 </div>
             </h:form>
         </div>
@@ -47,40 +55,11 @@
         <div class="card">
             <h3>Lista de Empleados</h3>
             <h:form id="frmTablaEmpleado">
-                <p:dataTable value="#{empleadoModel.registros}" var="item" styleClass="tabla"
-                             selectionMode="single" selection="#{empleadoModel.seleccion}"
-                             rowKey="#{item.idEmpleado}"
-                             paginator="true" rows="10" emptyMessage="No hay registros">
-                    <p:ajax event="rowSelect" update="botonera" />
-                    <p:ajax event="rowUnselect" update="botonera" />
-
-                    <p:column headerText="ID" style="font-size: 0.8em;">
-                        #{item.idEmpleado}
-                    </p:column>
-                    <p:column headerText="Nombre">
-                        #{item.nombre}
-                    </p:column>
-                    <p:column headerText="Apellido">
-                        #{item.apellido}
-                    </p:column>
-                    <p:column headerText="Estado">
-                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
-                    </p:column>
-                    <p:column headerText="Comentarios">
-                        #{item.comentarios}
-                    </p:column>
-                </p:dataTable>
-
-                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <!-- Botones de la tabla: Editar y Eliminar -->
-                    <c:btnsTabla model="#{empleadoModel}"
-                                   editUpdate="frmEmpleado"
-                                   deleteUpdate="frmTablaEmpleado frmEmpleado" />
-                    &#160;
-                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
-                                  rendered="#{empty empleadoModel.seleccion}"
-                                  style="color:#777; font-style: italic;" />
-                </h:panelGroup>
+                <c:tablaDinamica model="#{empleadoModel}"
+                                  columns="#{empleadoModel.columnas}"
+                                  rowKey="idEmpleado"
+                                  editUpdate="frmEmpleado"
+                                  deleteUpdate="frmTablaEmpleado frmEmpleado" />
             </h:form>
         </div>
     </ui:define>

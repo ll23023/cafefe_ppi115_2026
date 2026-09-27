@@ -36,9 +36,9 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     private List<Empleado> empleados;
     private List<Rol> roles;
-    
+
     /**
-     * Así es como se definen las columnas de la tabla dinámica. 
+     * Así es como se definen las columnas de la tabla dinámica.
      * La propiedad puede ser una ruta anidada, como {@code idEmpleado.nombre}.
      */
     private final List<ColumnaTabla> columnas = Arrays.asList(
@@ -89,22 +89,12 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     @Override
     public EmpleadoRol getRegistroById(Object id) {
-        if (id != null && this.registros != null && !this.registros.isEmpty()) {
-            UUID busca = (UUID) id;
-            return this.registros.stream()
-                    .filter(r -> r.getIdEmpleadoRol().equals(busca))
-                    .findFirst()
-                    .orElse(null);
-        }
-        return null;
+        return id == null ? null : empleadoRolRepository.findById((UUID) id);
     }
 
     @Override
     public Object getIdByRegistro(EmpleadoRol dato) {
-        if (dato != null) {
-            return dato.getIdEmpleadoRol();
-        }
-        return null;
+        return dato != null ? dato.getIdEmpleadoRol() : null;
     }
 
     // Getters y Setters para los combos
