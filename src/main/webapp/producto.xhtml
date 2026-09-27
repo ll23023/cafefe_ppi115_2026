@@ -37,7 +37,7 @@
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:formActions model="#{productoModel}"
+                    <c:btnsForm model="#{productoModel}"
                                    saveUpdate="frmProducto frmTablaProducto"
                                    newUpdate="frmProducto frmTablaProducto" />
                 </div>
@@ -70,7 +70,7 @@
                 </p:dataTable>
 
                 <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <c:crudActions model="#{productoModel}"
+                    <c:btnsTabla model="#{productoModel}"
                                    editUpdate="frmProducto"
                                    deleteUpdate="frmTablaProducto frmProducto" />
                     &#160;

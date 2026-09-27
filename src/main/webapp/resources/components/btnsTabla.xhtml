@@ -13,7 +13,7 @@
     <cc:implementation>
         <p:commandButton value="Editar"
                          action="#{cc.attrs.model.btnEditarHandler}"
-                         disabled="#{empty cc.attrs.model.seleccion}"
+                         rendered="#{not empty cc.attrs.model.seleccion}"
                          update="#{cc.attrs.editUpdate}"
                          styleClass="btn btn-edit">
             <f:setPropertyActionListener value="#{cc.attrs.model.seleccion}"
@@ -22,7 +22,7 @@
         &#160;
         <p:commandButton value="Eliminar"
                          action="#{cc.attrs.model.btnEliminarHandler}"
-                         disabled="#{empty cc.attrs.model.seleccion}"
+                         rendered="#{not empty cc.attrs.model.seleccion}"
                          update="#{cc.attrs.deleteUpdate}"
                          onclick="return confirm('¿Eliminar este registro?');"
                          styleClass="btn btn-danger">

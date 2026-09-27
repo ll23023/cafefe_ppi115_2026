@@ -5,6 +5,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRepository;
@@ -13,6 +14,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+
 /**
  *
  * @author mil
@@ -34,6 +36,19 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     private List<Empleado> empleados;
     private List<Rol> roles;
+    
+    /**
+     * Así es como se definen las columnas de la tabla dinámica. 
+     * La propiedad puede ser una ruta anidada, como {@code idEmpleado.nombre}.
+     */
+    private final List<ColumnaTabla> columnas = Arrays.asList(
+            new ColumnaTabla("idEmpleadoRol", "ID"),
+            new ColumnaTabla("idEmpleado.nombre", "Empleado"),
+            new ColumnaTabla("idEmpleado.apellido", "Apellido"),
+            new ColumnaTabla("idRol.nombre", "Rol"),
+            new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
+            new ColumnaTabla("observaciones", "Observaciones")
+    );
 
     @Override
     public EmpleadoRolRepository getRepository() {
@@ -107,5 +122,9 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     public void setRoles(List<Rol> roles) {
         this.roles = roles;
+    }
+
+    public List<ColumnaTabla> getColumnas() {
+        return columnas;
     }
 }

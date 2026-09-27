@@ -1,8 +1,8 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
 
@@ -10,11 +10,20 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
  *
  * @author mil
  *
- * Clase abstracta base para los Model (Boundary JSF).
+ * <p>La clase mantiene dos referencias distintas durante el flujo de una tabla:
+ * {@code seleccion} representa la fila marcada por el usuario y {@code registro}
+ * representa el objeto que se muestra o se guarda en el formulario. La fila no
+ * se copia al formulario al seleccionarla; esa copia ocurre cuando se ejecuta
+ * {@link #btnEditarHandler()}.</p>
  *
- * @param <T> Entidad gestionada
- * @param <ID> Tipo del ID
+ * <p>El estado {@link ESTADO_CRUD#CREAR} o {@link ESTADO_CRUD#MODIFICAR}
+ * determina si {@link #btnGuardarHandler()} llama a {@code crear} o a
+ * {@code modificar}. Después de guardar o eliminar, {@link #limpiar()}
+ * crea un registro nuevo y elimina la selección para que la tabla no conserve
+ * acciones activas sobre un registro anterior.</p>
  *
+ * @param <T> tipo de entidad administrada por la pantalla
+ * @param <ID> tipo del identificador de la entidad
  */
 public abstract class DefaultModel<T, ID> implements Serializable {
 
@@ -25,20 +34,47 @@ public abstract class DefaultModel<T, ID> implements Serializable {
     protected T seleccion;
     protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
+    /**
+     * Crea la instancia inicial que utilizará el formulario de alta.
+     *
+     * @return entidad nueva con los valores predeterminados de la pantalla
+     */
     public abstract T instanciarRegistro();
 
+    /**
+     * Busca una entidad por su identificador.
+     *
+     * @param id identificador recibido por la vista o por otra operación CRUD
+     * @return entidad encontrada o {@code null} si no existe
+     */
     public abstract T getRegistroById(Object id);
 
+    /**
+     * Extrae el identificador de una entidad.
+     *
+     * @param dato entidad de la que se obtendrá el identificador
+     * @return identificador de {@code dato}, o {@code null} si {@code dato} es null
+     */
     public abstract Object getIdByRegistro(T dato);
 
+    /**
+     * Proporciona el repositorio utilizado por las operaciones CRUD comunes.
+     *
+     * @return repositorio de la entidad administrada
+     */
     public abstract DefaultRepository<T, ID> getRepository();
 
+    /** Carga los registros iniciales y prepara el formulario en modo creación. */
     @PostConstruct
     public void init() {
         this.cargarRegistros();
         this.limpiar();
     }
 
+    /**
+     * Recarga la lista desde el repositorio. Si el repositorio aún no está
+     * disponible, deja una lista vacía para evitar errores durante la vista.
+     */
     public void cargarRegistros() {
         if (getRepository() != null) {
             this.registros = getRepository().findAll();
@@ -47,17 +83,30 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
+    /**
+     * Reinicia el formulario y la selección de la tabla.
+     *
+     * <p>La entidad concreta decide sus valores iniciales mediante
+     * {@link #instanciarRegistro()}. Por ejemplo, puede establecer un estado
+     * activo por defecto o generar un UUID antes de mostrar el formulario.</p>
+     */
     public void limpiar() {
         this.registro = this.instanciarRegistro();
         this.seleccion = null;
         this.estado = ESTADO_CRUD.CREAR;
     }
 
+    /** Activa el flujo de creación y descarta cualquier edición o selección previa. */
     public void btnNuevoHandler() {
         this.limpiar();
     }
 
+    /**
+     * Persiste el registro actual como nuevo o como modificación según
+     * {@link #estado}; después actualiza la tabla y reinicia el formulario.
+     */
     public void btnGuardarHandler() {
+        // El estado decide si el mismo botón crea un registro o guarda una edición.
         if (this.registro != null && getRepository() != null) {
             if (this.estado == ESTADO_CRUD.MODIFICAR) {
                 getRepository().modificar(this.registro);
@@ -69,6 +118,10 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
+    /**
+     * Mantiene el método de modificación directa para páginas antiguas que aún
+     * lo utilizan; las páginas nuevas pueden usar el flujo unificado de guardar.
+     */
     public void btnModificarHandler() {
         if (this.registro != null && getRepository() != null) {
             getRepository().modificar(this.registro);
@@ -77,6 +130,7 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
+    /** Elimina el registro actual, recarga la tabla y limpia la selección. */
     public void btnEliminarHandler() {
         if (this.registro != null && getRepository() != null) {
             getRepository().eliminar(this.registro);
@@ -85,6 +139,11 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
+    /**
+     * Carga una fila seleccionada en el formulario y cambia el modelo a edición.
+     *
+     * @param r entidad seleccionada en la tabla; {@code null} no modifica el estado
+     */
     public void seleccionarRegistro(T r) {
         if (r != null) {
             this.registro = r;
@@ -92,10 +151,16 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
+    /** Copia la selección actual al formulario si existe una fila seleccionada. */
     public void btnEditarHandler() {
         this.seleccionarRegistro(this.seleccion);
     }
 
+    /**
+     * Indica si el formulario está editando un registro existente.
+     *
+     * @return {@code true} cuando el estado actual es {@code MODIFICAR}
+     */
     public boolean isEditando() {
         return this.estado == ESTADO_CRUD.MODIFICAR;
     }

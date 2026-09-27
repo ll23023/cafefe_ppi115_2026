@@ -3,11 +3,13 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
-/** 
+/**
  *
  * @author mil
  */
@@ -19,6 +21,13 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> {
 
     @Inject
     private TipoProductoRepository tipoProductoRepository;
+
+    private final List<ColumnaTabla> columnas = Arrays.asList(
+            new ColumnaTabla("idTipoProducto", "ID"),
+            new ColumnaTabla("nombre", "Nombre"),
+            new ColumnaTabla("activo", "Estado"),
+            new ColumnaTabla("observaciones", "Observaciones")
+    );
 
     @Override
     public TipoProductoRepository getRepository() {
@@ -51,5 +60,9 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> {
             return dato.getIdTipoProducto();
         }
         return null;
+    }
+
+    public List<ColumnaTabla> getColumnas() {
+        return columnas;
     }
 }

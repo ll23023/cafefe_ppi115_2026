@@ -37,7 +37,7 @@
 
                 <div style="margin-top: 10px;">
                     <!-- Botones del formulario: Nuevo y Guardar -->
-                    <c:formActions model="#{empleadoModel}"
+                    <c:btnsForm model="#{empleadoModel}"
                                    saveUpdate="frmEmpleado frmTablaEmpleado"
                                    newUpdate="frmEmpleado frmTablaEmpleado" />
                 </div>
@@ -73,7 +73,7 @@
 
                 <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
                     <!-- Botones de la tabla: Editar y Eliminar -->
-                    <c:crudActions model="#{empleadoModel}"
+                    <c:btnsTabla model="#{empleadoModel}"
                                    editUpdate="frmEmpleado"
                                    deleteUpdate="frmTablaEmpleado frmEmpleado" />
                     &#160;

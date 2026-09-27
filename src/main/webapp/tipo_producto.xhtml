@@ -6,8 +6,6 @@
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
                 xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
-                                                                                                                                                                                                                                                                                                                           
-    <!--Para usar una plantilla debes agregar exactamente todo como está arriba y usas las etiquetas define para poder cambiar el conenido de la página-->
     <ui:define name="page_title">Prueba de plantilla</ui:define>
     <ui:define name="header_title">Test</ui:define>
 
@@ -33,8 +31,7 @@
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <!-- Ahora para usar los botónes del formulario se debe usar este componente -->
-                    <c:formActions model="#{tipoProductoModel}"
+                    <c:btnsForm model="#{tipoProductoModel}"
                                    saveUpdate="frmTipoProducto frmTablaProducto"
                                    newUpdate="frmTipoProducto frmTablaProducto" />
                 </div>
@@ -44,37 +41,11 @@
         <div class="card">
             <h3>Lista de Tipos de Producto</h3>
             <h:form id="frmTablaProducto">
-                <p:dataTable value="#{tipoProductoModel.registros}" var="item" styleClass="tabla"
-                             selectionMode="single" selection="#{tipoProductoModel.seleccion}"
-                             rowKey="#{item.idTipoProducto}"
-                             paginator="true" rows="10" emptyMessage="No hay registros">
-                        <p:ajax event="rowSelect" update="botonera" />
-
-                    <p:ajax event="rowUnselect" update="botonera" />
-                    <p:column headerText="ID" style="font-size: 0.8em;">
-                        #{item.idTipoProducto}
-                    </p:column>
-                    <p:column headerText="Nombre">
-                        #{item.nombre}
-                    </p:column>
-                    <p:column headerText="Estado">
-                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
-                    </p:column>
-                    <p:column headerText="Observaciones">
-                        #{item.observaciones}
-                    </p:column>
-                </p:dataTable>
-
-                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <!-- Ahora para usar los botónes de las tablas se debe usar este componente -->
-                    <c:crudActions model="#{tipoProductoModel}"
-                                   editUpdate="frmTipoProducto"
-                                   deleteUpdate="frmTablaProducto frmTipoProducto" />
-                    &#160;
-                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
-                                  rendered="#{empty tipoProductoModel.seleccion}"
-                                  style="color:#777; font-style: italic;" />
-                </h:panelGroup>
+                <c:tablaDinamica model="#{tipoProductoModel}"
+                                    columns="#{tipoProductoModel.columnas}"
+                                    rowKey="idTipoProducto"
+                                    editUpdate="frmTipoProducto"
+                                    deleteUpdate="frmTablaProducto frmTipoProducto" />
             </h:form>
         </div>
     </ui:define>

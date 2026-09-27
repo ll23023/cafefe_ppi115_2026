@@ -22,11 +22,13 @@
                                      value="#{empleadoRolModel.registro.idEmpleado}"
                                      required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        
                         <f:selectItems value="#{empleadoRolModel.empleados}"
                                        var="emp"
                                        itemLabel="#{emp.nombre} #{emp.apellido}"
                                        itemValue="#{emp}" />
                     </p:selectOneMenu>
+                    
                     <p:selectOneMenu id="rol"
                                      value="#{empleadoRolModel.registro.idRol}"
                                      required="true">
@@ -53,7 +55,7 @@
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:formActions model="#{empleadoRolModel}"
+                    <c:btnsForm model="#{empleadoRolModel}"
                                    saveUpdate="frmEmpleadoRol frmTablaEmpleadoRol"
                                    newUpdate="frmEmpleadoRol frmTablaEmpleadoRol" />
                 </div>
@@ -63,41 +65,15 @@
         <div class="card">
             <h3>Lista de Empleado-Rol</h3>
             <h:form id="frmTablaEmpleadoRol">
-                <p:dataTable value="#{empleadoRolModel.registros}" var="item" styleClass="tabla"
-                             selectionMode="single" selection="#{empleadoRolModel.seleccion}"
-                             rowKey="#{item.idEmpleadoRol}"
-                             paginator="true" rows="10" emptyMessage="No hay registros">
-
-                    <p:ajax event="rowSelect" update="botonera" />
-                    <p:ajax event="rowUnselect" update="botonera" />
-
-                    <p:column headerText="ID" style="font-size: 0.8em;">
-                        #{item.idEmpleadoRol}
-                    </p:column>
-                    <p:column headerText="Empleado">
-                        <h:outputText value="#{item.idEmpleado.nombre} #{item.idEmpleado.apellido}"
-                                      rendered="#{item.idEmpleado != null}" />
-                    </p:column>
-                    <p:column headerText="Rol">
-                        #{item.idRol != null ? item.idRol.nombre : ''}
-                    </p:column>
-                    <p:column headerText="Estado">
-                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
-                    </p:column>
-                    <p:column headerText="Observaciones">
-                        #{item.observaciones}
-                    </p:column>
-                </p:dataTable>
-
-                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <c:crudActions model="#{empleadoRolModel}"
-                                   editUpdate="frmEmpleadoRol"
-                                   deleteUpdate="frmTablaEmpleadoRol frmEmpleadoRol" />
-                    &#160;
-                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
-                                  rendered="#{empty empleadoRolModel.seleccion}"
-                                  style="color:#777; font-style: italic;" />
-                </h:panelGroup>
+                <!-- 
+                    Para usar el componente se debe pasar el módelo que usará, las columnas de este, su fila identificadora 
+                    y los IDs que ctualizará después de editar o eliminar. 
+                -->
+                <c:tablaDinamica model="#{empleadoRolModel}"
+                                    columns="#{empleadoRolModel.columnas}"
+                                    rowKey="idEmpleadoRol"
+                                    editUpdate="frmEmpleadoRol"
+                                    deleteUpdate="frmTablaEmpleadoRol frmEmpleadoRol" />
             </h:form>
         </div>
     </ui:define>

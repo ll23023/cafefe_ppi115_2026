@@ -52,7 +52,7 @@
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:formActions model="#{facturaModel}"
+                    <c:btnsForm model="#{facturaModel}"
                                    saveUpdate="frmFactura frmTablaFactura"
                                    newUpdate="frmFactura frmTablaFactura" />
                 </div>
@@ -87,7 +87,7 @@
                 </p:dataTable>
 
                 <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <c:crudActions model="#{facturaModel}"
+                    <c:btnsTabla model="#{facturaModel}"
                                    editUpdate="frmFactura"
                                    deleteUpdate="frmTablaFactura frmFactura" />
                     &#160;
