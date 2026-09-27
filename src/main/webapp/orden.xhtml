@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Órdenes</ui:define>
+    <ui:define name="header_title">Órdenes</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Órdenes</h2>
+
+            <h:form id="frmOrden">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="empleadoRol" value="Atendido por:" />
+                    <p:selectOneMenu id="empleadoRol"
+                                     value="#{ordenModel.registro.idEmpleadoRol}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{ordenModel.empleadoRoles}"
+                                       var="er"
+                                       itemLabel="#{er.idEmpleado.nombre} #{er.idEmpleado.apellido} - #{er.idRol.nombre}"
+                                       itemValue="#{er}" />
+                    </p:selectOneMenu>
+                    <p:messages for="empleadoRol" />
+
+                    <h:outputLabel for="fecha" value="Fecha:" />
+                    <p:calendar id="fecha"
+                                value="#{ordenModel.fechaSeleccionada}"
+                                pattern="dd/MM/yyyy"
+                                required="true" />
+                    <p:messages for="fecha" />
+
+                    <h:outputLabel for="hora" value="Hora:" />
+                    <p:calendar id="hora"
+                                value="#{ordenModel.horaSeleccionada}"
+                                timeOnly="true"
+                                pattern="HH:mm" />
+                    <h:panelGroup />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{ordenModel}"
+                                saveUpdate="frmOrden frmTablaOrden"
+                                newUpdate="frmOrden frmTablaOrden" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Órdenes</h3>
+            <h:form id="frmTablaOrden">
+                <c:tablaDinamica model="#{ordenModel}"
+                                  columns="#{ordenModel.columnas}"
+                                  rowKey="idOrden"
+                                  editUpdate="frmOrden"
+                                  deleteUpdate="frmTablaOrden frmOrden" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

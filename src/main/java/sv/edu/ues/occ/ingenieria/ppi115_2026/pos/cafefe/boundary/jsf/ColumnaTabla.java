@@ -71,7 +71,11 @@ public class ColumnaTabla implements Serializable {
 
         return switch (format) {
             case BOOLEAN -> Boolean.TRUE.equals(value) ? "ACTIVO" : "INACTIVO";
-            case CURRENCY -> NumberFormat.getCurrencyInstance(Locale.getDefault())
+            // Se fija Locale.US (no Locale.getDefault()) para que siempre se
+            // muestre "$", sin importar el locale del servidor: con es_SV,
+            // Java usa los datos históricos de esa región y formatea con el
+            // colón salvadoreño ("C") en vez del dólar.
+            case CURRENCY -> NumberFormat.getCurrencyInstance(Locale.US)
                     .format((BigDecimal) value);
             case DATE -> value instanceof TemporalAccessor
                     ? value.toString()

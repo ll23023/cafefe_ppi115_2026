@@ -31,9 +31,34 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
         return getEntityManager().merge(entity);
     }
 
+    /**
+     * Elimina la entidad re-atachándola primero al EntityManager actual si
+     * hace falta. Esto evita "Removing a detached instance" cuando el
+     * objeto viene desde un bean @ViewScoped (fuera de la transacción que
+     * lo cargó), algo común en las pantallas basadas en DefaultModel.
+     *
+     * <p>El id se obtiene de forma genérica con {@code PersistenceUnitUtil},
+     * así que ninguna subclase necesita sobrescribir este método (antes
+     * varias lo repetían casi igual).</p>
+     */
     @Override
     public void eliminar(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
+        if (entity == null) {
+            return;
+        }
+        EntityManager em = getEntityManager();
+        if (em.contains(entity)) {
+            em.remove(entity);
+            return;
+        }
+        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
+        if (id == null) {
+            return;
+        }
+        T managed = em.find(entityClass, id);
+        if (managed != null) {
+            em.remove(managed);
+        }
     }
 
     @Override

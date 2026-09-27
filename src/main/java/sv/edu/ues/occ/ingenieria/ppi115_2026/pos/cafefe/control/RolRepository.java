@@ -33,23 +33,4 @@ public class RolRepository extends DefaultRepository<Rol, java.util.UUID> {
                 .setParameter("nombre", nombre)
                 .getResultList();
     }
-
-    /**
-     * Elimina un Rol re-atachándolo primero al EntityManager actual. Esto evita
-     * "Removing a detached instance" cuando el objeto viene desde el
-     * @ViewScoped (fuera de la transacción que lo cargó).
-     */
-    @Override
-    public void eliminar(Rol registro) {
-        if (registro == null || registro.getIdRol() == null) {
-            return;
-        }
-        Rol managed = getEntityManager().contains(registro)
-                ? registro
-                : getEntityManager().find(Rol.class, registro.getIdRol());
-
-        if (managed != null) {
-            getEntityManager().remove(managed);
-        }
-    }
 }

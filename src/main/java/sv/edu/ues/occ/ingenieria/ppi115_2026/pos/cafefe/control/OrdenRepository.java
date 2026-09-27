@@ -26,23 +26,4 @@ public class OrdenRepository extends DefaultRepository<Orden, UUID> {
     public EntityManager getEntityManager() {
         return em;
     }
-
-    /**
-     * Elimina una Orden re-atachándola primero al EntityManager actual.
-     * Evita "Removing a detached instance" cuando el objeto viene desde
-     * el @ViewScoped.
-     */
-    @Override
-    public void eliminar(Orden registro) {
-        if (registro == null || registro.getIdOrden() == null) {
-            return;
-        }
-        Orden managed = getEntityManager().contains(registro)
-                ? registro
-                : getEntityManager().find(Orden.class, registro.getIdOrden());
-
-        if (managed != null) {
-            getEntityManager().remove(managed);
-        }
-    }
 }

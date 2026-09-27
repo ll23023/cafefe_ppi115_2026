@@ -3,12 +3,17 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CajaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
 
 /**
@@ -23,8 +28,18 @@ public class FacturaModel extends DefaultModel<Factura, UUID> {
 
     @Inject
     private FacturaRepository facturaRepository;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    private CajaRepository cajaRepository;
+
     private Date fechaSeleccionada;
     private Date horaSeleccionada;
+    private List<EmpleadoRol> empleadoRoles;
+    private List<Caja> cajas;
+    private List<ColumnaTabla> columnas;
 
     @Override
     public FacturaRepository getRepository() {
@@ -42,22 +57,12 @@ public class FacturaModel extends DefaultModel<Factura, UUID> {
 
     @Override
     public Factura getRegistroById(Object id) {
-        if (id != null && this.registros != null && !this.registros.isEmpty()) {
-            UUID busca = (UUID) id;
-            return this.registros.stream()
-                    .filter(f -> f.getIdFactura().equals(busca))
-                    .findFirst()
-                    .orElse(null);
-        }
-        return null;
+        return id == null ? null : facturaRepository.findById((UUID) id);
     }
 
     @Override
     public Object getIdByRegistro(Factura dato) {
-        if (dato != null) {
-            return dato.getIdFactura();
-        }
-        return null;
+        return dato != null ? dato.getIdFactura() : null;
     }
 
     @Override
@@ -125,7 +130,46 @@ public class FacturaModel extends DefaultModel<Factura, UUID> {
     }
 
     public List<String> getEstadosDisponibles() {
-        return Arrays.asList("Pendiente", "Cancelado");
+        return Arrays.asList("PENDIENTE", "CANCELADO");
     }
 
+    // Carga perezosa para el combo de Empleado-Rol (quien atendió la factura).
+    public List<EmpleadoRol> getEmpleadoRoles() {
+        if (this.empleadoRoles == null) {
+            this.empleadoRoles = empleadoRolRepository != null
+                    ? empleadoRolRepository.findAll()
+                    : new ArrayList<>();
+        }
+        return empleadoRoles;
+    }
+
+    public void setEmpleadoRoles(List<EmpleadoRol> empleadoRoles) {
+        this.empleadoRoles = empleadoRoles;
+    }
+
+    // Carga perezosa para el combo de Caja.
+    public List<Caja> getCajas() {
+        if (this.cajas == null) {
+            this.cajas = cajaRepository != null ? cajaRepository.findAll() : new ArrayList<>();
+        }
+        return cajas;
+    }
+
+    public void setCajas(List<Caja> cajas) {
+        this.cajas = cajas;
+    }
+
+    public List<ColumnaTabla> getColumnas() {
+        if (columnas == null) {
+            columnas = List.of(
+                    new ColumnaTabla("cliente", "Cliente"),
+                    new ColumnaTabla("fechaFacturacion", "Fecha", FORMATO_COLUMNA.DATE),
+                    new ColumnaTabla("estado", "Estado"),
+                    new ColumnaTabla("idEmpleadoRol.idEmpleado.nombre", "Atendido por"),
+                    new ColumnaTabla("idCaja.nombre", "Caja"),
+                    new ColumnaTabla("observaciones", "Observaciones")
+            );
+        }
+        return columnas;
+    }
 }

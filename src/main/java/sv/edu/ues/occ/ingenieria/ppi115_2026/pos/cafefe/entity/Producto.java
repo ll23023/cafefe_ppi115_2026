@@ -9,6 +9,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -53,6 +55,8 @@ public class Producto implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
+    @DecimalMin(value = "0.00", message = "El precio no puede ser negativo")
+    @DecimalMax(value = "50.00", message = "El precio máximo permitido es 50.00")
     @Column(name = "precio_sugerido", nullable = false, precision = 8, scale = 2)
     private BigDecimal precioSugerido;
     @OneToMany(mappedBy = "idProducto")

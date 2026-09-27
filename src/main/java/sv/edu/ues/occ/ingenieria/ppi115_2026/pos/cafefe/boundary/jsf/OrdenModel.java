@@ -33,6 +33,7 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     private EmpleadoRolRepository empleadoRolRepository;
 
     private List<EmpleadoRol> empleadoRoles;
+    private List<ColumnaTabla> columnas;
 
     @Override
     public OrdenRepository getRepository() {
@@ -133,5 +134,20 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
 
     public void setHoraSeleccionada(Date horaSeleccionada) {
         this.horaSeleccionada = horaSeleccionada;
+    }
+
+    /**
+     * Columnas para tablaDinamica; faltaba este método.
+     */
+    public List<ColumnaTabla> getColumnas() {
+        if (columnas == null) {
+            columnas = List.of(
+                    new ColumnaTabla("idEmpleadoRol.idEmpleado.nombre", "Empleado"),
+                    new ColumnaTabla("idEmpleadoRol.idEmpleado.apellido", "Apellido"),
+                    new ColumnaTabla("idEmpleadoRol.idRol.nombre", "Rol"),
+                    new ColumnaTabla("fechaCreacion", "Fecha", FORMATO_COLUMNA.DATE)
+            );
+        }
+        return columnas;
     }
 }
