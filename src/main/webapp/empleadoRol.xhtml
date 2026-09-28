@@ -1,12 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets"
-                template="/resources/templates/basic.xhtml"
-                xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
-                xmlns:f="jakarta.faces.core">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    template="/resources/templates/basic.xhtml" xmlns:p="primefaces" xmlns:c="jakarta.faces.composite/components"
+    xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Administración de Empleado-Rol</ui:define>
     <ui:define name="header_title">Empleado-Rol</ui:define>
@@ -18,46 +15,35 @@
             <h:form id="frmEmpleadoRol">
                 <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="empleado" value="Empleado:" />
-                    <p:selectOneMenu id="empleado"
-                                     value="#{empleadoRolModel.registro.idEmpleado}"
-                                     required="true">
+                    <p:selectOneMenu id="empleado" value="#{empleadoRolModel.registro.idEmpleado}" required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{empleadoRolModel.empleados}"
-                                       var="emp"
-                                       itemLabel="#{emp.nombre} #{emp.apellido}"
-                                       itemValue="#{emp}" />
+                        <f:selectItems value="#{empleadoRolModel.empleados}" var="emp"
+                            itemLabel="#{emp.nombre} #{emp.apellido}" itemValue="#{emp}" />
                     </p:selectOneMenu>
                     <p:messages for="empleado" />
 
                     <h:outputLabel for="rol" value="Rol:" />
-                    <p:selectOneMenu id="rol"
-                                     value="#{empleadoRolModel.registro.idRol}"
-                                     required="true">
+                    <p:selectOneMenu id="rol" value="#{empleadoRolModel.registro.idRol}" required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{empleadoRolModel.roles}"
-                                       var="r"
-                                       itemLabel="#{r.nombre}"
-                                       itemValue="#{r}" />
+                        <f:selectItems value="#{empleadoRolModel.roles}" var="r" itemLabel="#{r.nombre}"
+                            itemValue="#{r}" />
                     </p:selectOneMenu>
                     <p:messages for="rol" />
 
                     <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo"
-                                             value="#{empleadoRolModel.registro.activo}"
-                                             itemLabel="Activo" />
+                    <p:selectBooleanCheckbox id="activo" value="#{empleadoRolModel.registro.activo}"
+                        itemLabel="Activo" />
                     <h:panelGroup />
 
                     <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones"
-                                     value="#{empleadoRolModel.registro.observaciones}"
-                                     rows="3" cols="50" />
+                    <p:inputTextarea id="observaciones" value="#{empleadoRolModel.registro.observaciones}" rows="3"
+                        cols="50" />
                     <p:messages for="observaciones" />
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{empleadoRolModel}"
-                                saveUpdate="frmEmpleadoRol frmTablaEmpleadoRol"
-                                newUpdate="frmEmpleadoRol frmTablaEmpleadoRol" />
+                    <c:btnsForm model="#{empleadoRolModel}" saveUpdate="frmEmpleadoRol frmTablaEmpleadoRol"
+                        newUpdate="frmEmpleadoRol frmTablaEmpleadoRol" />
                 </div>
             </h:form>
         </div>
@@ -65,11 +51,9 @@
         <div class="card">
             <h3>Lista de Empleado-Rol</h3>
             <h:form id="frmTablaEmpleadoRol">
-                <c:tablaDinamica model="#{empleadoRolModel}"
-                                    columns="#{empleadoRolModel.columnas}"
-                                    rowKey="idEmpleadoRol"
-                                    editUpdate="frmEmpleadoRol"
-                                    deleteUpdate="frmTablaEmpleadoRol frmEmpleadoRol" />
+                <c:tablaDinamica model="#{empleadoRolModel}" columns="#{empleadoRolModel.columnas}"
+                    rowKey="idEmpleadoRol" editUpdate="frmEmpleadoRol"
+                    deleteUpdate="frmTablaEmpleadoRol frmEmpleadoRol" />
             </h:form>
         </div>
     </ui:define>

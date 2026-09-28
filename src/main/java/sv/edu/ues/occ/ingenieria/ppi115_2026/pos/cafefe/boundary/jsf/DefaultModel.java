@@ -10,19 +10,28 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
  *
  * @author mil
  *
- * <p>La clase mantiene dos referencias distintas durante el flujo de una tabla:
- * {@code seleccion} representa la fila marcada por el usuario y {@code registro}
- * representa el objeto que se muestra o se guarda en el formulario. La fila no
- * se copia al formulario al seleccionarla; esa copia ocurre cuando se ejecuta
- * {@link #btnEditarHandler()}.</p>
+ *         <p>
+ *         La clase mantiene dos referencias distintas durante el flujo de una
+ *         tabla:
+ *         {@code seleccion} representa la fila marcada por el usuario y
+ *         {@code registro}
+ *         representa el objeto que se muestra o se guarda en el formulario. La
+ *         fila no
+ *         se copia al formulario al seleccionarla; esa copia ocurre cuando se
+ *         ejecuta
+ *         {@link #btnEditarHandler()}.
+ *         </p>
  *
- * <p>El estado {@link ESTADO_CRUD#CREAR} o {@link ESTADO_CRUD#MODIFICAR}
- * determina si {@link #btnGuardarHandler()} llama a {@code crear} o a
- * {@code modificar}. Después de guardar o eliminar, {@link #limpiar()}
- * crea un registro nuevo y elimina la selección para que la tabla no conserve
- * acciones activas sobre un registro anterior.</p>
+ *         <p>
+ *         El estado {@link ESTADO_CRUD#CREAR} o {@link ESTADO_CRUD#MODIFICAR}
+ *         determina si {@link #btnGuardarHandler()} llama a {@code crear} o a
+ *         {@code modificar}. Después de guardar o eliminar, {@link #limpiar()}
+ *         crea un registro nuevo y elimina la selección para que la tabla no
+ *         conserve
+ *         acciones activas sobre un registro anterior.
+ *         </p>
  *
- * @param <T> tipo de entidad administrada por la pantalla
+ * @param <T>  tipo de entidad administrada por la pantalla
  * @param <ID> tipo del identificador de la entidad
  */
 public abstract class DefaultModel<T, ID> implements Serializable {
@@ -86,9 +95,11 @@ public abstract class DefaultModel<T, ID> implements Serializable {
     /**
      * Reinicia el formulario y la selección de la tabla.
      *
-     * <p>La entidad concreta decide sus valores iniciales mediante
+     * <p>
+     * La entidad concreta decide sus valores iniciales mediante
      * {@link #instanciarRegistro()}. Por ejemplo, puede establecer un estado
-     * activo por defecto o generar un UUID antes de mostrar el formulario.</p>
+     * activo por defecto o generar un UUID antes de mostrar el formulario.
+     * </p>
      */
     public void limpiar() {
         this.registro = this.instanciarRegistro();
@@ -96,7 +107,9 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         this.estado = ESTADO_CRUD.CREAR;
     }
 
-    /** Activa el flujo de creación y descarta cualquier edición o selección previa. */
+    /**
+     * Activa el flujo de creación y descarta cualquier edición o selección previa.
+     */
     public void btnNuevoHandler() {
         this.limpiar();
     }

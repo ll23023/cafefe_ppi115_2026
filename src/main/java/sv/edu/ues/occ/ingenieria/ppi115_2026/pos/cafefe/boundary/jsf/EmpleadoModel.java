@@ -58,8 +58,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
                     new ColumnaTabla("nombre", "Nombre"),
                     new ColumnaTabla("apellido", "Apellido"),
                     new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla("comentarios", "Comentarios")
-            );
+                    new ColumnaTabla("comentarios", "Comentarios"));
         }
         return columnas;
     }

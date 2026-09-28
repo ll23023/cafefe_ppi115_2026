@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces" xmlns:c="jakarta.faces.composite/components" template="/resources/templates/basic.xhtml">
+    <ui:define name="page_title">Tipos de Característica</ui:define>
+    <ui:define name="header_title">Administración de Tipos de Característica</ui:define>
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Tipos de Característica</h2>
+            <h:form id="frmTipoCaracteristica">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{tipoCaracteristicaModel.registro.nombre}" required="true" />
+                    <p:messages for="nombre" />
+                    <h:outputLabel for="expresion" value="Expresión regular:" />
+                    <p:inputText id="expresion" value="#{tipoCaracteristicaModel.registro.expresionRegular}" />
+                    <p:messages for="expresion" />
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo" value="#{tipoCaracteristicaModel.registro.activo}"
+                        itemLabel="Activo" />
+                    <h:panelGroup />
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones" value="#{tipoCaracteristicaModel.registro.observaciones}"
+                        rows="3" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+                <c:btnsForm model="#{tipoCaracteristicaModel}"
+                    saveUpdate="frmTipoCaracteristica frmTablaTipoCaracteristica"
+                    newUpdate="frmTipoCaracteristica frmTablaTipoCaracteristica" />
+            </h:form>
+        </div>
+        <div class="card">
+            <h3>Lista de Tipos de Característica</h3>
+            <h:form id="frmTablaTipoCaracteristica">
+                <c:tablaDinamica model="#{tipoCaracteristicaModel}" columns="#{tipoCaracteristicaModel.columnas}"
+                    rowKey="idTipoCaracteristica" editUpdate="frmTipoCaracteristica"
+                    deleteUpdate="frmTablaTipoCaracteristica frmTipoCaracteristica" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

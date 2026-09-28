@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+    template="/resources/templates/basic.xhtml">
+    <ui:define name="page_title">Descuentos por Producto</ui:define>
+    <ui:define name="header_title">Administración de Descuentos por Producto</ui:define>
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Descuentos por Producto</h2>
+            <h:form id="frmDescuentoProducto">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="descuento" value="Descuento:" />
+                    <p:selectOneMenu id="descuento" value="#{descuentoProductoModel.registro.idDescuento}"
+                        required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{descuentoProductoModel.descuentos}" var="descuento"
+                            itemLabel="#{descuento.nombre}" itemValue="#{descuento}" />
+
+                    </p:selectOneMenu>
+                    <p:messages for="descuento" />
+                    <h:outputLabel for="producto" value="Producto:" />
+                    <p:selectOneMenu id="producto" value="#{descuentoProductoModel.registro.idProducto}"
+                        required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{descuentoProductoModel.productos}" var="producto"
+                            itemLabel="#{producto.nombre}" itemValue="#{producto}" />
+                    </p:selectOneMenu>
+                    <p:messages for="producto" />
+
+                    <h:outputLabel for="desde" value="Desde:" />
+                    <p:datePicker id="desde" value="#{descuentoProductoModel.registro.fechaDesde}" showTime="true" />
+                    <p:messages for="desde" />
+
+                    <h:outputLabel for="hasta" value="Hasta:" />
+                    <p:datePicker id="hasta" value="#{descuentoProductoModel.registro.fechaHasta}" showTime="true" />
+                    <p:messages for="hasta" />
+
+                    <h:outputLabel for="valor" value="Valor:" />
+                    <p:inputNumber id="valor" value="#{descuentoProductoModel.registro.valor}" />
+                    <p:messages for="valor" />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones" value="#{descuentoProductoModel.registro.observaciones}"
+                        rows="3" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+                <c:btnsForm model="#{descuentoProductoModel}"
+                    saveUpdate="frmDescuentoProducto frmTablaDescuentoProducto"
+                    newUpdate="frmDescuentoProducto frmTablaDescuentoProducto" />
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Descuentos por Producto</h3>
+            <h:form id="frmTablaDescuentoProducto">
+                <c:tablaDinamica model="#{descuentoProductoModel}" columns="#{descuentoProductoModel.columnas}"
+                    rowKey="idDescuentoProducto" editUpdate="frmDescuentoProducto"
+                    deleteUpdate="frmTablaDescuentoProducto frmDescuentoProducto" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

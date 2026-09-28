@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets"
-                template="/resources/templates/basic.xhtml"
-                xmlns:p="primefaces"
-                xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    template="/resources/templates/basic.xhtml" xmlns:p="primefaces"
+    xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
     <ui:define name="page_title">Prueba de plantilla</ui:define>
     <ui:define name="header_title">Test</ui:define>
 
@@ -20,20 +18,19 @@
                     <p:messages for="nombre" />
 
                     <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}"
-                                     rows="3" cols="50" />
+                    <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}" rows="3"
+                        cols="50" />
                     <p:messages for="observaciones" />
 
                     <h:outputLabel for="activo" value="Estado:" />
                     <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}"
-                                             itemLabel="Activo" />
+                        itemLabel="Activo" />
                     <h:panelGroup />
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{tipoProductoModel}"
-                                   saveUpdate="frmTipoProducto frmTablaProducto"
-                                   newUpdate="frmTipoProducto frmTablaProducto" />
+                    <c:btnsForm model="#{tipoProductoModel}" saveUpdate="frmTipoProducto frmTablaProducto"
+                        newUpdate="frmTipoProducto frmTablaProducto" />
                 </div>
             </h:form>
         </div>
@@ -41,11 +38,9 @@
         <div class="card">
             <h3>Lista de Tipos de Producto</h3>
             <h:form id="frmTablaProducto">
-                <c:tablaDinamica model="#{tipoProductoModel}"
-                                    columns="#{tipoProductoModel.columnas}"
-                                    rowKey="idTipoProducto"
-                                    editUpdate="frmTipoProducto"
-                                    deleteUpdate="frmTablaProducto frmTipoProducto" />
+                <c:tablaDinamica model="#{tipoProductoModel}" columns="#{tipoProductoModel.columnas}"
+                    rowKey="idTipoProducto" editUpdate="frmTipoProducto"
+                    deleteUpdate="frmTablaProducto frmTipoProducto" />
             </h:form>
         </div>
     </ui:define>

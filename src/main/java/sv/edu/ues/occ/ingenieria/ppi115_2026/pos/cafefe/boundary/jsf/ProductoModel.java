@@ -51,8 +51,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                     new ColumnaTabla("nombre", "Nombre"),
                     new ColumnaTabla("precioSugerido", "Precio sugerido", FORMATO_COLUMNA.CURRENCY),
                     new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla("comentarios", "Comentarios")
-            );
+                    new ColumnaTabla("comentarios", "Comentarios"));
         }
         return columnas;
     }

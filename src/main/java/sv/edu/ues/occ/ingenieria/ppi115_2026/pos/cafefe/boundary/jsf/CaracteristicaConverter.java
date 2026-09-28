@@ -1,0 +1,28 @@
+package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.convert.FacesConverter;
+import jakarta.inject.Inject;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica;
+
+@FacesConverter(forClass = Caracteristica.class, managed = true)
+public class CaracteristicaConverter extends DefaultConverter<Caracteristica, UUID> {
+    @Inject
+    private CaracteristicaRepository repository;
+
+    @Override
+    protected CaracteristicaRepository getRepository() {
+        return repository;
+    }
+
+    @Override
+    protected UUID parseId(String value) {
+        return UUID.fromString(value);
+    }
+
+    @Override
+    protected UUID getId(Caracteristica entity) {
+        return entity.getIdCaracteristica();
+    }
+}

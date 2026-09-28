@@ -24,7 +24,7 @@ public class ColumnaTabla implements Serializable {
      * Crea una columna de texto.
      *
      * @param property propiedad o ruta de propiedades que se leerá en cada fila
-     * @param header texto visible en el encabezado
+     * @param header   texto visible en el encabezado
      */
     public ColumnaTabla(String property, String header) {
         this(property, header, FORMATO_COLUMNA.TEXT);
@@ -34,8 +34,9 @@ public class ColumnaTabla implements Serializable {
      * Crea una columna con formato explícito.
      *
      * @param property propiedad o ruta anidada, separada por puntos
-     * @param header texto visible en el encabezado de la columna.
-     * @param format formato del texto de la columna; si es {@code null}, se usa {@code TEXT}
+     * @param header   texto visible en el encabezado de la columna.
+     * @param format   formato del texto de la columna; si es {@code null}, se usa
+     *                 {@code TEXT}
      */
     public ColumnaTabla(String property, String header, FORMATO_COLUMNA format) {
         this.property = property;
@@ -60,7 +61,7 @@ public class ColumnaTabla implements Serializable {
      *
      * @param row entidad que representa la fila actual
      * @return texto formateado; devuelve una cadena vacía si algún segmento
-     * de la ruta es {@code null}
+     *         de la ruta es {@code null}
      * @throws IllegalArgumentException si la ruta no tiene un getter válido
      */
     public String getValue(Object row) {
@@ -90,7 +91,7 @@ public class ColumnaTabla implements Serializable {
      *
      * @param row entidad que representa la fila actual
      * @return valor de la propiedad final, o {@code null} si algún segmento es
-     * {@code null}
+     *         {@code null}
      */
     private Object resolveProperty(Object row) {
         Object value = row;
@@ -106,7 +107,7 @@ public class ColumnaTabla implements Serializable {
     /**
      * Invoca el getter de una propiedad en un objeto.
      *
-     * @param target objeto que contiene la propiedad
+     * @param target       objeto que contiene la propiedad
      * @param propertyName nombre de la propiedad
      * @return valor de la propiedad
      * @throws IllegalArgumentException si no se puede invocar el getter

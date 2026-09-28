@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+    template="/resources/templates/basic.xhtml">
+    <ui:define name="page_title">Descuentos</ui:define>
+    <ui:define name="header_title">Administración de Descuentos</ui:define>
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Descuentos</h2>
+            <h:form id="frmDescuento">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{descuentoModel.registro.nombre}" required="true" />
+                    <p:messages for="nombre" />
+
+                    <h:outputLabel for="tipo" value="Tipo de descuento:" />
+                    <p:selectOneMenu id="tipo" value="#{descuentoModel.registro.idTipoDescuento}" required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{descuentoModel.tiposDescuento}" var="tipo" itemLabel="#{tipo.nombre}"
+                            itemValue="#{tipo}" />
+                    </p:selectOneMenu>
+                    <p:messages for="tipo" />
+
+                    <h:outputLabel for="desde" value="Desde:" />
+                    <p:datePicker id="desde" value="#{descuentoModel.registro.fechaDesde}" showTime="true" />
+                    <p:messages for="desde" />
+
+                    <h:outputLabel for="hasta" value="Hasta:" />
+                    <p:datePicker id="hasta" value="#{descuentoModel.registro.fechaHasta}" showTime="true" />
+                    <p:messages for="hasta" />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones" value="#{descuentoModel.registro.observaciones}" rows="3" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+                <c:btnsForm model="#{descuentoModel}" saveUpdate="frmDescuento frmTablaDescuento"
+                    newUpdate="frmDescuento frmTablaDescuento" />
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Descuentos</h3>
+            <h:form id="frmTablaDescuento">
+                <c:tablaDinamica model="#{descuentoModel}" columns="#{descuentoModel.columnas}" rowKey="idDescuento"
+                    editUpdate="frmDescuento" deleteUpdate="frmTablaDescuento frmDescuento" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

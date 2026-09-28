@@ -1,55 +1,54 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
-      xmlns:ui="jakarta.faces.facelets">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:p="primefaces" xmlns:ui="jakarta.faces.facelets">
 
-    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
-        <h:head>
-            <h:outputStylesheet library="css" name="/resources/css/main.css"/>
-            <!-- Librería de FontAwesome para íconos -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-            <title>
-                <ui:insert name="page_title">
-                    Título por defecto
-                </ui:insert>
-            </title>
-        </h:head>
+<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+    <h:head>
+        <h:outputStylesheet library="css" name="/resources/css/main.css" />
+        <!-- Librería de FontAwesome para íconos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <title>
+            <ui:insert name="page_title">
+                Título por defecto
+            </ui:insert>
+        </title>
+    </h:head>
 
-        <h:body class="ui-g main_body">
-            <header class="ui-g-2 side_menu">
-                <!-- TODO: Reemplazar por el logo de la app -->
-                <h2>Menu lateral</h2>
-                
-                <nav class='menu_nav'>
-                    <a href="#">
-                        <i class="fa-solid fa-house"></i>
-                        Opcion
-                    </a>
-                </nav>
-                
-                <section class="menu_copy">
-                    <p>&copy; 2026 Todos los derechos reservados</p>
-                </section>
-            </header>
+    <h:body class="ui-g main_body">
+        <header class="ui-g-2 side_menu">
+            <!-- TODO: Reemplazar por el logo de la app -->
+            <h2>Menu lateral</h2>
 
-            <main class="ui-g-10">
-                <section class="ui-g-10 main_header">
-                    <h2>
-                        <ui:insert name="header_title">
-                            Título por defecto
-                        </ui:insert>
-                    </h2>
-                </section>
+            <nav class='menu_nav'>
+                <a href="#">
+                    <i class="fa-solid fa-house"></i>
+                    Opcion
+                </a>
+            </nav>
 
-                <section class="ui-g-10 work_area">
-                    <ui:insert name="content">
-                        <h2>Área de Trabajo</h2>
+            <section class="menu_copy">
+                <p>&copy; 2026 Todos los derechos reservados</p>
+            </section>
+        </header>
+
+        <main class="ui-g-10">
+            <section class="ui-g-10 main_header">
+                <h2>
+                    <ui:insert name="header_title">
+                        Título por defecto
                     </ui:insert>
-                </section>
-            </main>
-        </h:body>
-    </f:view>
+                </h2>
+            </section>
+
+            <section class="ui-g-10 work_area">
+                <ui:insert name="content">
+                    <h2>Área de Trabajo</h2>
+                </ui:insert>
+            </section>
+        </main>
+    </h:body>
+</f:view>
+
 </html>

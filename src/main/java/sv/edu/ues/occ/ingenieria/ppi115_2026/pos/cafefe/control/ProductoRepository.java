@@ -16,7 +16,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 @LocalBean
 public class ProductoRepository extends DefaultRepository<Producto, UUID> {
 
-   @PersistenceContext(unitName = "Cafefe-PU")
+    @PersistenceContext(unitName = "Cafefe-PU")
     private EntityManager em;
 
     public ProductoRepository() {
