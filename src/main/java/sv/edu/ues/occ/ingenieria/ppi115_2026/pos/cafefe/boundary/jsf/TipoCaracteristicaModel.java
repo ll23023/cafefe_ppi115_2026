@@ -8,12 +8,19 @@ import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
 
+/**
+ *
+ * @author mil
+ */
 @Named
 @ViewScoped
 public class TipoCaracteristicaModel extends DefaultModel<TipoCaracteristica, UUID> {
+
     private static final long serialVersionUID = 1L;
+
     @Inject
     private TipoCaracteristicaRepository tipoCaracteristicaRepository;
+
     private List<ColumnaTabla> columnas;
 
     @Override
@@ -23,10 +30,10 @@ public class TipoCaracteristicaModel extends DefaultModel<TipoCaracteristica, UU
 
     @Override
     public TipoCaracteristica instanciarRegistro() {
-        TipoCaracteristica tipo = new TipoCaracteristica(UUID.randomUUID());
-        tipo.setActivo(Boolean.TRUE);
-        tipo.setObservaciones("");
-        return tipo;
+        TipoCaracteristica t = new TipoCaracteristica(UUID.randomUUID());
+        t.setActivo(Boolean.TRUE);
+        t.setObservaciones("");
+        return t;
     }
 
     @Override
@@ -36,15 +43,18 @@ public class TipoCaracteristicaModel extends DefaultModel<TipoCaracteristica, UU
 
     @Override
     public Object getIdByRegistro(TipoCaracteristica dato) {
-        return dato == null ? null : dato.getIdTipoCaracteristica();
+        return dato != null ? dato.getIdTipoCaracteristica() : null;
     }
 
     public List<ColumnaTabla> getColumnas() {
-        if (columnas == null)
-            columnas = List.of(new ColumnaTabla("idTipoCaracteristica", "ID"), new ColumnaTabla("nombre", "Nombre"),
+        if (columnas == null) {
+            columnas = List.of(
+                    new ColumnaTabla("nombre", "Nombre"),
                     new ColumnaTabla("expresionRegular", "Expresión regular"),
                     new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla("observaciones", "Observaciones"));
+                    new ColumnaTabla("observaciones", "Observaciones")
+            );
+        }
         return columnas;
     }
 }

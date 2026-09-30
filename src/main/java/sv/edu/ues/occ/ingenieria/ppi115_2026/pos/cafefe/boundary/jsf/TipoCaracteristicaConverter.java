@@ -6,14 +6,18 @@ import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
 
+/**
+ * @author mil
+ */
 @FacesConverter(forClass = TipoCaracteristica.class, managed = true)
 public class TipoCaracteristicaConverter extends DefaultConverter<TipoCaracteristica, UUID> {
+
     @Inject
-    private TipoCaracteristicaRepository repository;
+    private TipoCaracteristicaRepository tipoCaracteristicaRepository;
 
     @Override
     protected TipoCaracteristicaRepository getRepository() {
-        return repository;
+        return tipoCaracteristicaRepository;
     }
 
     @Override
@@ -22,7 +26,7 @@ public class TipoCaracteristicaConverter extends DefaultConverter<TipoCaracteris
     }
 
     @Override
-    protected UUID getId(TipoCaracteristica entity) {
-        return entity.getIdTipoCaracteristica();
+    protected UUID getId(TipoCaracteristica entidad) {
+        return entidad.getIdTipoCaracteristica();
     }
 }

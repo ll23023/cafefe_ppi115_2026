@@ -1,11 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-    template="/resources/templates/basic.xhtml" xmlns:p="primefaces"
-    xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
-    <ui:define name="page_title">Prueba de plantilla</ui:define>
-    <ui:define name="header_title">Test</ui:define>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Tipos de Producto</ui:define>
+    <ui:define name="header_title">Tipos de Producto</ui:define>
 
     <ui:define name="content">
         <div class="card">
@@ -13,34 +17,42 @@
 
             <h:form id="frmTipoProducto">
                 <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="nombre" value="Nombre del Producto:" />
-                    <p:inputText id="nombre" value="#{tipoProductoModel.registro.nombre}" required="true" />
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre"
+                                 value="#{tipoProductoModel.registro.nombre}"
+                                 required="true"
+                                 maxlength="155" />
                     <p:messages for="nombre" />
 
-                    <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}" rows="3"
-                        cols="50" />
-                    <p:messages for="observaciones" />
-
                     <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}"
-                        itemLabel="Activo" />
+                    <p:selectBooleanCheckbox id="activo"
+                                             value="#{tipoProductoModel.registro.activo}"
+                                             itemLabel="Activo" />
                     <h:panelGroup />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{tipoProductoModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
                 </h:panelGrid>
 
                 <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{tipoProductoModel}" saveUpdate="frmTipoProducto frmTablaProducto"
-                        newUpdate="frmTipoProducto frmTablaProducto" />
+                    <c:btnsForm model="#{tipoProductoModel}"
+                                saveUpdate="frmTipoProducto frmTablaTipoProducto"
+                                newUpdate="frmTipoProducto frmTablaTipoProducto" />
                 </div>
             </h:form>
         </div>
 
         <div class="card">
             <h3>Lista de Tipos de Producto</h3>
-            <h:form id="frmTablaProducto">
-                <c:tablaDinamica model="#{tipoProductoModel}" columns="#{tipoProductoModel.columnas}"
-                    rowKey="idTipoProducto" editUpdate="frmTipoProducto"
-                    deleteUpdate="frmTablaProducto frmTipoProducto" />
+            <h:form id="frmTablaTipoProducto">
+                <c:tablaDinamica model="#{tipoProductoModel}"
+                                  columns="#{tipoProductoModel.columnas}"
+                                  rowKey="idTipoProducto"
+                                  editUpdate="frmTipoProducto"
+                                  deleteUpdate="frmTablaTipoProducto frmTipoProducto" />
             </h:form>
         </div>
     </ui:define>

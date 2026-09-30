@@ -1,6 +1,8 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -37,10 +39,6 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
     private List<Empleado> empleados;
     private List<Rol> roles;
 
-    /**
-     * Así es como se definen las columnas de la tabla dinámica.
-     * La propiedad puede ser una ruta anidada, como {@code idEmpleado.nombre}.
-     */
     private final List<ColumnaTabla> columnas = Arrays.asList(
             new ColumnaTabla("idEmpleadoRol", "ID"),
             new ColumnaTabla("idEmpleado.nombre", "Empleado"),
@@ -73,7 +71,9 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     public void cargarRoles() {
         if (rolRepository != null) {
-            this.roles = rolRepository.findAll();
+            this.roles = rolRepository.findAll().stream()
+                    .filter(r -> Boolean.TRUE.equals(r.getActivo()))
+                    .toList();
         } else {
             this.roles = new ArrayList<>();
         }
@@ -95,6 +95,19 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
     @Override
     public Object getIdByRegistro(EmpleadoRol dato) {
         return dato != null ? dato.getIdEmpleadoRol() : null;
+    }
+
+    @Override
+    public void btnGuardarHandler() {
+        if (this.registro != null
+                && this.registro.getIdRol() != null
+                && !Boolean.TRUE.equals(this.registro.getIdRol().getActivo())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se puede asignar un rol inactivo.", null));
+            return;
+        }
+        super.btnGuardarHandler();
     }
 
     // Getters y Setters para los combos

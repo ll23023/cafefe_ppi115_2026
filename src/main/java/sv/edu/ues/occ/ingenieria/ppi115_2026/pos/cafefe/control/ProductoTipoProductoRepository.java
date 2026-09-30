@@ -7,9 +7,14 @@ import jakarta.persistence.PersistenceContext;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto;
 
+/**
+ *
+ * @author mil
+ */
 @Stateless
 @LocalBean
 public class ProductoTipoProductoRepository extends DefaultRepository<ProductoTipoProducto, UUID> {
+
     @PersistenceContext(unitName = "Cafefe-PU")
     private EntityManager em;
 
@@ -18,7 +23,7 @@ public class ProductoTipoProductoRepository extends DefaultRepository<ProductoTi
     }
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 }

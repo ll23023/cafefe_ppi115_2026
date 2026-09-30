@@ -1,50 +1,69 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-    xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="jakarta.faces.composite/components"
-    template="/resources/templates/basic.xhtml">
-    <ui:define name="page_title">Productos y Tipos</ui:define>
-    <ui:define name="header_title">Administración de Productos y Tipos</ui:define>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Producto-Tipo de Producto</ui:define>
+    <ui:define name="header_title">Producto-Tipo de Producto</ui:define>
+
     <ui:define name="content">
         <div class="card">
-            <h2>Administración de Productos y Tipos</h2>
+            <h2>Administración de Producto-Tipo de Producto</h2>
+
             <h:form id="frmProductoTipoProducto">
                 <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="producto" value="Producto:" />
-                    <p:selectOneMenu id="producto" value="#{productoTipoProductoModel.registro.idProducto}"
-                        required="true">
+                    <p:selectOneMenu id="producto"
+                                     value="#{productoTipoProductoModel.registro.idProducto}"
+                                     required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{productoTipoProductoModel.productos}" var="producto"
-                            itemLabel="#{producto.nombre}" itemValue="#{producto}" />
+                        <f:selectItems value="#{productoTipoProductoModel.productos}"
+                                       var="prod"
+                                       itemLabel="#{prod.nombre}"
+                                       itemValue="#{prod}" />
                     </p:selectOneMenu>
                     <p:messages for="producto" />
+
                     <h:outputLabel for="tipo" value="Tipo de producto:" />
-                    <p:selectOneMenu id="tipo" value="#{productoTipoProductoModel.registro.idTipoProducto}"
-                        required="true">
+                    <p:selectOneMenu id="tipo"
+                                     value="#{productoTipoProductoModel.registro.idTipoProducto}"
+                                     required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{productoTipoProductoModel.tiposProducto}" var="tipo"
-                            itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                        <f:selectItems value="#{productoTipoProductoModel.tiposProducto}"
+                                       var="t"
+                                       itemLabel="#{t.nombre}"
+                                       itemValue="#{t}" />
                     </p:selectOneMenu>
                     <p:messages for="tipo" />
-                    <h:outputLabel for="fecha" value="Fecha de creación:" />
-                    <p:datePicker id="fecha" value="#{productoTipoProductoModel.registro.fechaCreacion}"
-                        showTime="true" />
-                    <p:messages for="fecha" />
+
                     <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones" value="#{productoTipoProductoModel.registro.observaciones}"
-                        rows="3" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{productoTipoProductoModel.registro.observaciones}"
+                                     rows="3" cols="50" />
                     <p:messages for="observaciones" />
                 </h:panelGrid>
-                <c:btnsForm model="#{productoTipoProductoModel}"
-                    saveUpdate="frmProductoTipoProducto frmTablaProductoTipoProducto"
-                    newUpdate="frmProductoTipoProducto frmTablaProductoTipoProducto" />
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{productoTipoProductoModel}"
+                                saveUpdate="frmProductoTipoProducto frmTablaProductoTipoProducto"
+                                newUpdate="frmProductoTipoProducto frmTablaProductoTipoProducto" />
+                </div>
             </h:form>
         </div>
+
         <div class="card">
-            <h3>Lista de Relaciones</h3>
+            <h3>Lista de Producto-Tipo de Producto</h3>
             <h:form id="frmTablaProductoTipoProducto">
-                <c:tablaDinamica model="#{productoTipoProductoModel}" columns="#{productoTipoProductoModel.columnas}"
-                    rowKey="idProductoTipoProducto" editUpdate="frmProductoTipoProducto"
-                    deleteUpdate="frmTablaProductoTipoProducto frmProductoTipoProducto" />
+                <c:tablaDinamica model="#{productoTipoProductoModel}"
+                                  columns="#{productoTipoProductoModel.columnas}"
+                                  rowKey="idProductoTipoProducto"
+                                  editUpdate="frmProductoTipoProducto"
+                                  deleteUpdate="frmTablaProductoTipoProducto frmProductoTipoProducto" />
             </h:form>
         </div>
     </ui:define>
