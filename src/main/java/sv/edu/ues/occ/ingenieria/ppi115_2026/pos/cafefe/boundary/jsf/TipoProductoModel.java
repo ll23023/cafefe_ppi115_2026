@@ -25,7 +25,7 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> {
     private final List<ColumnaTabla> columnas = Arrays.asList(
             new ColumnaTabla("idTipoProducto", "ID"),
             new ColumnaTabla("nombre", "Nombre"),
-            new ColumnaTabla("activo", "Estado"),
+            new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
             new ColumnaTabla("observaciones", "Observaciones")
     );
 

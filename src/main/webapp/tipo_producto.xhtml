@@ -4,44 +4,46 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
     template="/resources/templates/basic.xhtml" xmlns:p="primefaces"
     xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
-    <ui:define name="page_title">Prueba de plantilla</ui:define>
-    <ui:define name="header_title">Test</ui:define>
+    <ui:define name="page_title">Cafefe - Tipos de Productos</ui:define>
+    <ui:define name="header_title">Tipos de Productos</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Tipos de Producto</h2>
+    <ui:define name="main_form">
+        <h2>Nuevo Tipo de Producto</h2>
 
-            <h:form id="frmTipoProducto">
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="nombre" value="Nombre del Producto:" />
-                    <p:inputText id="nombre" value="#{tipoProductoModel.registro.nombre}" required="true" />
-                    <p:messages for="nombre" />
+        <h:form id="frmTipoProducto">
+            <h:outputLabel for="nombre" value="Nombre del Producto:" />
+            <p:inputText id="nombre" value="#{tipoProductoModel.registro.nombre}" required="true" />
+            <p:messages for="nombre" />
 
-                    <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}" rows="3"
-                        cols="50" />
-                    <p:messages for="observaciones" />
+            <h:outputLabel for="observaciones" value="Observaciones:" />
+            <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}" rows="3"
+                cols="20" />
+            <p:messages for="observaciones" />
 
-                    <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}"
-                        itemLabel="Activo" />
-                    <h:panelGroup />
-                </h:panelGrid>
+            <h:outputLabel for="activo" value="Estado:" />
+            <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}" itemLabel="Activo" />
+            <h:panelGroup />
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{tipoProductoModel}" saveUpdate="frmTipoProducto frmTablaProducto"
-                        newUpdate="frmTipoProducto frmTablaProducto" />
-                </div>
-            </h:form>
-        </div>
-
-        <div class="card">
-            <h3>Lista de Tipos de Producto</h3>
-            <h:form id="frmTablaProducto">
-                <c:tablaDinamica model="#{tipoProductoModel}" columns="#{tipoProductoModel.columnas}"
-                    rowKey="idTipoProducto" editUpdate="frmTipoProducto"
-                    deleteUpdate="frmTablaProducto frmTipoProducto" />
-            </h:form>
-        </div>
+            <div style="margin-top: 10px;">
+                <c:btnsForm model="#{tipoProductoModel}" saveUpdate="frmTipoProducto frmTablaProducto"
+                    newUpdate="frmTipoProducto frmTablaProducto" />
+            </div>
+        </h:form>
     </ui:define>
+
+    <ui:define name="main_list">
+        <h2>Lista de Tipos de Producto</h2>
+        <h:form id="frmTablaProducto">
+            <c:tablaDinamica model="#{tipoProductoModel}" columns="#{tipoProductoModel.columnas}"
+                rowKey="idTipoProducto" editUpdate="frmTipoProducto" deleteUpdate="frmTablaProducto frmTipoProducto" />
+        </h:form>
+    </ui:define>
+
+    <!--        <div class="card">
+            
+        </div>
+
+        <div class="card">
+            
+        </div>-->
 </ui:composition>
