@@ -1,5 +1,7 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -8,8 +10,10 @@ import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 
 /**
  *
@@ -27,7 +31,11 @@ public class OrdenProductoModel extends DefaultModel<OrdenProducto, UUID> {
     @Inject
     private OrdenRepository ordenRepository;
 
+    @Inject
+    private ProductoRepository productoRepository;
+
     private List<Orden> ordenes;
+    private List<Producto> productos;
     private List<ColumnaTabla> columnas;
 
     @Override
@@ -53,10 +61,23 @@ public class OrdenProductoModel extends DefaultModel<OrdenProducto, UUID> {
     }
 
     /**
-     * Combo de Orden, por si se arma una pantalla propia para OrdenProducto
-     * más adelante. El combo de Producto todavía no se puede armar porque
-     * falta esa entidad/repositorio.
+     * Validación defensiva: aunque el combo ya solo muestra productos activos,
+     * esto evita guardar si de alguna forma llega uno inactivo.
      */
+    @Override
+    public void btnGuardarHandler() {
+        if (this.registro != null
+                && this.registro.getIdProducto() != null
+                && !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se puede agregar un producto inactivo.", null));
+            return;
+        }
+        super.btnGuardarHandler();
+    }
+
+    // Carga perezosa para el combo de Orden.
     public List<Orden> getOrdenes() {
         if (this.ordenes == null) {
             this.ordenes = ordenRepository != null ? ordenRepository.findAll() : new ArrayList<>();
@@ -68,16 +89,27 @@ public class OrdenProductoModel extends DefaultModel<OrdenProducto, UUID> {
         this.ordenes = ordenes;
     }
 
-    /**
-     * Columnas para tablaDinamica. La columna "Producto" queda como
-     * placeholder (muestra el toString() de Producto) hasta tener esa
-     * entidad con un campo de nombre real.
-     */
+    //Solo trae productos activos
+    public List<Producto> getProductos() {
+        if (this.productos == null) {
+            this.productos = productoRepository != null
+                    ? productoRepository.findAll().stream()
+                            .filter(p -> Boolean.TRUE.equals(p.getActivo()))
+                            .toList()
+                    : new ArrayList<>();
+        }
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
     public List<ColumnaTabla> getColumnas() {
         if (columnas == null) {
             columnas = List.of(
                     new ColumnaTabla("idOrden.fechaCreacion", "Fecha de la orden", FORMATO_COLUMNA.DATE),
-                    new ColumnaTabla("idProducto", "Producto"),
+                    new ColumnaTabla("idProducto.nombre", "Producto"),
                     new ColumnaTabla("precio", "Precio", FORMATO_COLUMNA.CURRENCY),
                     new ColumnaTabla("observaciones", "Observaciones")
             );

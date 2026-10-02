@@ -62,10 +62,15 @@ public class ProductoTipoProductoModel extends DefaultModel<ProductoTipoProducto
         return dato != null ? dato.getIdProductoTipoProducto() : null;
     }
 
-    // Carga perezosa para el combo de Producto (no tiene restricción de activo).
+     //Solo trae productos activos.
+    
     public List<Producto> getProductos() {
         if (this.productos == null) {
-            this.productos = productoRepository != null ? productoRepository.findAll() : new ArrayList<>();
+            this.productos = productoRepository != null
+                    ? productoRepository.findAll().stream()
+                            .filter(p -> Boolean.TRUE.equals(p.getActivo()))
+                            .toList()
+                    : new ArrayList<>();
         }
         return productos;
     }
@@ -74,6 +79,8 @@ public class ProductoTipoProductoModel extends DefaultModel<ProductoTipoProducto
         this.productos = productos;
     }
 
+     //Solo trae tipos de producto activos.
+    
     public List<TipoProducto> getTiposProducto() {
         if (this.tiposProducto == null) {
             this.tiposProducto = tipoProductoRepository != null
@@ -89,8 +96,20 @@ public class ProductoTipoProductoModel extends DefaultModel<ProductoTipoProducto
         this.tiposProducto = tiposProducto;
     }
 
+    /**
+     * Validación defensiva: aunque el combo ya solo muestra tipos activos,
+     * esto evita guardar si de alguna forma llega un tipo inactivo.
+     */
     @Override
     public void btnGuardarHandler() {
+        if (this.registro != null
+                && this.registro.getIdProducto() != null
+                && !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se puede configurar un producto inactivo.", null));
+            return;
+        }
         if (this.registro != null
                 && this.registro.getIdTipoProducto() != null
                 && !Boolean.TRUE.equals(this.registro.getIdTipoProducto().getActivo())) {
