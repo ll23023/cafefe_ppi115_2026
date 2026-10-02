@@ -3,6 +3,8 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
@@ -21,7 +23,7 @@ public class TipoProductoModel extends DefaultModel<TipoProducto, UUID> {
     @Inject
     private TipoProductoRepository tipoProductoRepository;
 
-    private final List<ColumnaTabla> columnas = Arrays.asList(
+    private List<ColumnaTabla> columnas = Arrays.asList(
             new ColumnaTabla("idTipoProducto", "ID"),
             new ColumnaTabla("nombre", "Nombre"),
             new ColumnaTabla("activo", "Estado", FORMATO_COLUMNA.BOOLEAN),
