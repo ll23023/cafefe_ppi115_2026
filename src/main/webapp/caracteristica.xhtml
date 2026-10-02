@@ -1,44 +1,70 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-    xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="jakarta.faces.composite/components"
-    template="/resources/templates/basic.xhtml">
-    <ui:define name="page_title">Características</ui:define>
-    <ui:define name="header_title">Administración de Características</ui:define>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Características</ui:define>
+    <ui:define name="header_title">Características</ui:define>
+
     <ui:define name="content">
         <div class="card">
             <h2>Administración de Características</h2>
+
             <h:form id="frmCaracteristica">
                 <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{caracteristicaModel.registro.nombre}" required="true" />
+                    <p:inputText id="nombre"
+                                 value="#{caracteristicaModel.registro.nombre}"
+                                 required="true"
+                                 maxlength="155" />
                     <p:messages for="nombre" />
+
                     <h:outputLabel for="tipo" value="Tipo:" />
-                    <p:selectOneMenu id="tipo" value="#{caracteristicaModel.registro.idTipoCaracteristica}"
-                        required="true">
+                    <p:selectOneMenu id="tipo"
+                                     value="#{caracteristicaModel.registro.idTipoCaracteristica}"
+                                     required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{caracteristicaModel.tiposCaracteristica}" var="tipo"
-                            itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                        <f:selectItems value="#{caracteristicaModel.tipos}"
+                                       var="t"
+                                       itemLabel="#{t.nombre}"
+                                       itemValue="#{t}" />
                     </p:selectOneMenu>
                     <p:messages for="tipo" />
+
                     <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo" value="#{caracteristicaModel.registro.activo}"
-                        itemLabel="Activo" />
+                    <p:selectBooleanCheckbox id="activo"
+                                             value="#{caracteristicaModel.registro.activo}"
+                                             itemLabel="Activo" />
                     <h:panelGroup />
+
                     <h:outputLabel for="observaciones" value="Observaciones:" />
-                    <p:inputTextarea id="observaciones" value="#{caracteristicaModel.registro.observaciones}"
-                        rows="3" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{caracteristicaModel.registro.observaciones}"
+                                     rows="3" cols="50" />
                     <p:messages for="observaciones" />
                 </h:panelGrid>
-                <c:btnsForm model="#{caracteristicaModel}" saveUpdate="frmCaracteristica frmTablaCaracteristica"
-                    newUpdate="frmCaracteristica frmTablaCaracteristica" />
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{caracteristicaModel}"
+                                saveUpdate="frmCaracteristica frmTablaCaracteristica"
+                                newUpdate="frmCaracteristica frmTablaCaracteristica" />
+                </div>
             </h:form>
         </div>
+
         <div class="card">
             <h3>Lista de Características</h3>
             <h:form id="frmTablaCaracteristica">
-                <c:tablaDinamica model="#{caracteristicaModel}" columns="#{caracteristicaModel.columnas}"
-                    rowKey="idCaracteristica" editUpdate="frmCaracteristica"
-                    deleteUpdate="frmTablaCaracteristica frmCaracteristica" />
+                <c:tablaDinamica model="#{caracteristicaModel}"
+                                  columns="#{caracteristicaModel.columnas}"
+                                  rowKey="idCaracteristica"
+                                  editUpdate="frmCaracteristica"
+                                  deleteUpdate="frmTablaCaracteristica frmCaracteristica" />
             </h:form>
         </div>
     </ui:define>

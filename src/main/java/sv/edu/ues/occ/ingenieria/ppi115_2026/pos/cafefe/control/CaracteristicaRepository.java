@@ -7,6 +7,10 @@ import jakarta.persistence.PersistenceContext;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica;
 
+/**
+ *
+ * @author mil
+ */
 @Stateless
 @LocalBean
 public class CaracteristicaRepository extends DefaultRepository<Caracteristica, UUID> {
@@ -19,7 +23,7 @@ public class CaracteristicaRepository extends DefaultRepository<Caracteristica, 
     }
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 }
