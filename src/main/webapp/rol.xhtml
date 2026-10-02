@@ -5,55 +5,133 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
                 xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Cafefe - Roles</ui:define>
     <ui:define name="header_title">Roles</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Roles</h2>
+    <ui:define name="main_form">
+        <p:growl id="growl" showDetail="false" />
 
-            <h:form id="frmRol">
-                <h:panelGrid columns="3" cellpadding="5">
+        <section class="main_form">
+            <h2>#{rolModel.tituloFormulario}</h2>
+
+            <h:form id="frmRol" styleClass="form_grid">
+                <div class="custom_input">
                     <h:outputLabel for="nombre" value="Nombre:" />
                     <p:inputText id="nombre"
                                  value="#{rolModel.registro.nombre}"
                                  required="true"
-                                 maxlength="155" />
-                    <p:messages for="nombre" />
+                                 maxlength="155"
+                                 disabled="#{rolModel.soloLectura}" />
+                    <p:message for="nombre" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="activo" value="Estado:" />
                     <p:selectBooleanCheckbox id="activo"
-                                              value="#{rolModel.registro.activo}"
-                                              itemLabel="Activo" />
-                    <h:panelGroup />
+                                             value="#{rolModel.registro.activo}"
+                                             itemLabel="Activo"
+                                             disabled="#{rolModel.soloLectura}" />
+                    <p:message for="activo" />
+                </div>
 
+                <div class="custom_input input_tarea">
                     <h:outputLabel for="observaciones" value="Observaciones:" />
                     <p:inputTextarea id="observaciones"
                                      value="#{rolModel.registro.observaciones}"
-                                     rows="3" cols="50" />
-                    <p:messages for="observaciones" />
-                </h:panelGrid>
+                                     rows="2"
+                                     disabled="#{rolModel.soloLectura}" />
+                    <p:message for="observaciones" />
+                </div>
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{rolModel}"
-                                saveUpdate="frmRol frmTablaRol"
-                                newUpdate="frmRol frmTablaRol" />
+                <div class="form_buttons">
+                    <p:commandButton value="#{rolModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{rolModel.btnGuardarHandler}"
+                                     process="@form"
+                                     update=":frmRol :pnlInfo :frmListaRol :growl"
+                                     styleClass="btn btn-primary"
+                                     rendered="#{!rolModel.soloLectura}" />
+                    <p:commandButton value="#{rolModel.soloLectura ? 'Nuevo' : (rolModel.editando ? 'Cancelar' : 'Nuevo')}"
+                                     action="#{rolModel.cancelar}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update=":frmRol :pnlInfo :frmListaRol :growl"
+                                     styleClass="btn btn-secondary" />
                 </div>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
 
-        <div class="card">
-            <h3>Lista de Roles</h3>
-            <h:form id="frmTablaRol">
-                <c:tablaDinamica model="#{rolModel}"
-                                  columns="#{rolModel.columnas}"
-                                  rowKey="idRol"
-                                  editUpdate="frmRol"
-                                  deleteUpdate="frmTablaRol frmRol" />
-            </h:form>
-        </div>
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h:panelGroup id="pnlInfo" layout="block">
+                <h2>Empleados con este rol</h2>
+
+                <h:outputText rendered="#{rolModel.seleccion == null}"
+                              value="Seleccione un rol de la lista para ver qué empleados lo tienen." />
+
+                <p:dataTable id="tblEmpleadosRol"
+                             var="emp"
+                             value="#{rolModel.empleadosDelRol}"
+                             rendered="#{rolModel.seleccion != null}"
+                             emptyMessage="Ningún empleado tiene este rol">
+                    <p:column headerText="Nombres">
+                        <h:outputText value="#{emp.nombre}" />
+                    </p:column>
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{emp.apellido}" />
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{emp.activo ? 'ACTIVO' : 'INACTIVO'}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmListaRol">
+            <article class="main_item_list">
+                <h2>Lista de roles</h2>
+                <p:dataTable id="tblRoles"
+                             var="rol"
+                             value="#{rolModel.registros}"
+                             rowKey="#{rol.idRol}"
+                             selection="#{rolModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay registros"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{rolModel.onSeleccionar}"
+                            update=":frmRol :pnlInfo" />
+
+                    <p:columns value="#{rolModel.columnas}" var="column"
+                               headerText="#{column.header}">
+                        #{column.getValue(rol)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones" styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{rolModel.editar(rol)}"
+                                         process="@this"
+                                         update=":frmRol :pnlInfo :frmListaRol"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         action="#{rolModel.eliminar(rol)}"
+                                         process="@this"
+                                         update=":frmRol :pnlInfo :frmListaRol :growl"
+                                         onclick="return confirm('¿Eliminar este rol?');"
+                                         styleClass="btn btn-danger" />
+                    </p:column>
+                </p:dataTable>
+            </article>
+        </h:form>
     </ui:define>
 </ui:composition>
