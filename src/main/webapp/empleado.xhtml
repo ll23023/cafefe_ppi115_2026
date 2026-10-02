@@ -5,62 +5,156 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
                 xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Cafefe - Empleados</ui:define>
     <ui:define name="header_title">Empleados</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Empleados</h2>
+    <ui:define name="main_form">
+        <h:outputStylesheet name="css/empleado_layout.css" />
+        <p:growl id="growl" showDetail="false" />
 
-            <h:form id="frmEmpleado">
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="nombre" value="Nombre:" />
+        <section class="main_form">
+            <h2>#{empleadoModel.tituloFormulario}</h2>
+            <h:form id="frmEmpleado" styleClass="form_grid">
+
+                <div class="custom_input">
+                    <h:outputLabel for="nombre" value="Nombres:" />
                     <p:inputText id="nombre"
                                  value="#{empleadoModel.registro.nombre}"
                                  required="true"
-                                 maxlength="255" />
-                    <p:messages for="nombre" />
+                                 maxlength="100"
+                                 disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="nombre" />
+                </div>
 
-                    <h:outputLabel for="apellido" value="Apellido:" />
+                <div class="custom_input">
+                    <h:outputLabel for="apellido" value="Apellidos:" />
                     <p:inputText id="apellido"
                                  value="#{empleadoModel.registro.apellido}"
                                  required="true"
-                                 maxlength="255" />
-                    <p:messages for="apellido" />
+                                 maxlength="100"
+                                 disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="apellido" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="activo" value="Estado:" />
                     <p:selectBooleanCheckbox id="activo"
-                                              value="#{empleadoModel.registro.activo}"
-                                              itemLabel="Activo" />
-                    <h:panelGroup />
+                                             value="#{empleadoModel.registro.activo}"
+                                             itemLabel="Activo"
+                                             disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="activo" />
+                </div>
 
+                <div class="custom_input input_tarea">
                     <h:outputLabel for="comentarios" value="Comentarios:" />
                     <p:inputTextarea id="comentarios"
                                      value="#{empleadoModel.registro.comentarios}"
-                                     rows="3" cols="50" />
-                    <p:messages for="comentarios" />
-                </h:panelGrid>
+                                     rows="2"
+                                     disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="comentarios" />
+                </div>
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{empleadoModel}"
-                                saveUpdate="frmEmpleado frmTablaEmpleado"
-                                newUpdate="frmEmpleado frmTablaEmpleado" />
+                <div class="form_buttons">
+                    <p:commandButton value="#{empleadoModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{empleadoModel.btnGuardarHandler}"
+                                     process="@form"
+                                     update=":frmEmpleado :frmRoles :frmLista :growl"
+                                     styleClass="btn btn-primary"
+                                     rendered="#{!empleadoModel.soloLectura}" />
+                    <p:commandButton value="#{empleadoModel.soloLectura ? 'Nuevo' : (empleadoModel.editando ? 'Cancelar' : 'Nuevo')}"
+                                     action="#{empleadoModel.cancelar}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update=":frmEmpleado :frmRoles :frmLista :growl"
+                                     styleClass="btn btn-secondary" />
                 </div>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
 
-        <div class="card">
-            <h3>Lista de Empleados</h3>
-            <h:form id="frmTablaEmpleado">
-                <c:tablaDinamica model="#{empleadoModel}"
-                                  columns="#{empleadoModel.columnas}"
-                                  rowKey="idEmpleado"
-                                  editUpdate="frmEmpleado"
-                                  deleteUpdate="frmTablaEmpleado frmEmpleado" />
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h:form id="frmRoles">
+                <div class="item_sublist_header">
+                    <h2>Roles</h2>
+                    <p:commandButton icon="pi pi-plus"
+                                     title="Agregar rol"
+                                     action="#{empleadoModel.agregarFila}"
+                                     process="@this tblRoles"
+                                     update="tblRoles" />
+                </div>
+
+                <p:dataTable id="tblRoles"
+                             var="fila"
+                             value="#{empleadoModel.filas}"
+                             emptyMessage="Sin roles asignados">
+                    <p:column headerText="">
+                        <p:selectOneMenu value="#{fila.nombre}"
+                                         editable="true"
+                                         title="Busque un rol o escriba uno nuevo">
+                            <p:ajax event="change" process="@this" update="@none" />
+                            <f:selectItems value="#{empleadoModel.roles}" var="r"
+                                           itemValue="#{r.nombre}"
+                                           itemLabel="#{r.nombre}"
+                                           itemDisabled="#{!r.activo}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-minus"
+                                         title="Quitar rol"
+                                         action="#{empleadoModel.quitarFila(fila)}"
+                                         process="@this tblRoles"
+                                         update="tblRoles" />
+                    </p:column>
+                </p:dataTable>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmLista">
+            <article class="main_item_list">
+                <h2>Lista de empleados</h2>
+                <p:dataTable id="tblEmpleados"
+                             var="emp"
+                             value="#{empleadoModel.registros}"
+                             rowKey="#{emp.idEmpleado}"
+                             selection="#{empleadoModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay registros"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{empleadoModel.onSeleccionar}"
+                            update=":frmEmpleado :frmRoles" />
+
+                    <p:columns value="#{empleadoModel.columnas}" var="column"
+                               headerText="#{column.header}">
+                        #{column.getValue(emp)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones" styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{empleadoModel.editar(emp)}"
+                                         process="@this"
+                                         update=":frmEmpleado :frmRoles :frmLista"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         action="#{empleadoModel.eliminar(emp)}"
+                                         process="@this"
+                                         update=":frmEmpleado :frmRoles :frmLista :growl"
+                                         onclick="return confirm('¿Eliminar este registro?');"
+                                         styleClass="btn btn-danger" />
+                    </p:column>
+                </p:dataTable>
+            </article>
+        </h:form>
     </ui:define>
 </ui:composition>

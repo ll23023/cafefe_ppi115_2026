@@ -71,9 +71,8 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     public void cargarRoles() {
         if (rolRepository != null) {
-            this.roles = rolRepository.findAll().stream()
-                    .filter(r -> Boolean.TRUE.equals(r.getActivo()))
-                    .toList();
+            // Todos los roles: la vista deshabilita los inactivos (itemDisabled)
+            this.roles = rolRepository.findAll();
         } else {
             this.roles = new ArrayList<>();
         }
@@ -110,7 +109,6 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
         super.btnGuardarHandler();
     }
 
-    // Getters y Setters para los combos
     public List<Empleado> getEmpleados() {
         return empleados;
     }

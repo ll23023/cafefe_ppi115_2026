@@ -26,7 +26,7 @@
                     <p:selectOneMenu id="rol" value="#{empleadoRolModel.registro.idRol}" required="true">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{empleadoRolModel.roles}" var="r" itemLabel="#{r.nombre}"
-                            itemValue="#{r}" />
+                            itemValue="#{r}" itemDisabled="#{!r.activo}" />
                     </p:selectOneMenu>
                     <p:messages for="rol" />
 
