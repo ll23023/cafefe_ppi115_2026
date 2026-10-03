@@ -11,13 +11,12 @@
     <ui:define name="header_title">Empleados</ui:define>
 
     <ui:define name="main_form">
-        <h:outputStylesheet name="css/empleado_layout.css" />
         <p:growl id="growl" showDetail="false" />
 
         <section class="main_form">
-            <h2>#{empleadoModel.tituloFormulario}</h2>
-            <h:form id="frmEmpleado" styleClass="form_grid">
 
+            <h:form id="frmEmpleado" styleClass="form_grid">
+                <h2>#{empleadoModel.tituloFormulario}</h2>
                 <div class="custom_input">
                     <h:outputLabel for="nombre" value="Nombres:" />
                     <p:inputText id="nombre"
@@ -83,7 +82,8 @@
                                      title="Agregar rol"
                                      action="#{empleadoModel.agregarFila}"
                                      process="@this tblRoles"
-                                     update="tblRoles" />
+                                     update="tblRoles"
+                                     disabled="#{!empleadoModel.creando}" />
                 </div>
 
                 <p:dataTable id="tblRoles"
@@ -93,7 +93,8 @@
                     <p:column headerText="">
                         <p:selectOneMenu value="#{fila.nombre}"
                                          editable="true"
-                                         title="Busque un rol o escriba uno nuevo">
+                                         title="Busque un rol o escriba uno nuevo"
+                                         disabled="#{!empleadoModel.creando}">
                             <p:ajax event="change" process="@this" update="@none" />
                             <f:selectItems value="#{empleadoModel.roles}" var="r"
                                            itemValue="#{r.nombre}"
@@ -106,7 +107,8 @@
                                          title="Quitar rol"
                                          action="#{empleadoModel.quitarFila(fila)}"
                                          process="@this tblRoles"
-                                         update="tblRoles" />
+                                         update="tblRoles"
+                                         disabled="#{!empleadoModel.creando}" />
                     </p:column>
                 </p:dataTable>
             </h:form>

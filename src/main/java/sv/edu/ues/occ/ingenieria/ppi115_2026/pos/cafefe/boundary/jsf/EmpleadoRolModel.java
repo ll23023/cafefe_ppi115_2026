@@ -98,15 +98,43 @@ public class EmpleadoRolModel extends DefaultModel<EmpleadoRol, UUID> {
 
     @Override
     public void btnGuardarHandler() {
-        if (this.registro != null
-                && this.registro.getIdRol() != null
-                && !Boolean.TRUE.equals(this.registro.getIdRol().getActivo())) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "No se puede asignar un rol inactivo.", null));
+        if (this.registro == null) {
             return;
         }
+        if (isEditando()) {
+            // Empleado y rol no cambian al modificar: se restauran desde la BD
+            EmpleadoRol original = empleadoRolRepository.findById(registro.getIdEmpleadoRol());
+            if (original != null) {
+                registro.setIdEmpleado(original.getIdEmpleado());
+                registro.setIdRol(original.getIdRol());
+            }
+        } else {
+            if (registro.getIdRol() != null
+                    && !Boolean.TRUE.equals(registro.getIdRol().getActivo())) {
+                error("No se puede asignar un rol inactivo.");
+                return;
+            }
+            if (existeAsignacion(registro)) {
+                error("Ese empleado ya tiene asignado ese rol.");
+                return;
+            }
+        }
         super.btnGuardarHandler();
+    }
+
+    private boolean existeAsignacion(EmpleadoRol nuevo) {
+        if (nuevo.getIdEmpleado() == null || nuevo.getIdRol() == null) {
+            return false;
+        }
+        return empleadoRolRepository.findAll().stream().anyMatch(er
+                -> er.getIdEmpleado() != null && er.getIdRol() != null
+                && er.getIdEmpleado().getIdEmpleado().equals(nuevo.getIdEmpleado().getIdEmpleado())
+                && er.getIdRol().getIdRol().equals(nuevo.getIdRol().getIdRol()));
+    }
+
+    private void error(String msg) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
     }
 
     public List<Empleado> getEmpleados() {

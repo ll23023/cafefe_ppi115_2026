@@ -5,62 +5,166 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
                 xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Cafefe - Órdenes</ui:define>
     <ui:define name="header_title">Órdenes</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Órdenes</h2>
+    <ui:define name="main_form">
+        <p:growl id="growl" showDetail="false" />
 
-            <h:form id="frmOrden">
-                <h:panelGrid columns="3" cellpadding="5">
+        <section class="main_form">
+
+            <h:form id="frmOrden" styleClass="form_grid">
+                <h2>#{ordenModel.tituloFormulario}</h2>
+                <div class="custom_input">
                     <h:outputLabel for="empleadoRol" value="Atendido por:" />
                     <p:selectOneMenu id="empleadoRol"
                                      value="#{ordenModel.registro.idEmpleadoRol}"
-                                     required="true">
+                                     required="true"
+                                     disabled="#{!ordenModel.creando}">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{ordenModel.empleadoRoles}"
                                        var="er"
                                        itemLabel="#{er.idEmpleado.nombre} #{er.idEmpleado.apellido} - #{er.idRol.nombre}"
-                                       itemValue="#{er}" />
+                                       itemValue="#{er}"
+                                       itemDisabled="#{!er.activo}" />
                     </p:selectOneMenu>
-                    <p:messages for="empleadoRol" />
+                    <p:message for="empleadoRol" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="fecha" value="Fecha:" />
                     <p:calendar id="fecha"
                                 value="#{ordenModel.fechaSeleccionada}"
                                 pattern="dd/MM/yyyy"
-                                required="true" />
-                    <p:messages for="fecha" />
+                                required="true"
+                                disabled="#{ordenModel.soloLectura}" />
+                    <p:message for="fecha" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="hora" value="Hora:" />
                     <p:calendar id="hora"
                                 value="#{ordenModel.horaSeleccionada}"
                                 timeOnly="true"
-                                pattern="HH:mm" />
-                    <h:panelGroup />
-                </h:panelGrid>
+                                pattern="HH:mm"
+                                disabled="#{ordenModel.soloLectura}" />
+                    <p:message for="hora" />
+                </div>
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{ordenModel}"
-                                saveUpdate="frmOrden frmTablaOrden"
-                                newUpdate="frmOrden frmTablaOrden" />
+                <div class="form_buttons">
+                    <p:commandButton value="#{ordenModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{ordenModel.btnGuardarHandler}"
+                                     process="@form frmProductos"
+                                     update=":frmOrden :frmProductos :frmLista :growl"
+                                     styleClass="btn btn-primary"
+                                     rendered="#{!ordenModel.soloLectura}" />
+                    <p:commandButton value="#{ordenModel.soloLectura ? 'Nuevo' : (ordenModel.editando ? 'Cancelar' : 'Nuevo')}"
+                                     action="#{ordenModel.cancelar}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update=":frmOrden :frmProductos :frmLista :growl"
+                                     styleClass="btn btn-secondary" />
                 </div>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
 
-        <div class="card">
-            <h3>Lista de Órdenes</h3>
-            <h:form id="frmTablaOrden">
-                <c:tablaDinamica model="#{ordenModel}"
-                                  columns="#{ordenModel.columnas}"
-                                  rowKey="idOrden"
-                                  editUpdate="frmOrden"
-                                  deleteUpdate="frmTablaOrden frmOrden" />
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h:form id="frmProductos">
+                <div class="item_sublist_header">
+                    <h2>Productos</h2>
+                    <p:commandButton icon="pi pi-plus"
+                                     title="Agregar producto"
+                                     action="#{ordenModel.agregarFila}"
+                                     process="@this tblProductos"
+                                     update="tblProductos"
+                                     disabled="#{!ordenModel.creando}" />
+                </div>
+
+                <p:dataTable id="tblProductos"
+                             var="fila"
+                             value="#{ordenModel.filas}"
+                             emptyMessage="Sin productos agregados">
+                    <p:column headerText="">
+                        <p:selectOneMenu value="#{fila.nombreProducto}"
+                                         title="Seleccione un producto"
+                                         disabled="#{!ordenModel.creando}">
+                            <f:selectItem itemLabel="-- Seleccione --" itemValue="" noSelectionOption="true" />
+                            <p:ajax event="change"
+                                    listener="#{ordenModel.onCambioProducto(fila)}"
+                                    process="@this"
+                                    update="precio" />
+                            <f:selectItems value="#{ordenModel.productos}" var="p"
+                                           itemValue="#{p.nombre}"
+                                           itemLabel="#{p.nombre}"
+                                           itemDisabled="#{!p.activo}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="">
+                        <p:inputNumber id="precio"
+                                       value="#{fila.precio}"
+                                       symbol="$ "
+                                       decimalPlaces="2"
+                                       minValue="0"
+                                       disabled="#{!ordenModel.creando}" />
+                    </p:column>
+                    <p:column styleClass="col_acciones" rendered="#{ordenModel.creando}">
+                        <p:commandButton icon="pi pi-minus"
+                                         title="Quitar producto"
+                                         action="#{ordenModel.quitarFila(fila)}"
+                                         process="@this tblProductos"
+                                         update="tblProductos" />
+                    </p:column>
+                </p:dataTable>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmLista">
+            <article class="main_item_list">
+                <h2>Lista de órdenes</h2>
+                <p:dataTable id="tblOrdenes"
+                             var="o"
+                             value="#{ordenModel.registros}"
+                             rowKey="#{o.idOrden}"
+                             selection="#{ordenModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay registros"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{ordenModel.onSeleccionar}"
+                            update=":frmOrden :frmProductos" />
+
+                    <p:columns value="#{ordenModel.columnas}" var="column"
+                               headerText="#{column.header}">
+                        #{column.getValue(o)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones" styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{ordenModel.editar(o)}"
+                                         process="@this"
+                                         update=":frmOrden :frmProductos :frmLista"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         action="#{ordenModel.eliminar(o)}"
+                                         process="@this"
+                                         update=":frmOrden :frmProductos :frmLista :growl"
+                                         onclick="return confirm('¿Eliminar este registro?');"
+                                         styleClass="btn btn-danger" />
+                    </p:column>
+                </p:dataTable>
+            </article>
+        </h:form>
     </ui:define>
 </ui:composition>

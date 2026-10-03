@@ -9,29 +9,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositor
 /**
  *
  * @author mil
- *
- *         <p>
- *         La clase mantiene dos referencias distintas durante el flujo de una
- *         tabla:
- *         {@code seleccion} representa la fila marcada por el usuario y
- *         {@code registro}
- *         representa el objeto que se muestra o se guarda en el formulario. La
- *         fila no
- *         se copia al formulario al seleccionarla; esa copia ocurre cuando se
- *         ejecuta
- *         {@link #btnEditarHandler()}.
- *         </p>
- *
- *         <p>
- *         El estado {@link ESTADO_CRUD#CREAR} o {@link ESTADO_CRUD#MODIFICAR}
- *         determina si {@link #btnGuardarHandler()} llama a {@code crear} o a
- *         {@code modificar}. Después de guardar o eliminar, {@link #limpiar()}
- *         crea un registro nuevo y elimina la selección para que la tabla no
- *         conserve
- *         acciones activas sobre un registro anterior.
- *         </p>
- *
- * @param <T>  tipo de entidad administrada por la pantalla
+ * 
+ * @param <T> tipo de entidad administrada por la pantalla
  * @param <ID> tipo del identificador de la entidad
  */
 public abstract class DefaultModel<T, ID> implements Serializable {
@@ -62,7 +41,8 @@ public abstract class DefaultModel<T, ID> implements Serializable {
      * Extrae el identificador de una entidad.
      *
      * @param dato entidad de la que se obtendrá el identificador
-     * @return identificador de {@code dato}, o {@code null} si {@code dato} es null
+     * @return identificador de {@code dato}, o {@code null} si {@code dato} es
+     * null
      */
     public abstract Object getIdByRegistro(T dato);
 
@@ -73,7 +53,9 @@ public abstract class DefaultModel<T, ID> implements Serializable {
      */
     public abstract DefaultRepository<T, ID> getRepository();
 
-    /** Carga los registros iniciales y prepara el formulario en modo creación. */
+    /**
+     * Carga los registros iniciales y prepara el formulario en modo creación.
+     */
     @PostConstruct
     public void init() {
         this.cargarRegistros();
@@ -108,7 +90,8 @@ public abstract class DefaultModel<T, ID> implements Serializable {
     }
 
     /**
-     * Activa el flujo de creación y descarta cualquier edición o selección previa.
+     * Activa el flujo de creación y descarta cualquier edición o selección
+     * previa.
      */
     public void btnNuevoHandler() {
         this.limpiar();
@@ -133,7 +116,8 @@ public abstract class DefaultModel<T, ID> implements Serializable {
 
     /**
      * Mantiene el método de modificación directa para páginas antiguas que aún
-     * lo utilizan; las páginas nuevas pueden usar el flujo unificado de guardar.
+     * lo utilizan; las páginas nuevas pueden usar el flujo unificado de
+     * guardar.
      */
     public void btnModificarHandler() {
         if (this.registro != null && getRepository() != null) {
@@ -143,7 +127,9 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
-    /** Elimina el registro actual, recarga la tabla y limpia la selección. */
+    /**
+     * Elimina el registro actual, recarga la tabla y limpia la selección.
+     */
     public void btnEliminarHandler() {
         if (this.registro != null && getRepository() != null) {
             getRepository().eliminar(this.registro);
@@ -153,9 +139,11 @@ public abstract class DefaultModel<T, ID> implements Serializable {
     }
 
     /**
-     * Carga una fila seleccionada en el formulario y cambia el modelo a edición.
+     * Carga una fila seleccionada en el formulario y cambia el modelo a
+     * edición.
      *
-     * @param r entidad seleccionada en la tabla; {@code null} no modifica el estado
+     * @param r entidad seleccionada en la tabla; {@code null} no modifica el
+     * estado
      */
     public void seleccionarRegistro(T r) {
         if (r != null) {
@@ -164,7 +152,9 @@ public abstract class DefaultModel<T, ID> implements Serializable {
         }
     }
 
-    /** Copia la selección actual al formulario si existe una fila seleccionada. */
+    /**
+     * Copia la selección actual al formulario si existe una fila seleccionada.
+     */
     public void btnEditarHandler() {
         this.seleccionarRegistro(this.seleccion);
     }
@@ -176,6 +166,14 @@ public abstract class DefaultModel<T, ID> implements Serializable {
      */
     public boolean isEditando() {
         return this.estado == ESTADO_CRUD.MODIFICAR;
+    }
+
+    /**
+     * Indica si el formulario está en modo creación (el único modo en que se
+     * permiten cambios en listas de selección y ventanas emergentes).
+     */
+    public boolean isCreando() {
+        return this.estado == ESTADO_CRUD.CREAR;
     }
 
     // Getters y Setters
