@@ -81,7 +81,7 @@
                                      action="#{ordenModel.agregarFila}"
                                      process="@this tblProductos"
                                      update="tblProductos"
-                                     disabled="#{!ordenModel.creando}" />
+                                     disabled="#{!ordenModel.puedeAgregarProductos}" />
                 </div>
 
                 <p:dataTable id="tblProductos"
@@ -90,8 +90,11 @@
                              emptyMessage="Sin productos agregados">
                     <p:column headerText="">
                         <p:selectOneMenu value="#{fila.nombreProducto}"
-                                         title="Seleccione un producto"
-                                         disabled="#{!ordenModel.creando}">
+                                         title="Seleccione o busque un producto"
+                                         filter="true"
+                                         filterMatchMode="contains"
+                                         filterNormalize="true"
+                                         disabled="#{fila.existente or !ordenModel.puedeAgregarProductos}">
                             <f:selectItem itemLabel="-- Seleccione --" itemValue="" noSelectionOption="true" />
                             <p:ajax event="change"
                                     listener="#{ordenModel.onCambioProducto(fila)}"
@@ -109,14 +112,15 @@
                                        symbol="$ "
                                        decimalPlaces="2"
                                        minValue="0"
-                                       disabled="#{!ordenModel.creando}" />
+                                       disabled="#{fila.existente or !ordenModel.puedeAgregarProductos}" />
                     </p:column>
-                    <p:column styleClass="col_acciones" rendered="#{ordenModel.creando}">
+                    <p:column styleClass="col_acciones" rendered="#{ordenModel.puedeAgregarProductos}">
                         <p:commandButton icon="pi pi-minus"
                                          title="Quitar producto"
                                          action="#{ordenModel.quitarFila(fila)}"
                                          process="@this tblProductos"
-                                         update="tblProductos" />
+                                         update="tblProductos"
+                                         disabled="#{fila.existente}" />
                     </p:column>
                 </p:dataTable>
             </h:form>
