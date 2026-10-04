@@ -46,6 +46,7 @@
                     <p:datePicker id="desde"
                                   value="#{descuentoModel.registro.fechaDesde}"
                                   showTime="true"
+                                  showButtonBar="true"
                                   pattern="dd/MM/yyyy HH:mm"
                                   appendTo="@(body)"
                                   required="true" />
@@ -57,20 +58,10 @@
                     <p:datePicker id="hasta"
                                   value="#{descuentoModel.registro.fechaHasta}"
                                   showTime="true"
+                                  showButtonBar="true"
                                   pattern="dd/MM/yyyy HH:mm"
-                                  appendTo="@(body)"
-                                  disabled="#{descuentoModel.sinFechaFin}" />
+                                  appendTo="@(body)" />
                     <p:message for="hasta" />
-                </div>
-
-                <div class="custom_input">
-                    <p:selectBooleanCheckbox id="sinFin"
-                                             value="#{descuentoModel.sinFechaFin}"
-                                             itemLabel="Sin fecha de finalización (descuento abierto)">
-                        <p:ajax listener="#{descuentoModel.onCambioSinFin}"
-                                process="@this"
-                                update="hasta" />
-                    </p:selectBooleanCheckbox>
                 </div>
 
                 <div class="custom_input">
@@ -85,13 +76,13 @@
                     <p:commandButton value="#{descuentoModel.editando ? 'Guardar edición' : 'Guardar'}"
                                      action="#{descuentoModel.btnGuardarHandler}"
                                      process="@form"
-                                     update=":frmDescuento :frmDetalle :frmTipos :growl"
+                                     update=":frmDescuento :frmDetalle :frmLista :growl"
                                      styleClass="btn btn-primary" />
                     <p:commandButton value="#{descuentoModel.editando ? 'Cancelar' : 'Nuevo'}"
                                      action="#{descuentoModel.cancelar}"
                                      process="@this"
                                      resetValues="true"
-                                     update=":frmDescuento :frmDetalle :frmTipos :growl"
+                                     update=":frmDescuento :frmDetalle :frmLista :growl"
                                      styleClass="btn btn-secondary" />
                 </div>
             </h:form>
@@ -102,22 +93,78 @@
         <section class="item_sublist">
             <h:form id="frmDetalle">
                 <div class="item_sublist_header">
-                    <h2>Descuentos relacionados</h2>
+                    <h2>Productos relacionados</h2>
                 </div>
 
-                <h:outputText value="Tipo de descuento: #{descuentoModel.tipoSeleccionado.nombre}"
-                              rendered="#{not empty descuentoModel.tipoSeleccionado}" />
+                <h:outputText value="Descuento: #{descuentoModel.seleccion.nombre}"
+                              rendered="#{not empty descuentoModel.seleccion}" />
 
-                <p:dataTable id="tblDescuentos"
-                             var="d"
-                             value="#{descuentoModel.descuentosDelTipo}"
+                <p:dataTable id="tblProductos"
+                             var="dp"
+                             value="#{descuentoModel.productosDelDescuento}"
                              paginator="true"
                              paginatorPosition="bottom"
                              rows="5"
                              styleClass="tabla"
-                             emptyMessage="#{empty descuentoModel.tipoSeleccionado ? 'Seleccione un tipo de descuento en la lista' : 'Este tipo de descuento todavía no tiene descuentos'}">
+                             emptyMessage="#{empty descuentoModel.seleccion ? 'Seleccione un descuento en la lista' : 'Este descuento todavía no se aplica a ningún producto'}">
+                    <p:column headerText="Producto">
+                        <h:outputText value="#{dp.idProducto.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Precio sugerido">
+                        <h:outputText value="#{dp.idProducto.precioSugerido}">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Valor (%)">
+                        <h:outputText value="#{dp.valor}" />
+                    </p:column>
+
+                    <p:column headerText="Desde">
+                        <h:outputText value="#{descuentoModel.fechaTexto(dp.fechaDesde)}" />
+                    </p:column>
+
+                    <p:column headerText="Hasta">
+                        <h:outputText value="#{descuentoModel.fechaHastaTexto(dp.fechaHasta)}" />
+                    </p:column>
+
+                    <p:column headerText="Observaciones">
+                        <h:outputText value="#{dp.observaciones}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmLista">
+            <article class="main_item_list">
+                <h2>Descuentos</h2>
+                <p:dataTable id="tblDescuentos"
+                             var="d"
+                             value="#{descuentoModel.registros}"
+                             rowKey="#{d.idDescuento}"
+                             selection="#{descuentoModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay descuentos"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{descuentoModel.onSeleccionarDescuento}"
+                            update=":frmDetalle" />
+                    <p:ajax event="rowUnselect"
+                            listener="#{descuentoModel.onSeleccionarDescuento}"
+                            update=":frmDetalle" />
+
                     <p:column headerText="Nombre">
                         <h:outputText value="#{d.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Tipo">
+                        <h:outputText value="#{d.idTipoDescuento.nombre}" />
                     </p:column>
 
                     <p:column headerText="Desde">
@@ -132,56 +179,21 @@
                         <h:outputText value="#{d.observaciones}" />
                     </p:column>
 
-                    <p:column styleClass="col_acciones">
+                    <p:column headerText="Acciones" styleClass="col_acciones">
                         <p:commandButton icon="pi pi-pencil"
                                          title="Editar"
                                          action="#{descuentoModel.editar(d)}"
                                          process="@this"
-                                         update=":frmDescuento :frmDetalle"
+                                         update=":frmDescuento :frmDetalle :frmLista"
                                          styleClass="btn btn-edit" />
                         &#160;
                         <p:commandButton icon="pi pi-trash"
                                          title="Eliminar"
                                          action="#{descuentoModel.eliminar(d)}"
                                          process="@this"
-                                         update=":frmDescuento :frmDetalle :frmTipos :growl"
+                                         update=":frmDescuento :frmDetalle :frmLista :growl"
                                          onclick="return confirm('¿Eliminar este descuento?');"
                                          styleClass="btn btn-danger" />
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </section>
-    </ui:define>
-
-    <ui:define name="main_list">
-        <h:form id="frmTipos">
-            <article class="main_item_list">
-                <h2>Tipos de descuento</h2>
-                <p:dataTable id="tblTipos"
-                             var="t"
-                             value="#{descuentoModel.tiposDescuento}"
-                             rowKey="#{t.idTipoDescuento}"
-                             selection="#{descuentoModel.tipoSeleccionado}"
-                             selectionMode="single"
-                             paginator="true"
-                             paginatorPosition="bottom"
-                             rows="10"
-                             emptyMessage="No hay tipos de descuento"
-                             styleClass="tabla">
-                    <p:ajax event="rowSelect"
-                            listener="#{descuentoModel.onSeleccionarTipo}"
-                            update=":frmDetalle :frmDescuento:tipo" />
-                    <p:ajax event="rowUnselect"
-                            listener="#{descuentoModel.onSeleccionarTipo}"
-                            update=":frmDetalle :frmDescuento:tipo" />
-
-                    <p:columns value="#{descuentoModel.columnasTipos}" var="column"
-                               headerText="#{column.header}">
-                        #{column.getValue(t)}
-                    </p:columns>
-
-                    <p:column headerText="Descuentos">
-                        #{descuentoModel.cantidadDe(t)}
                     </p:column>
                 </p:dataTable>
             </article>

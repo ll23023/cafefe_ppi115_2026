@@ -19,11 +19,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento;
-import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 
 /**
@@ -48,13 +46,9 @@ public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> {
     @Inject
     private DescuentoRepository descuentoRepository;
 
-    @Inject
-    private DescuentoProductoRepository descuentoProductoRepository;
-
     private boolean soloLectura = false;
     private List<Descuento> descuentos = new ArrayList<>();
-    private List<DescuentoProducto> asignaciones = new ArrayList<>();
-    private List<DescuentoProducto> productosDelTipo = new ArrayList<>();
+    private List<Descuento> descuentosDelTipo = new ArrayList<>();
 
     private final List<ColumnaTabla> columnas = Arrays.asList(
             new ColumnaTabla("nombre", "Nombre"),
@@ -100,8 +94,6 @@ public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> {
     public void cargarRegistros() {
         super.cargarRegistros();
         this.descuentos = descuentoRepository != null ? descuentoRepository.findAll() : new ArrayList<>();
-        this.asignaciones = descuentoProductoRepository != null
-                ? descuentoProductoRepository.findAll() : new ArrayList<>();
         refrescarDetalle();
     }
 
@@ -218,23 +210,19 @@ public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> {
     }
 
     private void refrescarDetalle() {
-        List<DescuentoProducto> lista = new ArrayList<>();
-        if (registro != null && registro.getIdTipoDescuento() != null) {
+        List<Descuento> lista = new ArrayList<>();
+        if (registro != null && registro.getIdTipoDescuento() != null && descuentos != null) {
             UUID idTipo = registro.getIdTipoDescuento();
-            for (DescuentoProducto dp : asignaciones) {
-                if (dp != null && perteneceAlTipo(dp.getIdDescuento(), idTipo)) {
-                    lista.add(dp);
+            for (Descuento d : descuentos) {
+                if (perteneceAlTipo(d, idTipo)) {
+                    lista.add(d);
                 }
             }
             lista.sort((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                    nombreProducto(a), nombreProducto(b)));
+                    a.getNombre() == null ? "" : a.getNombre(),
+                    b.getNombre() == null ? "" : b.getNombre()));
         }
-        this.productosDelTipo = lista;
-    }
-
-    private static String nombreProducto(DescuentoProducto dp) {
-        return dp.getIdProducto() == null || dp.getIdProducto().getNombre() == null
-                ? "" : dp.getIdProducto().getNombre();
+        this.descuentosDelTipo = lista;
     }
 
     public int cantidadDescuentos(TipoDescuento t) {
@@ -328,8 +316,8 @@ public class TipoDescuentoModel extends DefaultModel<TipoDescuento, UUID> {
         return isEditando() ? "Editar tipo de descuento" : "Nuevo tipo de descuento";
     }
 
-    public List<DescuentoProducto> getProductosDelTipo() {
-        return productosDelTipo;
+    public List<Descuento> getDescuentosDelTipo() {
+        return descuentosDelTipo;
     }
 
     public List<ColumnaTabla> getColumnas() {
