@@ -5,90 +5,152 @@
                 xmlns:ui="jakarta.faces.facelets"
                 template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
                 xmlns:f="jakarta.faces.core">
 
     <ui:define name="page_title">Cafefe - Tipos de Descuento</ui:define>
     <ui:define name="header_title">Administración de Tipos de Descuento</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Tipos de Descuento</h2>
+    <ui:define name="main_form">
+        <p:growl id="growl" showDetail="false" />
 
-            <h:form id="frmTipoDescuento">
-                <h:panelGrid columns="3" cellpadding="5">
+        <section class="main_form">
+            <h:form id="frmTipoDescuento" styleClass="form_grid">
+                <h2>#{tipoDescuentoModel.tituloFormulario}</h2>
+
+                <div class="custom_input">
                     <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{tipoDescuentoModel.registro.nombre}"
-                                 required="true" />
-                    <p:messages for="nombre" />
+                    <p:inputText id="nombre"
+                                 value="#{tipoDescuentoModel.registro.nombre}"
+                                 required="true"
+                                 disabled="#{tipoDescuentoModel.soloLectura}" />
+                    <p:message for="nombre" />
+                </div>
 
-                    <h:outputLabel for="descuentoMaximo" value="Descuento Máximo:" />
+                <div class="custom_input">
+                    <h:outputLabel for="descuentoMaximo" value="Descuento máximo (%):" />
                     <p:spinner id="descuentoMaximo"
                                value="#{tipoDescuentoModel.registro.descuentoMaximo}"
                                min="5"
-                               max="90"
+                               max="40"
                                stepFactor="5"
-                               required="true" />
-                    <p:messages for="descuentoMaximo" />
+                               required="true"
+                               disabled="#{tipoDescuentoModel.soloLectura}" />
+                    <p:message for="descuentoMaximo" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="observaciones" value="Observaciones:" />
                     <p:inputTextarea id="observaciones"
                                      value="#{tipoDescuentoModel.registro.observaciones}"
-                                     rows="3" cols="50" />
-                    <p:messages for="observaciones" />
+                                     rows="3"
+                                     disabled="#{tipoDescuentoModel.soloLectura}" />
+                    <p:message for="observaciones" />
+                </div>
 
-                    <h:outputLabel for="activo" value="Estado:" />
+                <div class="custom_input">
                     <p:selectBooleanCheckbox id="activo"
                                              value="#{tipoDescuentoModel.registro.activo}"
-                                             itemLabel="Activo" />
-                    <h:panelGroup />
-                </h:panelGrid>
+                                             itemLabel="Activo"
+                                             disabled="#{tipoDescuentoModel.soloLectura}" />
+                </div>
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{tipoDescuentoModel}"
-                                   saveUpdate="frmTipoDescuento frmTablaDescuento"
-                                   newUpdate="frmTipoDescuento frmTablaDescuento" />
+                <div class="form_buttons">
+                    <p:commandButton value="#{tipoDescuentoModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{tipoDescuentoModel.btnGuardarHandler}"
+                                     process="@form"
+                                     update=":frmTipoDescuento :frmDetalle :frmLista :growl"
+                                     styleClass="btn btn-primary"
+                                     rendered="#{!tipoDescuentoModel.soloLectura}" />
+                    <p:commandButton value="#{tipoDescuentoModel.soloLectura ? 'Nuevo' : (tipoDescuentoModel.editando ? 'Cancelar' : 'Nuevo')}"
+                                     action="#{tipoDescuentoModel.cancelar}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update=":frmTipoDescuento :frmDetalle :frmLista :growl"
+                                     styleClass="btn btn-secondary" />
                 </div>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
 
-        <div class="card">
-            <h3>Lista de Tipos de Descuento</h3>
-            <h:form id="frmTablaDescuento">
-                <p:dataTable value="#{tipoDescuentoModel.registros}" var="item" styleClass="tabla"
-                             selectionMode="single" selection="#{tipoDescuentoModel.seleccion}"
-                             rowKey="#{item.idTipoDescuento}"
-                             paginator="true" rows="10" emptyMessage="No hay registros">
-                    <p:ajax event="rowSelect" update="botonera" />
-                    <p:ajax event="rowUnselect" update="botonera" />
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h:form id="frmDetalle">
+                <div class="item_sublist_header">
+                    <h2>Descuentos asociados</h2>
+                </div>
 
-                    <p:column headerText="ID" style="font-size: 0.8em;">
-                        #{item.idTipoDescuento}
-                    </p:column>
+                <p:dataTable id="tblDescuentos"
+                             var="d"
+                             value="#{tipoDescuentoModel.descuentosDelTipo}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="5"
+                             styleClass="tabla"
+                             emptyMessage="#{tipoDescuentoModel.creando ? 'Seleccione un tipo de la lista para ver sus descuentos' : 'Este tipo de descuento todavía no tiene descuentos'}">
                     <p:column headerText="Nombre">
-                        #{item.nombre}
+                        <h:outputText value="#{d.nombre}" />
                     </p:column>
-                    <p:column headerText="Descuento Máximo">
-                        #{item.descuentoMaximo}
+                    <p:column headerText="Desde">
+                        <h:outputText value="#{tipoDescuentoModel.fechaTexto(d.fechaDesde)}" />
                     </p:column>
-                    <p:column headerText="Estado">
-                        #{item.activo ? 'ACTIVO' : 'INACTIVO'}
+                    <p:column headerText="Hasta">
+                        <h:outputText value="#{tipoDescuentoModel.fechaHastaTexto(d.fechaHasta)}" />
                     </p:column>
                     <p:column headerText="Observaciones">
-                        #{item.observaciones}
+                        <h:outputText value="#{d.observaciones}" />
                     </p:column>
                 </p:dataTable>
-
-                <h:panelGroup id="botonera" layout="block" style="margin-top: 12px;">
-                    <c:btnsTabla model="#{tipoDescuentoModel}"
-                                   editUpdate="frmTipoDescuento"
-                                   deleteUpdate="frmTablaDescuento frmTipoDescuento" />
-                    &#160;
-                    <h:outputText value="Seleccione una fila de la tabla para editar o eliminar"
-                                  rendered="#{empty tipoDescuentoModel.seleccion}"
-                                  style="color:#777; font-style: italic;" />
-                </h:panelGroup>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmLista">
+            <article class="main_item_list">
+                <h2>Lista de tipos de descuento</h2>
+                <p:dataTable id="tblTipos"
+                             var="t"
+                             value="#{tipoDescuentoModel.registros}"
+                             rowKey="#{t.idTipoDescuento}"
+                             selection="#{tipoDescuentoModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay registros"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{tipoDescuentoModel.onSeleccionar}"
+                            update=":frmTipoDescuento :frmDetalle" />
+
+                    <p:columns value="#{tipoDescuentoModel.columnas}" var="column"
+                               headerText="#{column.header}">
+                        #{column.getValue(t)}
+                    </p:columns>
+
+                    <p:column headerText="Descuentos">
+                        #{tipoDescuentoModel.cantidadDescuentos(t)}
+                    </p:column>
+
+                    <p:column headerText="Acciones" styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{tipoDescuentoModel.editar(t)}"
+                                         process="@this"
+                                         update=":frmTipoDescuento :frmDetalle :frmLista"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="#{tipoDescuentoModel.cantidadDescuentos(t) gt 0 ? 'No se puede eliminar: tiene descuentos asociados' : 'Eliminar'}"
+                                         action="#{tipoDescuentoModel.eliminar(t)}"
+                                         process="@this"
+                                         disabled="#{tipoDescuentoModel.cantidadDescuentos(t) gt 0}"
+                                         update=":frmTipoDescuento :frmDetalle :frmLista :growl"
+                                         onclick="return confirm('¿Eliminar este registro?');"
+                                         styleClass="btn btn-danger" />
+                    </p:column>
+                </p:dataTable>
+            </article>
+        </h:form>
     </ui:define>
 </ui:composition>

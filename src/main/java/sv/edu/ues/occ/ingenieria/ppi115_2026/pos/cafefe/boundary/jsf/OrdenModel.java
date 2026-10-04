@@ -7,6 +7,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,10 +25,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto;
@@ -46,22 +56,17 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         private String nombreProducto;
         private BigDecimal precio;
         private String observaciones;
-        private boolean existente;
+        private String idDescuentoSel;
+        private final List<String> aplicados = new ArrayList<>();
 
         public ProductoFila() {
         }
 
         public ProductoFila(UUID idOrdenProducto, String nombreProducto, BigDecimal precio, String observaciones) {
-            this(idOrdenProducto, nombreProducto, precio, observaciones, false);
-        }
-
-        public ProductoFila(UUID idOrdenProducto, String nombreProducto, BigDecimal precio,
-                String observaciones, boolean existente) {
             this.idOrdenProducto = idOrdenProducto;
             this.nombreProducto = nombreProducto;
             this.precio = precio;
             this.observaciones = observaciones;
-            this.existente = existente;
         }
 
         public UUID getIdOrdenProducto() {
@@ -96,14 +101,58 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
             this.observaciones = observaciones;
         }
 
-        public boolean isExistente() {
-            return existente;
+        public String getIdDescuentoSel() {
+            return idDescuentoSel;
         }
 
-        public void setExistente(boolean existente) {
-            this.existente = existente;
+        public void setIdDescuentoSel(String idDescuentoSel) {
+            this.idDescuentoSel = idDescuentoSel;
+        }
+
+        public List<String> getAplicados() {
+            return aplicados;
+        }
+
+        public boolean isConDescuento() {
+            return !aplicados.isEmpty();
+        }
+
+        public void limpiarDescuentos() {
+            this.idDescuentoSel = null;
+            this.aplicados.clear();
+            this.observaciones = "";
         }
     }
+
+    public static class OpcionDescuento implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        private final String id;
+        private final String etiqueta;
+        private final boolean aplicable;
+
+        public OpcionDescuento(String id, String etiqueta, boolean aplicable) {
+            this.id = id;
+            this.etiqueta = etiqueta;
+            this.aplicable = aplicable;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getEtiqueta() {
+            return etiqueta;
+        }
+
+        public boolean isAplicable() {
+            return aplicable;
+        }
+    }
+
+    private static final String PREFIJO_DESCUENTO = "-Aplicado ";
+    private static final boolean COMENTARIO_CON_NOMBRE_DEL_TIPO = false;
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Inject
     private OrdenRepository ordenRepository;
@@ -117,12 +166,16 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     @Inject
     private ProductoRepository productoRepository;
 
+    @Inject
+    private DescuentoProductoRepository descuentoProductoRepository;
+
     private boolean soloLectura = false;
     private Date fechaSeleccionada;
     private Date horaSeleccionada;
     private final List<ProductoFila> filas = new ArrayList<>();
     private List<EmpleadoRol> empleadoRoles;
     private List<Producto> productos = new ArrayList<>();
+    private List<DescuentoProducto> descuentosProducto; // caché; se recarga al limpiar y al agregar fila
     private List<ColumnaTabla> columnas;
 
     @Override
@@ -155,7 +208,8 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         this.horaSeleccionada = ahora;
         this.soloLectura = false;
         this.filas.clear();
-        this.empleadoRoles = null;
+        this.empleadoRoles = null;  
+        this.descuentosProducto = null;
         this.cargarProductos();
     }
 
@@ -173,7 +227,11 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     }
 
     public void cancelar() {
-        limpiar();
+        if (estado == ESTADO_CRUD.MODIFICAR && seleccion != null) {
+            mostrar(seleccion);
+        } else {
+            limpiar();
+        }
     }
 
     public void eliminar(Orden o) {
@@ -194,41 +252,33 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         }
     }
 
-    public boolean isPuedeAgregarProductos() {
-        if (isCreando()) {
-            return true;
-        }
-        if (isEditando()) {
-            return filas.stream().noneMatch(ProductoFila::isExistente);
-        }
-        return false;
-    }
-
     public void agregarFila() {
-        if (!isPuedeAgregarProductos()) {
+        if (!isCreando()) {
             return;
         }
         cargarProductos();
+        this.descuentosProducto = null;
         filas.add(new ProductoFila(null, "", null, ""));
     }
 
     public void quitarFila(ProductoFila fila) {
-        if (!isPuedeAgregarProductos() || fila == null || fila.isExistente()) {
+        if (!isCreando()) {
             return;
         }
         filas.remove(fila);
     }
 
     public void onCambioProducto(ProductoFila fila) {
-        if (fila == null || fila.getNombreProducto() == null || fila.getNombreProducto().isBlank()) {
+        if (fila == null) {
             return;
         }
-        String k = clave(fila.getNombreProducto());
-        for (Producto p : productos) {
-            if (k.equals(clave(p.getNombre()))) {
-                fila.setPrecio(p.getPrecioSugerido());
-                return;
-            }
+        fila.limpiarDescuentos();
+        if (fila.getNombreProducto() == null || fila.getNombreProducto().isBlank()) {
+            return;
+        }
+        Producto p = productoDeFila(fila);
+        if (p != null) {
+            fila.setPrecio(p.getPrecioSugerido());
         }
     }
 
@@ -259,21 +309,21 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
                         + String.join(", ", RolesOrden.getNombresRolesOrden()));
                 return;
             }
+            if (!productosValidos()) {
+                return;
+            }
         } else {
             Orden original = ordenRepository.findById(registro.getIdOrden());
             if (original != null) {
                 registro.setIdEmpleadoRol(original.getIdEmpleadoRol());
             }
         }
-        if (!productosValidos()) {
-            return;
-        }
         combinarFechaHora();
         try {
             if (esNuevo) {
                 crearConProductos();
             } else {
-                modificarConProductos();
+                ordenRepository.modificar(registro);
             }
 
             UUID id = registro.getIdOrden();
@@ -306,12 +356,6 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
             ordenRepository.eliminar(ord);
             throw ex;
         }
-    }
-
-    private void modificarConProductos() {
-        ordenRepository.modificar(registro);
-        Orden ord = ordenRepository.findById(registro.getIdOrden());
-        guardarProductos(ord);
     }
 
     private void combinarFechaHora() {
@@ -351,9 +395,6 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     private boolean productosValidos() {
         Map<String, Producto> porNombre = productosPorNombre();
         for (ProductoFila f : filas) {
-            if (f.isExistente()) {
-                continue;
-            }
             String nombre = f.getNombreProducto() == null ? "" : f.getNombreProducto().trim();
             if (nombre.isEmpty()) {
                 continue;
@@ -371,16 +412,211 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
                 error("Indique el precio para: " + nombre);
                 return false;
             }
+            LocalDate fechaOrden = fechaDeLaOrden();
+            for (String idDp : f.getAplicados()) {
+                DescuentoProducto dp = descuentoPorId(idDp);
+                if (dp == null || !aplicaEnFecha(dp, fechaOrden)) {
+                    error("Un descuento aplicado a \"" + nombre + "\" no aplica para la fecha de la orden ("
+                            + fechaOrden.format(FORMATO_FECHA)
+                            + "). Quite ese producto de la orden y vuelva a agregarlo, o cambie la fecha.");
+                    return false;
+                }
+            }
         }
         return true;
+    }
+
+    public List<OpcionDescuento> opcionesDescuento(ProductoFila fila) {
+        List<OpcionDescuento> opciones = new ArrayList<>();
+        Producto producto = productoDeFila(fila);
+        if (producto == null) {
+            return opciones;
+        }
+        LocalDate fechaOrden = fechaDeLaOrden();
+        for (DescuentoProducto dp : descuentosCargados()) {
+            if (dp.getIdDescuentoProducto() == null || !esDelProducto(dp, producto)) {
+                continue;
+            }
+            boolean aplica = aplicaEnFecha(dp, fechaOrden);
+            Integer valor = aEntero(dp.getValor());
+            String tipo = nombreTipo(dp);
+            String etiqueta = nombreDescuento(dp)
+                    + (tipo != null ? " [" + tipo + "]" : "")
+                    + " - " + (valor != null ? valor + "%" : "?")
+                    + (dp.getIdProducto() == null ? " (todos los productos)" : "")
+                    + (aplica ? "" : " - no aplica en la fecha de la orden");
+            opciones.add(new OpcionDescuento(dp.getIdDescuentoProducto().toString(), etiqueta, aplica));
+        }
+        opciones.sort((a, b) -> {
+            if (a.isAplicable() != b.isAplicable()) {
+                return a.isAplicable() ? -1 : 1;
+            }
+            return String.CASE_INSENSITIVE_ORDER.compare(a.getEtiqueta(), b.getEtiqueta());
+        });
+        return opciones;
+    }
+
+    public void aplicarDescuento(ProductoFila fila) {
+        if (!isCreando() || fila == null) {
+            return;
+        }
+        Producto producto = productoDeFila(fila);
+        if (producto == null) {
+            error("Seleccione primero un producto.");
+            return;
+        }
+        DescuentoProducto dp = descuentoPorId(fila.getIdDescuentoSel());
+        if (dp == null) {
+            error("Seleccione un descuento para aplicar.");
+            return;
+        }
+        if (!esDelProducto(dp, producto)) {
+            error("Ese descuento no corresponde al producto seleccionado.");
+            return;
+        }
+        String nombre = nombreDescuento(dp);
+        LocalDate fechaOrden = fechaDeLaOrden();
+        if (!aplicaEnFecha(dp, fechaOrden)) {
+            error("El descuento \"" + nombre + "\" no aplica para la fecha de la orden ("
+                    + fechaOrden.format(FORMATO_FECHA) + ").");
+            return;
+        }
+        Integer valor = aEntero(dp.getValor());
+        if (valor == null || valor <= 0 || valor > 100) {
+            error("El descuento \"" + nombre + "\" tiene un valor inválido.");
+            return;
+        }
+        if (fila.getPrecio() == null) {
+            error("El producto no tiene precio.");
+            return;
+        }
+
+        BigDecimal factor = BigDecimal.valueOf(100L - valor).divide(BigDecimal.valueOf(100));
+        fila.setPrecio(fila.getPrecio().multiply(factor).setScale(2, RoundingMode.HALF_UP));
+
+        String nota = PREFIJO_DESCUENTO + nombreParaComentario(dp) + " (" + valor + "%)";
+        String actual = fila.getObservaciones() == null ? "" : fila.getObservaciones().trim();
+        fila.setObservaciones(actual.isEmpty() ? nota : actual + " " + nota);
+        fila.getAplicados().add(dp.getIdDescuentoProducto().toString());
+        info("Descuento aplicado: " + nota.substring(PREFIJO_DESCUENTO.length()) + ".");
+    }
+
+    private List<DescuentoProducto> descuentosCargados() {
+        if (this.descuentosProducto == null) {
+            if (descuentoProductoRepository != null) {
+                this.descuentosProducto = descuentoProductoRepository.findAll();
+            } else {
+                this.descuentosProducto = new ArrayList<>();
+            }
+        }
+        return this.descuentosProducto;
+    }
+
+    private DescuentoProducto descuentoPorId(String id) {
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+        for (DescuentoProducto dp : descuentosCargados()) {
+            if (dp.getIdDescuentoProducto() != null && id.equals(dp.getIdDescuentoProducto().toString())) {
+                return dp;
+            }
+        }
+        return null;
+    }
+
+    private Producto productoDeFila(ProductoFila fila) {
+        if (fila == null || fila.getNombreProducto() == null || fila.getNombreProducto().isBlank()) {
+            return null;
+        }
+        return productosPorNombre().get(clave(fila.getNombreProducto()));
+    }
+
+    private boolean esDelProducto(DescuentoProducto dp, Producto p) {
+        if (dp.getIdProducto() == null) {
+            return true;
+        }
+        return p.getIdProducto() != null && p.getIdProducto().equals(dp.getIdProducto().getIdProducto());
+    }
+
+    private static String nombreDescuento(DescuentoProducto dp) {
+        var d = dp.getIdDescuento();
+        String n = d != null ? d.getNombre() : null;
+        return n == null || n.isBlank() ? "Descuento" : n.trim();
+    }
+
+    private static String nombreTipo(DescuentoProducto dp) {
+        var d = dp.getIdDescuento();
+        var t = d != null ? d.getIdTipoDescuento() : null;
+        String n = t != null ? t.getNombre() : null;
+        return n == null || n.isBlank() ? null : n.trim();
+    }
+
+    private static String nombreParaComentario(DescuentoProducto dp) {
+        if (COMENTARIO_CON_NOMBRE_DEL_TIPO) {
+            String tipo = nombreTipo(dp);
+            if (tipo != null) {
+                return tipo;
+            }
+        }
+        return nombreDescuento(dp);
+    }
+
+    private LocalDate fechaDeLaOrden() {
+        LocalDate f = aLocalDate(fechaSeleccionada);
+        return f != null ? f : LocalDate.now();
+    }
+
+    private boolean aplicaEnFecha(DescuentoProducto dp, LocalDate fecha) {
+        if (fecha == null) {
+            return false;
+        }
+        var d = dp.getIdDescuento();
+        boolean enDescuento = d == null
+                || dentro(fecha, aLocalDate(d.getFechaDesde()), aLocalDate(d.getFechaHasta()));
+        boolean enProducto = dentro(fecha, aLocalDate(dp.getFechaDesde()), aLocalDate(dp.getFechaHasta()));
+        return enDescuento && enProducto;
+    }
+
+    private static boolean dentro(LocalDate fecha, LocalDate desde, LocalDate hasta) {
+        return (desde == null || !fecha.isBefore(desde)) && (hasta == null || !fecha.isAfter(hasta));
+    }
+
+    private static LocalDate aLocalDate(Object o) {
+        if (o == null) {
+            return null;
+        }
+        ZoneId zona = ZoneId.systemDefault();
+        if (o instanceof LocalDate ld) {
+            return ld;
+        }
+        if (o instanceof LocalDateTime ldt) {
+            return ldt.toLocalDate();
+        }
+        if (o instanceof OffsetDateTime odt) {
+            return odt.atZoneSameInstant(zona).toLocalDate();
+        }
+        if (o instanceof ZonedDateTime zdt) {
+            return zdt.withZoneSameInstant(zona).toLocalDate();
+        }
+        if (o instanceof Instant i) {
+            return i.atZone(zona).toLocalDate();
+        }
+        if (o instanceof java.sql.Date sd) {
+            return sd.toLocalDate();
+        }
+        if (o instanceof Date d) {
+            return d.toInstant().atZone(zona).toLocalDate();
+        }
+        return null;
+    }
+
+    private static Integer aEntero(Object o) {
+        return o instanceof Number n ? n.intValue() : null;
     }
 
     private void guardarProductos(Orden orden) {
         Map<String, Producto> porNombre = productosPorNombre();
         for (ProductoFila f : filas) {
-            if (f.isExistente()) {
-                continue;
-            }
             String nombre = f.getNombreProducto() == null ? "" : f.getNombreProducto().trim();
             if (nombre.isEmpty()) {
                 continue;
@@ -411,8 +647,7 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         this.filas.clear();
         for (OrdenProducto op : asignacionesDe(this.registro)) {
             String nombre = op.getIdProducto() != null ? op.getIdProducto().getNombre() : "";
-            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(),
-                    op.getObservaciones(), true));
+            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(), op.getObservaciones()));
         }
     }
 

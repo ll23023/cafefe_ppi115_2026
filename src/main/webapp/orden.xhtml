@@ -39,7 +39,11 @@
                                 value="#{ordenModel.fechaSeleccionada}"
                                 pattern="dd/MM/yyyy"
                                 required="true"
-                                disabled="#{ordenModel.soloLectura}" />
+                                disabled="#{ordenModel.soloLectura}">
+                    <!-- Al cambiar la fecha se vuelven a evaluar los descuentos aplicables -->
+                    <p:ajax event="dateSelect" process="@this" update=":frmProductos" />
+                    <p:ajax event="change" process="@this" update=":frmProductos" />
+                </p:calendar>
                     <p:message for="fecha" />
                 </div>
 
@@ -81,46 +85,70 @@
                                      action="#{ordenModel.agregarFila}"
                                      process="@this tblProductos"
                                      update="tblProductos"
-                                     disabled="#{!ordenModel.puedeAgregarProductos}" />
+                                     disabled="#{!ordenModel.creando}" />
                 </div>
 
                 <p:dataTable id="tblProductos"
                              var="fila"
                              value="#{ordenModel.filas}"
                              emptyMessage="Sin productos agregados">
-                    <p:column headerText="">
+                    <p:column headerText="Producto">
                         <p:selectOneMenu value="#{fila.nombreProducto}"
                                          title="Seleccione o busque un producto"
                                          filter="true"
                                          filterMatchMode="contains"
                                          filterNormalize="true"
-                                         disabled="#{fila.existente or !ordenModel.puedeAgregarProductos}">
+                                         disabled="#{!ordenModel.creando}">
                             <f:selectItem itemLabel="-- Seleccione --" itemValue="" noSelectionOption="true" />
                             <p:ajax event="change"
                                     listener="#{ordenModel.onCambioProducto(fila)}"
                                     process="@this"
-                                    update="precio" />
+                                    update="tblProductos" />
                             <f:selectItems value="#{ordenModel.productos}" var="p"
                                            itemValue="#{p.nombre}"
                                            itemLabel="#{p.nombre}"
                                            itemDisabled="#{!p.activo}" />
                         </p:selectOneMenu>
                     </p:column>
-                    <p:column headerText="">
+
+                    <p:column headerText="Precio">
+                        <!-- Se bloquea al aplicar un descuento: el precio solo cambia por los descuentos -->
                         <p:inputNumber id="precio"
                                        value="#{fila.precio}"
                                        symbol="$ "
                                        decimalPlaces="2"
                                        minValue="0"
-                                       disabled="#{fila.existente or !ordenModel.puedeAgregarProductos}" />
+                                       disabled="#{!ordenModel.creando or fila.conDescuento}" />
                     </p:column>
-                    <p:column styleClass="col_acciones" rendered="#{ordenModel.puedeAgregarProductos}">
+
+                    <!-- Descuentos del producto elegido (solo al crear la orden) -->
+                    <p:column headerText="Descuento" rendered="#{ordenModel.creando}">
+                        <p:selectOneMenu value="#{fila.idDescuentoSel}"
+                                         title="Descuentos del producto">
+                            <f:selectItem itemLabel="-- Sin descuento --" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{ordenModel.opcionesDescuento(fila)}" var="o"
+                                           itemValue="#{o.id}"
+                                           itemLabel="#{o.etiqueta}"
+                                           itemDisabled="#{!o.aplicable}" />
+                        </p:selectOneMenu>
+                        <p:commandButton icon="pi pi-tag"
+                                         value="Aplicar"
+                                         title="Aplicar descuento"
+                                         action="#{ordenModel.aplicarDescuento(fila)}"
+                                         process="@this tblProductos"
+                                         update="tblProductos :growl" />
+                    </p:column>
+
+                    <p:column headerText="Observaciones">
+                        <h:outputText value="#{fila.observaciones}" />
+                    </p:column>
+
+                    <p:column styleClass="col_acciones" rendered="#{ordenModel.creando}">
                         <p:commandButton icon="pi pi-minus"
                                          title="Quitar producto"
                                          action="#{ordenModel.quitarFila(fila)}"
                                          process="@this tblProductos"
-                                         update="tblProductos"
-                                         disabled="#{fila.existente}" />
+                                         update="tblProductos" />
                     </p:column>
                 </p:dataTable>
             </h:form>
