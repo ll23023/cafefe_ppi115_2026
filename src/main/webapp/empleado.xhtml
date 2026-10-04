@@ -14,9 +14,11 @@
         <p:growl id="growl" showDetail="false" />
 
         <section class="main_form">
-
             <h:form id="frmEmpleado" styleClass="form_grid">
-                <h2>#{empleadoModel.tituloFormulario}</h2>
+
+                <!-- El título va dentro del form para que se actualice con :frmEmpleado -->
+                <h2 style="grid-column: 1 / -1;">#{empleadoModel.tituloFormulario}</h2>
+
                 <div class="custom_input">
                     <h:outputLabel for="nombre" value="Nombres:" />
                     <p:inputText id="nombre"
@@ -83,7 +85,7 @@
                                      action="#{empleadoModel.agregarFila}"
                                      process="@this tblRoles"
                                      update="tblRoles"
-                                     disabled="#{!empleadoModel.creando}" />
+                                     disabled="#{!empleadoModel.puedeAgregarRoles}" />
                 </div>
 
                 <p:dataTable id="tblRoles"
@@ -94,7 +96,10 @@
                         <p:selectOneMenu value="#{fila.nombre}"
                                          editable="true"
                                          title="Busque un rol o escriba uno nuevo"
-                                         disabled="#{!empleadoModel.creando}">
+                                          filter="true"
+                                         filterMatchMode="contains"
+                                         filterNormalize="true"
+                                         disabled="#{fila.existente or !empleadoModel.puedeAgregarRoles}">
                             <p:ajax event="change" process="@this" update="@none" />
                             <f:selectItems value="#{empleadoModel.roles}" var="r"
                                            itemValue="#{r.nombre}"
@@ -108,7 +113,7 @@
                                          action="#{empleadoModel.quitarFila(fila)}"
                                          process="@this tblRoles"
                                          update="tblRoles"
-                                         disabled="#{!empleadoModel.creando}" />
+                                         disabled="#{fila.existente or !empleadoModel.puedeAgregarRoles}" />
                     </p:column>
                 </p:dataTable>
             </h:form>

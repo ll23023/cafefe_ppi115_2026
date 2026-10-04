@@ -83,11 +83,7 @@ public class RolModel extends DefaultModel<Rol, UUID> {
     }
 
     public void cancelar() {
-        if (estado == ESTADO_CRUD.MODIFICAR && seleccion != null) {
-            mostrar(seleccion);
-        } else {
             limpiar();
-        }
     }
 
     // No deja borrar un rol que tenga empleados.

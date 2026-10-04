@@ -46,15 +46,22 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         private String nombreProducto;
         private BigDecimal precio;
         private String observaciones;
+        private boolean existente;
 
         public ProductoFila() {
         }
 
         public ProductoFila(UUID idOrdenProducto, String nombreProducto, BigDecimal precio, String observaciones) {
+            this(idOrdenProducto, nombreProducto, precio, observaciones, false);
+        }
+
+        public ProductoFila(UUID idOrdenProducto, String nombreProducto, BigDecimal precio,
+                String observaciones, boolean existente) {
             this.idOrdenProducto = idOrdenProducto;
             this.nombreProducto = nombreProducto;
             this.precio = precio;
             this.observaciones = observaciones;
+            this.existente = existente;
         }
 
         public UUID getIdOrdenProducto() {
@@ -87,6 +94,14 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
 
         public void setObservaciones(String observaciones) {
             this.observaciones = observaciones;
+        }
+
+        public boolean isExistente() {
+            return existente;
+        }
+
+        public void setExistente(boolean existente) {
+            this.existente = existente;
         }
     }
 
@@ -140,7 +155,7 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         this.horaSeleccionada = ahora;
         this.soloLectura = false;
         this.filas.clear();
-        this.empleadoRoles = null; // se vuelve a cargar al pedirlos
+        this.empleadoRoles = null;
         this.cargarProductos();
     }
 
@@ -158,11 +173,7 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     }
 
     public void cancelar() {
-        if (estado == ESTADO_CRUD.MODIFICAR && seleccion != null) {
-            mostrar(seleccion);
-        } else {
-            limpiar();
-        }
+        limpiar();
     }
 
     public void eliminar(Orden o) {
@@ -183,9 +194,18 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         }
     }
 
-    // Los productos solo se pueden agregar/quitar al crear (también se protege en servidor).
+    public boolean isPuedeAgregarProductos() {
+        if (isCreando()) {
+            return true;
+        }
+        if (isEditando()) {
+            return filas.stream().noneMatch(ProductoFila::isExistente);
+        }
+        return false;
+    }
+
     public void agregarFila() {
-        if (!isCreando()) {
+        if (!isPuedeAgregarProductos()) {
             return;
         }
         cargarProductos();
@@ -193,7 +213,7 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     }
 
     public void quitarFila(ProductoFila fila) {
-        if (!isCreando()) {
+        if (!isPuedeAgregarProductos() || fila == null || fila.isExistente()) {
             return;
         }
         filas.remove(fila);
@@ -212,11 +232,6 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         }
     }
 
-    /**
-     * Un empleado puede tomar la orden solo si la asignación, el rol y el
-     * empleado están activos y el rol es uno de {@link RolesOrden}
-     * (debe contener únicamente "camarero").
-     */
     public boolean rolPermitidoParaOrden(EmpleadoRol er) {
         if (er == null || er.getIdRol() == null || er.getIdEmpleado() == null
                 || er.getIdRol().getNombre() == null) {
@@ -244,22 +259,21 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
                         + String.join(", ", RolesOrden.getNombresRolesOrden()));
                 return;
             }
-            if (!productosValidos()) {
-                return;
-            }
         } else {
-            // El empleado no cambia al modificar: se restaura desde la BD
             Orden original = ordenRepository.findById(registro.getIdOrden());
             if (original != null) {
                 registro.setIdEmpleadoRol(original.getIdEmpleadoRol());
             }
+        }
+        if (!productosValidos()) {
+            return;
         }
         combinarFechaHora();
         try {
             if (esNuevo) {
                 crearConProductos();
             } else {
-                ordenRepository.modificar(registro);
+                modificarConProductos();
             }
 
             UUID id = registro.getIdOrden();
@@ -280,10 +294,6 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         }
     }
 
-    /**
-     * Crea la orden y sus productos. Si falla algo se deshace lo creado para no
-     * dejar una orden a medias.
-     */
     private void crearConProductos() {
         ordenRepository.crear(registro);
         Orden ord = ordenRepository.findById(registro.getIdOrden());
@@ -296,6 +306,12 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
             ordenRepository.eliminar(ord);
             throw ex;
         }
+    }
+
+    private void modificarConProductos() {
+        ordenRepository.modificar(registro);
+        Orden ord = ordenRepository.findById(registro.getIdOrden());
+        guardarProductos(ord);
     }
 
     private void combinarFechaHora() {
@@ -332,10 +348,12 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         return porNombre;
     }
 
-    // Cada producto debe existir (se crea en la pantalla de Productos) y estar activo.
     private boolean productosValidos() {
         Map<String, Producto> porNombre = productosPorNombre();
         for (ProductoFila f : filas) {
+            if (f.isExistente()) {
+                continue;
+            }
             String nombre = f.getNombreProducto() == null ? "" : f.getNombreProducto().trim();
             if (nombre.isEmpty()) {
                 continue;
@@ -360,6 +378,9 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
     private void guardarProductos(Orden orden) {
         Map<String, Producto> porNombre = productosPorNombre();
         for (ProductoFila f : filas) {
+            if (f.isExistente()) {
+                continue;
+            }
             String nombre = f.getNombreProducto() == null ? "" : f.getNombreProducto().trim();
             if (nombre.isEmpty()) {
                 continue;
@@ -390,7 +411,8 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         this.filas.clear();
         for (OrdenProducto op : asignacionesDe(this.registro)) {
             String nombre = op.getIdProducto() != null ? op.getIdProducto().getNombre() : "";
-            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(), op.getObservaciones()));
+            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(),
+                    op.getObservaciones(), true));
         }
     }
 
@@ -445,11 +467,6 @@ public class OrdenModel extends DefaultModel<Orden, UUID> {
         return productos;
     }
 
-    /**
-     * Al crear: solo asignaciones activas con rol permitido (camarero). Al ver o
-     * modificar se incluye además la asignación actual de la orden, para que el
-     * selector (deshabilitado) siga mostrando quién la tomó.
-     */
     public List<EmpleadoRol> getEmpleadoRoles() {
         if (this.empleadoRoles == null) {
             this.empleadoRoles = empleadoRolRepository == null ? new ArrayList<>()

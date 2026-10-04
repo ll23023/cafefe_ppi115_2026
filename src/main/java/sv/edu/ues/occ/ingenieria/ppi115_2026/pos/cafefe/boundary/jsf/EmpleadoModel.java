@@ -8,10 +8,12 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,10 +35,13 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
 
     private static final Logger LOG = Logger.getLogger(EmpleadoModel.class.getName());
 
+    private static final boolean CREAR_ROLES_AL_MODIFICAR = true;
+
     public static class RolFila implements Serializable {
 
         private static final long serialVersionUID = 1L;
         private String nombre;
+        private boolean existente;
 
         public RolFila() {
         }
@@ -45,12 +50,25 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
             this.nombre = nombre;
         }
 
+        public RolFila(String nombre, boolean existente) {
+            this.nombre = nombre;
+            this.existente = existente;
+        }
+
         public String getNombre() {
             return nombre;
         }
 
         public void setNombre(String nombre) {
             this.nombre = nombre;
+        }
+
+        public boolean isExistente() {
+            return existente;
+        }
+
+        public void setExistente(boolean existente) {
+            this.existente = existente;
         }
     }
 
@@ -113,11 +131,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
     }
 
     public void cancelar() {
-        if (estado == ESTADO_CRUD.MODIFICAR && seleccion != null) {
-            mostrar(seleccion);
-        } else {
             limpiar();
-        }
     }
 
     public void eliminar(Empleado e) {
@@ -138,9 +152,12 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         }
     }
 
-    // Los roles solo se pueden agregar/quitar al crear (también se protege en servidor).
+    public boolean isPuedeAgregarRoles() {
+        return isCreando() || isEditando();
+    }
+
     public void agregarFila() {
-        if (!isCreando()) {
+        if (!isPuedeAgregarRoles()) {
             return;
         }
         cargarRoles();
@@ -148,7 +165,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
     }
 
     public void quitarFila(RolFila fila) {
-        if (!isCreando()) {
+        if (!isPuedeAgregarRoles() || fila == null || fila.isExistente()) {
             return;
         }
         filas.remove(fila);
@@ -160,18 +177,16 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
             return;
         }
         boolean esNuevo = isCreando();
-        // Los roles solo se validan al crear: al modificar no se tocan.
-        if (esNuevo && !rolesValidos()) {
+        if (!rolesValidos(esNuevo)) {
             return;
         }
         try {
             if (esNuevo) {
                 crearConRoles();
             } else {
-                empleadoRepository.modificar(registro);
+                modificarConRoles();
             }
 
-            // Refrescar: el empleado guardado queda en solo lectura
             UUID id = registro.getIdEmpleado();
             cargarRegistros();
             Empleado guardado = registros.stream()
@@ -191,33 +206,48 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         }
     }
 
-    /**
-     * Crea el empleado y sus roles (creando también los roles que no existían).
-     * Si algo falla se deshace todo lo creado en esta operación: asignaciones,
-     * empleado y roles nuevos, para no dejar datos a medias.
-     */
     private void crearConRoles() {
         empleadoRepository.crear(registro);
         Empleado emp = empleadoRepository.findById(registro.getIdEmpleado());
         List<Rol> rolesCreados = new ArrayList<>();
+        List<EmpleadoRol> asignacionesCreadas = new ArrayList<>();
         try {
-            asignarRoles(emp, rolesCreados);
+            asignarRolesNuevos(emp, rolesCreados, asignacionesCreadas);
         } catch (RuntimeException ex) {
-            for (EmpleadoRol er : asignacionesDe(emp)) {
-                empleadoRolRepository.eliminar(er);
-            }
+            deshacer(asignacionesCreadas, rolesCreados);
             empleadoRepository.eliminar(emp);
-            for (Rol r : rolesCreados) {
-                rolRepository.eliminar(r);
-            }
             throw ex;
         }
     }
 
-    // Nombres de rol de la tabla: sin vacíos ni repetidos (sin distinguir mayúsculas).
+    private void modificarConRoles() {
+        empleadoRepository.modificar(registro);
+        Empleado emp = empleadoRepository.findById(registro.getIdEmpleado());
+        List<Rol> rolesCreados = new ArrayList<>();
+        List<EmpleadoRol> asignacionesCreadas = new ArrayList<>();
+        try {
+            asignarRolesNuevos(emp, rolesCreados, asignacionesCreadas);
+        } catch (RuntimeException ex) {
+            deshacer(asignacionesCreadas, rolesCreados);
+            throw ex;
+        }
+    }
+
+    private void deshacer(List<EmpleadoRol> asignaciones, List<Rol> rolesCreados) {
+        for (EmpleadoRol er : asignaciones) {
+            empleadoRolRepository.eliminar(er);
+        }
+        for (Rol r : rolesCreados) {
+            rolRepository.eliminar(r);
+        }
+    }
+
     private Map<String, String> rolesDeseados() {
         Map<String, String> deseados = new LinkedHashMap<>();
         for (RolFila f : filas) {
+            if (f.isExistente()) {
+                continue;
+            }
             String n = f.getNombre() == null ? "" : f.getNombre().trim();
             if (!n.isEmpty()) {
                 deseados.putIfAbsent(clave(n), n);
@@ -236,13 +266,32 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         return porNombre;
     }
 
-    // Un rol existente debe estar activo. Un nombre que no existe es un rol
-    // nuevo: se crea (activo) al guardar el empleado. Solo ocurre al crear.
-    private boolean rolesValidos() {
+    private Set<String> rolesYaAsignados(Empleado emp) {
+        Set<String> asignados = new HashSet<>();
+        for (EmpleadoRol er : asignacionesDe(emp)) {
+            if (er.getIdRol() != null && er.getIdRol().getNombre() != null) {
+                asignados.add(clave(er.getIdRol().getNombre()));
+            }
+        }
+        return asignados;
+    }
+
+    private boolean rolesValidos(boolean esNuevo) {
         Map<String, Rol> porNombre = rolesPorNombre();
+        Set<String> yaAsignados = esNuevo ? new HashSet<String>() : rolesYaAsignados(registro);
+        boolean puedeCrearRoles = esNuevo || CREAR_ROLES_AL_MODIFICAR;
         for (Map.Entry<String, String> d : rolesDeseados().entrySet()) {
+            if (yaAsignados.contains(d.getKey())) {
+                error("El empleado ya tiene asignado el rol: " + d.getValue());
+                return false;
+            }
             Rol r = porNombre.get(d.getKey());
             if (r == null) {
+                if (!puedeCrearRoles) {
+                    error("El rol no existe: " + d.getValue()
+                            + ". Al modificar solo puede elegir roles existentes.");
+                    return false;
+                }
                 if (d.getValue().length() > 155) {
                     error("El nombre del rol es demasiado largo (máximo 155 caracteres).");
                     return false;
@@ -255,12 +304,12 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         return true;
     }
 
-    private void asignarRoles(Empleado emp, List<Rol> rolesCreados) {
+    private void asignarRolesNuevos(Empleado emp, List<Rol> rolesCreados,
+            List<EmpleadoRol> asignacionesCreadas) {
         Map<String, Rol> porNombre = rolesPorNombre();
         for (Map.Entry<String, String> d : rolesDeseados().entrySet()) {
             Rol rol = porNombre.get(d.getKey());
             if (rol == null) {
-                // Rol nuevo escrito en el combo: se crea activo
                 rol = new Rol(UUID.randomUUID());
                 rol.setNombre(d.getValue());
                 rol.setActivo(Boolean.TRUE);
@@ -274,6 +323,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
             er.setActivo(Boolean.TRUE);
             er.setObservaciones("");
             empleadoRolRepository.crear(er);
+            asignacionesCreadas.add(er);
         }
     }
 
@@ -285,7 +335,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         this.filas.clear();
         for (EmpleadoRol er : asignacionesDe(this.registro)) {
             if (er.getIdRol() != null) {
-                filas.add(new RolFila(er.getIdRol().getNombre()));
+                filas.add(new RolFila(er.getIdRol().getNombre(), true));
             }
         }
     }
@@ -300,7 +350,6 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
                 .toList();
     }
 
-    // Carga todos los roles (activos e inactivos); la vista deshabilita los inactivos.
     private void cargarRoles() {
         this.roles = rolRepository.findAll().stream()
                 .filter(r -> r.getNombre() != null && !r.getNombre().isBlank())
