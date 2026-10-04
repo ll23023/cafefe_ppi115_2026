@@ -131,7 +131,7 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
     }
 
     public void cancelar() {
-            limpiar();
+        limpiar();
     }
 
     public void eliminar(Empleado e) {
@@ -153,7 +153,15 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
     }
 
     public boolean isPuedeAgregarRoles() {
-        return isCreando() || isEditando();
+        if (isCreando()) {
+            return true;
+        }
+        // Al editar, solo si todavía no tiene ningún rol asignado
+        return isEditando() && !tieneRolAsignado();
+    }
+
+    private boolean tieneRolAsignado() {
+        return filas.stream().anyMatch(RolFila::isExistente);
     }
 
     public void agregarFila() {
@@ -280,6 +288,12 @@ public class EmpleadoModel extends DefaultModel<Empleado, UUID> {
         Map<String, Rol> porNombre = rolesPorNombre();
         Set<String> yaAsignados = esNuevo ? new HashSet<String>() : rolesYaAsignados(registro);
         boolean puedeCrearRoles = esNuevo || CREAR_ROLES_AL_MODIFICAR;
+
+        // NUEVO: si ya tiene rol, no se permite agregar otro
+        if (!esNuevo && !yaAsignados.isEmpty() && !rolesDeseados().isEmpty()) {
+            error("El empleado ya tiene un rol asignado; no se pueden agregar más.");
+            return false;
+        }
         for (Map.Entry<String, String> d : rolesDeseados().entrySet()) {
             if (yaAsignados.contains(d.getKey())) {
                 error("El empleado ya tiene asignado el rol: " + d.getValue());

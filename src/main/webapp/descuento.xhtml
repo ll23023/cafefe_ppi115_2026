@@ -102,44 +102,51 @@
         <section class="item_sublist">
             <h:form id="frmDetalle">
                 <div class="item_sublist_header">
-                    <h2>Productos asociados</h2>
+                    <h2>Descuentos relacionados</h2>
                 </div>
 
                 <h:outputText value="Tipo de descuento: #{descuentoModel.tipoSeleccionado.nombre}"
                               rendered="#{not empty descuentoModel.tipoSeleccionado}" />
 
-                <p:dataTable id="tblProductos"
-                             var="dp"
-                             value="#{descuentoModel.productosDelTipo}"
+                <p:dataTable id="tblDescuentos"
+                             var="d"
+                             value="#{descuentoModel.descuentosDelTipo}"
                              paginator="true"
                              paginatorPosition="bottom"
                              rows="5"
                              styleClass="tabla"
-                             emptyMessage="#{empty descuentoModel.tipoSeleccionado ? 'Seleccione un tipo de descuento en la lista' : 'Los descuentos de este tipo todavía no se aplican a ningún producto'}">
-                    <p:column headerText="Producto">
-                        <h:outputText value="#{dp.idProducto.nombre}" />
-                    </p:column>
-
-                    <p:column headerText="Precio sugerido">
-                        <h:outputText value="#{dp.idProducto.precioSugerido}">
-                            <f:convertNumber type="currency" currencySymbol="$" />
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Descuento">
-                        <h:outputText value="#{dp.idDescuento.nombre}" />
-                    </p:column>
-
-                    <p:column headerText="Valor (%)">
-                        <h:outputText value="#{dp.valor}" />
+                             emptyMessage="#{empty descuentoModel.tipoSeleccionado ? 'Seleccione un tipo de descuento en la lista' : 'Este tipo de descuento todavía no tiene descuentos'}">
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{d.nombre}" />
                     </p:column>
 
                     <p:column headerText="Desde">
-                        <h:outputText value="#{descuentoModel.fechaTexto(dp.fechaDesde)}" />
+                        <h:outputText value="#{descuentoModel.fechaTexto(d.fechaDesde)}" />
                     </p:column>
 
                     <p:column headerText="Hasta">
-                        <h:outputText value="#{descuentoModel.fechaHastaTexto(dp.fechaHasta)}" />
+                        <h:outputText value="#{descuentoModel.fechaHastaTexto(d.fechaHasta)}" />
+                    </p:column>
+
+                    <p:column headerText="Observaciones">
+                        <h:outputText value="#{d.observaciones}" />
+                    </p:column>
+
+                    <p:column styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{descuentoModel.editar(d)}"
+                                         process="@this"
+                                         update=":frmDescuento :frmDetalle"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         action="#{descuentoModel.eliminar(d)}"
+                                         process="@this"
+                                         update=":frmDescuento :frmDetalle :frmTipos :growl"
+                                         onclick="return confirm('¿Eliminar este descuento?');"
+                                         styleClass="btn btn-danger" />
                     </p:column>
                 </p:dataTable>
             </h:form>

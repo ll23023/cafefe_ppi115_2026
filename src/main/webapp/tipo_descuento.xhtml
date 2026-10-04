@@ -31,7 +31,7 @@
                     <p:spinner id="descuentoMaximo"
                                value="#{tipoDescuentoModel.registro.descuentoMaximo}"
                                min="5"
-                               max="40"
+                               max="90"
                                stepFactor="5"
                                required="true"
                                disabled="#{tipoDescuentoModel.soloLectura}" />
@@ -76,28 +76,36 @@
         <section class="item_sublist">
             <h:form id="frmDetalle">
                 <div class="item_sublist_header">
-                    <h2>Descuentos asociados</h2>
+                    <h2>Productos asociados</h2>
                 </div>
 
-                <p:dataTable id="tblDescuentos"
-                             var="d"
-                             value="#{tipoDescuentoModel.descuentosDelTipo}"
+                <p:dataTable id="tblProductos"
+                             var="dp"
+                             value="#{tipoDescuentoModel.productosDelTipo}"
                              paginator="true"
                              paginatorPosition="bottom"
                              rows="5"
                              styleClass="tabla"
-                             emptyMessage="#{tipoDescuentoModel.creando ? 'Seleccione un tipo de la lista para ver sus descuentos' : 'Este tipo de descuento todavía no tiene descuentos'}">
-                    <p:column headerText="Nombre">
-                        <h:outputText value="#{d.nombre}" />
+                             emptyMessage="#{tipoDescuentoModel.creando ? 'Seleccione un tipo de la lista para ver sus productos' : 'Los descuentos de este tipo todavía no se aplican a ningún producto'}">
+                    <p:column headerText="Producto">
+                        <h:outputText value="#{dp.idProducto.nombre}" />
+                    </p:column>
+                    <p:column headerText="Precio sugerido">
+                        <h:outputText value="#{dp.idProducto.precioSugerido}">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Descuento">
+                        <h:outputText value="#{dp.idDescuento.nombre}" />
+                    </p:column>
+                    <p:column headerText="Valor (%)">
+                        <h:outputText value="#{dp.valor}" />
                     </p:column>
                     <p:column headerText="Desde">
-                        <h:outputText value="#{tipoDescuentoModel.fechaTexto(d.fechaDesde)}" />
+                        <h:outputText value="#{tipoDescuentoModel.fechaTexto(dp.fechaDesde)}" />
                     </p:column>
                     <p:column headerText="Hasta">
-                        <h:outputText value="#{tipoDescuentoModel.fechaHastaTexto(d.fechaHasta)}" />
-                    </p:column>
-                    <p:column headerText="Observaciones">
-                        <h:outputText value="#{d.observaciones}" />
+                        <h:outputText value="#{tipoDescuentoModel.fechaHastaTexto(dp.fechaHasta)}" />
                     </p:column>
                 </p:dataTable>
             </h:form>
@@ -140,6 +148,7 @@
                                          update=":frmTipoDescuento :frmDetalle :frmLista"
                                          styleClass="btn btn-edit" />
                         &#160;
+                        <!-- Solo se puede eliminar un tipo sin descuentos (hijos) -->
                         <p:commandButton icon="pi pi-trash"
                                          title="#{tipoDescuentoModel.cantidadDescuentos(t) gt 0 ? 'No se puede eliminar: tiene descuentos asociados' : 'Eliminar'}"
                                          action="#{tipoDescuentoModel.eliminar(t)}"
