@@ -35,23 +35,33 @@
                      selectionMode="single"
                      selection="#{cc.attrs.model.seleccion}"
                      rowKey="#{item[cc.attrs.rowKey]}"
-                     paginator="true" rows="10"
+                     paginator="true" paginatorPosition="bottom" rows="10"
                      emptyMessage="No hay registros"
                      styleClass="tabla">
-            <p:ajax event="rowSelect" update="actions" />
-            <p:ajax event="rowUnselect" update="actions" />
+            <!-- La selección solo identifica la fila; Editar inicia explícitamente la edición. -->
+            <p:ajax event="rowSelect" />
+            <p:ajax event="rowUnselect" />
             <!-- Componente de PrimeFaces que crea una columna visual por cada definición recibida. -->
             <p:columns value="#{cc.attrs.columns}" var="column"
                        headerText="#{column.header}">
                 #{column.getValue(item)}
             </p:columns>
-        </p:dataTable>
 
-        <!-- Cuando se guarda la edición o elimina el registro, el modelo limpia la selección. -->
-        <h:panelGroup id="actions" layout="block" style="margin-top: 12px;">
-            <c:btnsTabla model="#{cc.attrs.model}"
-                         editUpdate="#{cc.attrs.editUpdate}"
-                         deleteUpdate="#{cc.attrs.deleteUpdate}" />
-        </h:panelGroup>
+            <!-- Las acciones pertenecen a cada fila; seleccionar no inicia la edición. -->
+            <p:column headerText="Acciones" styleClass="col_acciones">
+                <p:commandButton icon="fa-solid fa-pen" title="Editar"
+                                 action="#{cc.attrs.model.editar(item)}"
+                                 process="@this"
+                                 update="#{cc.attrs.editUpdate}"
+                                 styleClass="btn btn-edit" />
+                &#160;
+                <p:commandButton icon="fa-solid fa-trash-can" title="Eliminar"
+                                 action="#{cc.attrs.model.eliminar(item)}"
+                                 process="@this"
+                                 update="#{cc.attrs.deleteUpdate}"
+                                 onclick="return confirm('¿Eliminar este registro?');"
+                                 styleClass="btn btn-danger" />
+            </p:column>
+        </p:dataTable>
     </cc:implementation>
 </ui:component>

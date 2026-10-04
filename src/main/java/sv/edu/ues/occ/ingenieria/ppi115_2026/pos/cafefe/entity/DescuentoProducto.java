@@ -26,6 +26,7 @@ import java.util.UUID;
 @Table(name = "descuento_producto", catalog = "pos_ppi115_2026", schema = "public")
 @NamedQueries({
     @NamedQuery(name = "DescuentoProducto.findAll", query = "SELECT d FROM DescuentoProducto d"),
+    @NamedQuery(name = "DescuentoProducto.findByProducto", query = "SELECT d FROM DescuentoProducto d JOIN FETCH d.idDescuento descuento JOIN FETCH descuento.idTipoDescuento WHERE d.idProducto.idProducto = :idProducto"),
     @NamedQuery(name = "DescuentoProducto.findByFechaDesde", query = "SELECT d FROM DescuentoProducto d WHERE d.fechaDesde = :fechaDesde"),
     @NamedQuery(name = "DescuentoProducto.findByFechaHasta", query = "SELECT d FROM DescuentoProducto d WHERE d.fechaHasta = :fechaHasta"),
     @NamedQuery(name = "DescuentoProducto.findByValor", query = "SELECT d FROM DescuentoProducto d WHERE d.valor = :valor"),

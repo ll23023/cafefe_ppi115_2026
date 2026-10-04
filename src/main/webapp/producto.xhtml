@@ -1,68 +1,335 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets"
-                template="/resources/templates/basic.xhtml"
-                xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
-                xmlns:f="jakarta.faces.core">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="jakarta.faces.composite/components"
+                template="/resources/templates/basic.xhtml">
 
     <ui:define name="page_title">Cafefe - Productos</ui:define>
     <ui:define name="header_title">Productos</ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Productos</h2>
+    <ui:define name="main_form">
+        <section class="main_form">
+            <h2>#{productoModel.tituloFormulario}</h2>
+            <hr />
+            <p:messages id="mensajesProducto" />
 
             <h:form id="frmProducto">
-                <h:panelGrid columns="3" cellpadding="5">
+                <div class="custom_input">
                     <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre"
-                                 value="#{productoModel.registro.nombre}"
-                                 required="true"
-                                 maxlength="155" />
-                    <p:messages for="nombre" />
+                    <p:inputText id="nombre" value="#{productoModel.registro.nombre}" required="true" maxlength="155" />
+                    <p:message for="nombre" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo"
-                                             value="#{productoModel.registro.activo}"
-                                             itemLabel="Activo" />
-                    <h:panelGroup />
+                    <p:selectBooleanCheckbox id="activo" value="#{productoModel.registro.activo}" itemLabel="Activo" />
+                    <p:message for="activo" />
+                </div>
 
-                    <h:outputLabel for="comentarios" value="Comentarios" />
-                    <p:inputTextarea id="comentarios"
-                                     value="#{productoModel.registro.comentarios}"
-                                     rows="3" cols="50" />
-                    <p:messages for="comentarios" />
+                <div class="custom_input input_tarea">
+                    <h:outputLabel for="comentarios" value="Comentarios:" />
+                    <p:inputTextarea id="comentarios" value="#{productoModel.registro.comentarios}" rows="3" />
+                    <p:message for="comentarios" />
+                </div>
 
+                <div class="custom_input">
                     <h:outputLabel for="precioSugerido" value="Precio sugerido:" />
-                    <p:inputNumber id="precioSugerido"
-                                   value="#{productoModel.registro.precioSugerido}"
-                                   required="true"
-                                   maxValue="50.00"
-                                   minValue="0"
-                                   decimalPlaces="2" />
-                    <p:messages for="precioSugerido" />
-                </h:panelGrid>
+                    <p:inputNumber id="precioSugerido" value="#{productoModel.registro.precioSugerido}" required="true"
+                                   maxValue="50.00" minValue="0" decimalPlaces="2" />
+                    <p:message for="precioSugerido" />
+                </div>
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{productoModel}"
-                                saveUpdate="frmProducto frmTablaProducto"
-                                newUpdate="frmProducto frmTablaProducto" />
+                <div class="form_buttons">
+                    <c:btnsForm model="#{productoModel}" process=":frmProducto :frmRelacionesProducto"
+                                saveUpdate="frmProducto :frmRelacionesProducto :frmTablaProducto :mensajesProducto"
+                                newUpdate="frmProducto :frmRelacionesProducto :frmTablaProducto :mensajesProducto" />
                 </div>
             </h:form>
-        </div>
 
-        <div class="card">
-            <h3>Lista de Productos</h3>
-            <h:form id="frmTablaProducto">
-                <c:tablaDinamica model="#{productoModel}"
-                                 columns="#{productoModel.columnas}"
-                                 rowKey="idProducto"
-                                 editUpdate="frmProducto"
-                                 deleteUpdate="frmTablaProducto frmProducto" />
+            <h:form id="frmTipoCaracteristicaDialog">
+                <p:dialog id="dlgTipoCaracteristica" widgetVar="tipoCaracteristicaDialog"
+                          header="Nuevo tipo de característica" modal="true" closable="true" resizable="false">
+                    <p:outputPanel id="panelTipoCaracteristica">
+                        <p:messages id="mensajesTipoCaracteristica" />
+                        <div class="custom_input">
+                            <h:outputLabel for="nombreTipo" value="Nombre:" />
+                            <p:inputText id="nombreTipo" value="#{productoModel.nuevoTipoCaracteristica.nombre}"
+                                         required="true" maxlength="155" />
+                            <p:message for="nombreTipo" />
+                        </div>
+                        <div class="custom_input input_tarea">
+                            <h:outputLabel for="expresionTipo" value="Expresión regular:" />
+                            <p:inputTextarea id="expresionTipo"
+                                             value="#{productoModel.nuevoTipoCaracteristica.expresionRegular}" rows="3" />
+                            <p:message for="expresionTipo" />
+                        </div>
+                        <div class="custom_input input_tarea">
+                            <h:outputLabel for="observacionesTipo" value="Observaciones:" />
+                            <p:inputTextarea id="observacionesTipo"
+                                             value="#{productoModel.nuevoTipoCaracteristica.observaciones}" rows="2" />
+                            <p:message for="observacionesTipo" />
+                        </div>
+                        <p:commandButton value="Guardar tipo" icon="fa-solid fa-check"
+                                         action="#{productoModel.guardarTipoCaracteristica}" process="panelTipoCaracteristica"
+                                         update="panelTipoCaracteristica :frmRelacionesProducto:relacionesProducto:tblCaracteristicas"
+                                         oncomplete="if (!args.validationFailed) PF('tipoCaracteristicaDialog').hide();" />
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
-        </div>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h2>Datos</h2>
+            <hr />
+            <h:form id="frmRelacionesProducto">
+                <p:outputPanel rendered="#{productoModel.datosVisibles}">
+                    <p:tabView id="relacionesProducto">
+                        <p:tab title="Características">
+                            <div class="sublist_header">
+                                <p:commandButton icon="fa-solid fa-plus" title="Agregar característica"
+                                                 action="#{productoModel.agregarCaracteristica}" process="@this"
+                                                 update="tblCaracteristicas" />
+                            </div>
+
+                            <p:dataTable id="tblCaracteristicas" var="fila" value="#{productoModel.filasCaracteristicas}"
+                                         emptyMessage="Sin características asignadas">
+                                <p:column>
+                                    <p:selectOneMenu value="#{fila.tipo}" placeholder="Tipo de característica"
+                                                     disabled="#{fila.persistida}">
+                                        <f:selectItem itemLabel="Tipo de característica" itemValue="#{null}"
+                                                      noSelectionOption="true" />
+                                        <p:ajax event="change" listener="#{productoModel.onCambioTipoCaracteristica(fila)}"
+                                                process="@this"
+                                                update=":frmRelacionesProducto:relacionesProducto:tblCaracteristicas" />
+                                        <f:selectItems value="#{productoModel.tiposCaracteristica}" var="tipo"
+                                                       itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column>
+                                    <p:selectOneMenu id="caracteristicaFila" value="#{fila.caracteristicaNombre}" editable="true"
+                                                     placeholder="Característica"
+                                                     disabled="#{fila.persistida}">
+                                        <f:selectItem itemLabel="Característica" itemValue=""
+                                                      noSelectionOption="true" />
+                                        <p:ajax event="change" process="@this" update="@none" />
+                                        <f:selectItems value="#{productoModel.getCaracteristicasPorTipo(fila.tipo)}"
+                                                       var="caracteristica"
+                                                       itemLabel="#{caracteristica.nombre}" itemValue="#{caracteristica.nombre}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column>
+                                    <p:inputText value="#{fila.valor}" placeholder="Valor"
+                                                 disabled="#{fila.persistida}">
+                                        <p:ajax event="blur" process="@this" update="@none" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column styleClass="col_acciones">
+                                    <p:commandButton icon="fa-solid fa-minus" title="Quitar característica"
+                                                     action="#{productoModel.quitarCaracteristica(fila)}" process="@this"
+                                                     update="tblCaracteristicas" disabled="#{fila.persistida}" />
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton value="Agregar tipo de característica" icon="fa-solid fa-plus"
+                                             styleClass="btn btn-secondary" action="#{productoModel.prepararNuevoTipoCaracteristica}"
+                                             process="@this" update=":frmTipoCaracteristicaDialog:panelTipoCaracteristica"
+                                             oncomplete="PF('tipoCaracteristicaDialog').show();" />
+                        </p:tab>
+
+                        <p:tab title="Tipos de producto">
+                            <div class="sublist_header">
+                                <p:commandButton icon="fa-solid fa-plus" title="Agregar tipo de producto"
+                                                 action="#{productoModel.agregarTipoProducto}" process="@this"
+                                                 update="tblTiposProducto" />
+                            </div>
+
+                            <p:dataTable id="tblTiposProducto" var="fila" value="#{productoModel.filasTiposProducto}"
+                                         emptyMessage="Sin tipos de producto asignados">
+                                <p:column>
+                                    <p:selectOneMenu value="#{fila.tipoNombre}" editable="true"
+                                                     placeholder="Tipo de producto" disabled="#{fila.persistida}">
+                                        <p:ajax event="change" process="@this" update="@none" />
+                                        <f:selectItems value="#{productoModel.tiposProducto}" var="tipo"
+                                                       itemLabel="#{tipo.nombre}" itemValue="#{tipo.nombre}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column styleClass="col_acciones">
+                                    <p:commandButton icon="fa-solid fa-minus" title="Quitar tipo de producto"
+                                                     action="#{productoModel.quitarTipoProducto(fila)}" process="@this"
+                                                     update="tblTiposProducto" disabled="#{fila.persistida}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+
+                        <p:tab title="Descuentos">
+                            <div class="sublist_header">
+                                <p:commandButton icon="fa-solid fa-plus" title="Agregar descuento"
+                                                 action="#{productoModel.agregarDescuento}"
+                                                 process="@this" update="tblDescuentos" />
+                            </div>
+                            <p:dataTable id="tblDescuentos" var="fila"
+                                         value="#{productoModel.filasDescuentos}"
+                                         emptyMessage="Sin descuentos asignados">
+                                <p:column>
+                                    <p:selectOneMenu id="tipoDescuentoFila" value="#{fila.tipo}"
+                                                     placeholder="Tipo de descuento"
+                                                     disabled="#{fila.persistida}">
+                                        <f:selectItem itemLabel="Tipo de descuento" itemValue="#{null}"
+                                                      noSelectionOption="true" />
+                                        <p:ajax event="change" listener="#{productoModel.onCambioTipoDescuento(fila)}"
+                                                process="@this"
+                                                update=":frmRelacionesProducto:relacionesProducto:tblDescuentos" />
+                                        <f:selectItems value="#{productoModel.tiposDescuento}" var="tipo"
+                                                       itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column>
+                                    <p:selectOneMenu id="descuentoFila" value="#{fila.descuentoNombre}"
+                                                     placeholder="Descuento"
+                                                     disabled="#{fila.persistida}">
+                                        <f:selectItem itemLabel="Descuento" itemValue=""
+                                                      noSelectionOption="true" />
+                                        <p:ajax event="change" process="@this" update="@none" />
+                                        <f:selectItems value="#{productoModel.getDescuentosPorTipo(fila.tipo)}"
+                                                       var="descuento"
+                                                       itemLabel="#{descuento.nombre}" itemValue="#{descuento.nombre}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column>
+                                    <p:inputNumber value="#{fila.valor}" placeholder="Valor" minValue="0"
+                                                   disabled="#{fila.persistida}">
+                                        <p:ajax event="blur" process="@this" update="@none" />
+                                    </p:inputNumber>
+                                </p:column>
+                                <p:column styleClass="col_acciones">
+                                    <p:commandButton icon="fa-solid fa-minus" title="Quitar descuento"
+                                                     action="#{productoModel.quitarDescuento(fila)}"
+                                                     process="@this" update="tblDescuentos"
+                                                     disabled="#{fila.persistida}" />
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton value="Agregar tipo de descuento" icon="fa-solid fa-plus"
+                                             styleClass="btn btn-secondary"
+                                             action="#{productoModel.prepararNuevoTipoDescuento}"
+                                             process="@this"
+                                             update=":frmTipoDescuentoDialog:panelTipoDescuento"
+                                             oncomplete="PF('tipoDescuentoDialog').show();" />
+                            <p:commandButton value="Agregar descuento" icon="fa-solid fa-plus"
+                                             styleClass="btn btn-secondary"
+                                             action="#{productoModel.prepararNuevoDescuento}"
+                                             process="@this"
+                                             update=":frmDescuentoDialog:panelDescuento"
+                                             oncomplete="PF('descuentoDialog').show();" />
+                        </p:tab>
+                    </p:tabView>
+                </p:outputPanel>
+                <p:outputPanel rendered="#{!productoModel.datosVisibles}" styleClass="datos_vacios">
+                    <h:outputText value="Crea o selecciona un producto para ver sus datos." />
+                </p:outputPanel>
+            </h:form>
+
+            <h:form id="frmTipoDescuentoDialog">
+                <p:dialog id="dlgTipoDescuento" widgetVar="tipoDescuentoDialog"
+                          header="Nuevo tipo de descuento" modal="true"
+                          closable="true" resizable="false">
+                    <p:outputPanel id="panelTipoDescuento">
+                        <p:messages id="mensajesTipoDescuento" />
+                        <div class="custom_input">
+                            <h:outputLabel for="nombreTipoDescuento" value="Nombre:" />
+                            <p:inputText id="nombreTipoDescuento"
+                                         value="#{productoModel.nuevoTipoDescuento.nombre}"
+                                         required="true" />
+                            <p:message for="nombreTipoDescuento" />
+                        </div>
+                        <div class="custom_input">
+                            <h:outputLabel for="maximoTipoDescuento" value="Descuento máximo:" />
+                            <p:inputNumber id="maximoTipoDescuento"
+                                           value="#{productoModel.nuevoTipoDescuento.descuentoMaximo}"
+                                           minValue="0" maxValue="100" decimalPlaces="0" />
+                            <p:message for="maximoTipoDescuento" />
+                        </div>
+                        <div class="custom_input input_tarea">
+                            <h:outputLabel for="observacionesTipoDescuento" value="Observaciones:" />
+                            <p:inputTextarea id="observacionesTipoDescuento"
+                                             value="#{productoModel.nuevoTipoDescuento.observaciones}"
+                                             rows="2" />
+                            <p:message for="observacionesTipoDescuento" />
+                        </div>
+                        <p:commandButton value="Guardar tipo" icon="fa-solid fa-check"
+                                         action="#{productoModel.guardarTipoDescuento}"
+                                         process="panelTipoDescuento"
+                                         update="panelTipoDescuento :frmRelacionesProducto:relacionesProducto:tblDescuentos"
+                                         oncomplete="if (!args.validationFailed) PF('tipoDescuentoDialog').hide();" />
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+
+            <h:form id="frmDescuentoDialog">
+                <p:dialog id="dlgDescuento" widgetVar="descuentoDialog"
+                          header="Nuevo descuento" modal="true" closable="true" resizable="false">
+                    <p:outputPanel id="panelDescuento">
+                        <p:messages id="mensajesDescuento" />
+                        <div class="custom_input">
+                            <h:outputLabel for="tipoDescuentoNuevo" value="Tipo:" />
+                            <p:selectOneMenu id="tipoDescuentoNuevo"
+                                             value="#{productoModel.nuevoDescuento.idTipoDescuento}"
+                                             placeholder="Tipo de descuento">
+                                <f:selectItems value="#{productoModel.tiposDescuento}" var="tipo"
+                                               itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                            </p:selectOneMenu>
+                            <p:message for="tipoDescuentoNuevo" />
+                        </div>
+                        <div class="custom_input">
+                            <h:outputLabel for="nombreDescuentoNuevo" value="Nombre:" />
+                            <p:inputText id="nombreDescuentoNuevo"
+                                         value="#{productoModel.nuevoDescuento.nombre}" required="true" />
+                            <p:message for="nombreDescuentoNuevo" />
+                        </div>
+                        <div class="custom_input">
+                            <h:outputLabel for="fechaDesdeDescuento" value="Desde:" />
+                            <p:datePicker id="fechaDesdeDescuento"
+                                          value="#{productoModel.nuevoDescuento.fechaDesde}" showTime="true" />
+                            <p:message for="fechaDesdeDescuento" />
+                        </div>
+                        <div class="custom_input">
+                            <h:outputLabel for="fechaHastaDescuento" value="Hasta:" />
+                            <p:datePicker id="fechaHastaDescuento"
+                                          value="#{productoModel.nuevoDescuento.fechaHasta}" showTime="true" />
+                            <p:message for="fechaHastaDescuento" />
+                        </div>
+                        <div class="custom_input input_tarea">
+                            <h:outputLabel for="observacionesDescuento" value="Observaciones:" />
+                            <p:inputTextarea id="observacionesDescuento"
+                                             value="#{productoModel.nuevoDescuento.observaciones}" rows="2" />
+                            <p:message for="observacionesDescuento" />
+                        </div>
+                        <p:commandButton value="Guardar descuento" icon="fa-solid fa-check"
+                                         action="#{productoModel.guardarDescuento}"
+                                         process="panelDescuento"
+                                         update="panelDescuento :frmRelacionesProducto:relacionesProducto:tblDescuentos"
+                                         oncomplete="if (!args.validationFailed) PF('descuentoDialog').hide();" />
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmTablaProducto">
+            <article class="main_item_list">
+                <h2>Lista de productos</h2>
+                <hr />
+                <c:tablaDinamica model="#{productoModel}" columns="#{productoModel.columnas}" rowKey="idProducto"
+                                 editUpdate=":frmProducto :frmRelacionesProducto"
+                                 deleteUpdate=":frmTablaProducto :frmProducto :frmRelacionesProducto" />
+            </article>
+        </h:form>
     </ui:define>
 </ui:composition>

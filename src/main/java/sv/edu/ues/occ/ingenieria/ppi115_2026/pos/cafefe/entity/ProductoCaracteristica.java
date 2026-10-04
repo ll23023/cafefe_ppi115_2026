@@ -23,6 +23,7 @@ import java.util.UUID;
 @Table(name = "producto_caracteristica", catalog = "pos_ppi115_2026", schema = "public")
 @NamedQueries({
     @NamedQuery(name = "ProductoCaracteristica.findAll", query = "SELECT p FROM ProductoCaracteristica p"),
+    @NamedQuery(name = "ProductoCaracteristica.findByProducto", query = "SELECT p FROM ProductoCaracteristica p JOIN FETCH p.idCaracteristica c JOIN FETCH c.idTipoCaracteristica WHERE p.idProducto.idProducto = :idProducto"),
     @NamedQuery(name = "ProductoCaracteristica.findByValor", query = "SELECT p FROM ProductoCaracteristica p WHERE p.valor = :valor")})
 public class ProductoCaracteristica implements Serializable {
 

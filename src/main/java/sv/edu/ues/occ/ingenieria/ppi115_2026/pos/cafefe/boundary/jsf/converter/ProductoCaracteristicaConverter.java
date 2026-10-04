@@ -1,6 +1,5 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.converter;
 
-import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.converter.DefaultConverter;
 import jakarta.faces.convert.FacesConverter;
 import jakarta.inject.Inject;
 import java.util.UUID;

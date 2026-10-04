@@ -10,19 +10,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+:root {
+    /* Paleta común de la aplicación. */
+    --bg-color: #F3EFCE;
+    --surface-color: #f8f8f8;
+    --primary-color: #69443A;
+    --secondary-color: #F3EFCE;
+    --accent-color: #84714F;
+    --text-color: #2f2926;
+    --text-on-primary-color: #fff;
+    --border-color: #eaeaea;
+
+    /* Medidas repetidas en tarjetas, navegación y encabezados. */
+    --default-padding: 5px 15px;
+    --compact-padding: 5px 6px;
+    --header-padding: 5px 1rem;
+    --default-radius: 20px;
+    --default-shadow: 1px 2px 2px 0 rgba(0, 0, 0, .1);
+    --default-gap: 1rem;
+}
+
 body {
     display: grid !important;
     grid-template-columns: 18rem 1fr;
-    grid-template-rows: 4.5rem 88vh;
+    grid-template-rows: 4.5rem 86vh;
 
-    gap: 1rem;
+    gap: var(--default-gap);
 
     grid-template-areas: 
         "header header"
         "side_menu work_area";
 
     font-family: 'Nunito', sans-serif !important;
-    background: #F3EFCE;
+    background: var(--bg-color);
 }
 
 header {
@@ -32,28 +52,38 @@ header {
     display: flex;
     flex-direction: row;
     
-    padding: 5px 1rem !important;
+    padding: var(--header-padding) !important;
+}
+
+main h2 {
+    margin: .5rem 0;
+}
+
+hr {
+    margin: 0;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
 }
 
 .logo {
     display: flex;
-    padding: 8px 15px;
+    padding: var(--default-padding);
 
     width: 20rem;
     height: fit-content;
 
     align-items: center;
 
-    border-radius: 20px;
+    border-radius: var(--default-radius);
 
-    background: #69443A;
+    background: var(--primary-color);
 
-    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, .1);
+    box-shadow: var(--default-shadow);
 }
 
 .app_name {
     font-size: 15pt;
-    color: #fff;
+    color: var(--text-on-primary-color);
 }
 
 .logo img {
@@ -64,7 +94,7 @@ header {
 .main_header {
     display: flex;
     margin-left: 1rem;
-    padding: 5px 15px;
+    padding: var(--default-padding);
 
     width: 100%;
     height: auto;
@@ -72,12 +102,12 @@ header {
     align-items: center;
     align-content: center;
 
-    background: #f8f8f8;
+    background: var(--surface-color);
 
-    border: 1px solid rbga(132, 113, 79, .5);
-    border-radius: 20px;
+    border: 1px solid rgba(132, 113, 79, .5);
+    border-radius: var(--default-radius);
 
-    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, .1);
+    box-shadow: var(--default-shadow);
 }
 
 .main_header h2 {
@@ -94,7 +124,7 @@ header {
     padding-left: 1rem !important;
 
     width: 100% !important;
-    height: 100% !important;
+    height: 85vh !important;
 
     overflow: hidden;
 }
@@ -106,7 +136,7 @@ nav {
     padding-top: 0 !important;
     
     width: 3rem;
-    height: 50%;
+    height: 42vh;
     
     align-content: center;
     justify-content: space-between;
@@ -121,19 +151,19 @@ nav {
     flex-direction: column;
 
     margin-top: 0 !important;
-    padding: 5px 6px;
+    padding: var(--compact-padding);
 
-    background: #69443A;
+    background: var(--primary-color);
 
-    border-radius: 20px;
+    border-radius: var(--default-radius);
 
-    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, .1);
+    box-shadow: var(--default-shadow);
 
     overflow: hidden;
 }
 
 .group_em {
-    padding: 5px 6px;
+    padding: var(--compact-padding);
 }
 
 .menu_item {
@@ -141,10 +171,10 @@ nav {
     flex-direction: row;
     flex-wrap: nowrap;
     position: relative;
-    padding: 5px 8px;
+
+    padding: var(--compact-padding);
 
     width: 18rem;
-    margin: 1px 0;
 
     align-items: center;
     align-content: center;
@@ -153,17 +183,14 @@ nav {
     font-size: 13pt;
     text-wrap: none;
 
-    color: #fff;
+    color: var(--text-on-primary-color);
 
-    border-radius: 20px 0 0 20px;
+    border-radius: var(--default-radius) 0 0 var(--default-radius);
+
+    transition: 0.15s ease-in-out;
 }
 
-.menu_item_active {
-    color: #69443A;
-    background: #F3EFCE;
-}
-
-.menu_item_active::before {
+.menu_item::before {
     content: "";
     position: absolute;
 
@@ -173,13 +200,35 @@ nav {
     width: 2rem;
     height: 2rem;
 
-    border-top: 10px solid #F3EFCE;
-    border-right: 5px solid #F3EFCE;
-    border-radius: 0 20px 0 0;    
+    border-top: 10px solid var(--primary-color);
+    border-right: 5px solid var(--primary-color);
+    border-radius: 0 20px 0 0;
+
+    transition: 0.15s ease-in-out;
+}
+
+.menu_item_active {
+    color: var(--primary-color);
+    background: var(--secondary-color);
+}
+
+.menu_item_active::before {
+    border-top: 10px solid var(--secondary-color);
+    border-right: 5px solid var(--secondary-color);
 }
 
 .side_menu:hover nav {
     width: 100%;
+}
+
+.menu_item:hover {
+    color: var(--primary-color);
+    background: var(--secondary-color);
+}
+
+.menu_item:hover::before {
+    border-top: 10px solid var(--secondary-color);
+    border-right: 5px solid var(--secondary-color);
 }
 
 main {
@@ -201,20 +250,22 @@ main {
     display: flex;
     flex-direction: column;
 
-    width: 59% !important;
+    width: 40vw !important;
 
     justify-content: space-between;
 }
 
 .card {
-    padding: 5px 15px;
+    padding: var(--default-padding) !important;
 
-    background-color: #f8f8f8;
+    background-color: var(--surface-color);
 
-    border: 1px solid #eaeaea;
-    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--default-radius);
 
-    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, .1);
+    box-shadow: var(--default-shadow);
+
+    overflow: auto;
 }
 
 .work_area .card {
@@ -222,8 +273,35 @@ main {
     height: 48% !important;
 }
 
+.sublist_header {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sublist_header button {
+    display: flex;
+
+    width: 35px !important;
+    height: 30px;
+
+    justify-content: center;
+    align-items: center;
+
+    background: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.sublist_header button:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
 .card_list {
-    width: 39% !important;
+    width: 40vw !important;
 }
 
 footer {
@@ -237,11 +315,11 @@ footer {
 
     font-size: 10pt;
 
-    color: #69443A;
+    color: var(--primary-color);
     background: rgba(255, 255, 255, .5);
 
     border: 1px solid rgba(132, 113, 79, .2);
-    border-radius: 20px 20px 0px 20px;
+    border-radius: var(--default-radius) var(--default-radius) 0 var(--default-radius);
 
-    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, .1);
+    box-shadow: var(--default-shadow);
 }

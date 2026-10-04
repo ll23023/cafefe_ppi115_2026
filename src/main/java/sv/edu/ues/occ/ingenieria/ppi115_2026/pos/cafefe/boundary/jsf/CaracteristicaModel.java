@@ -2,6 +2,7 @@ package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
 
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -13,10 +14,6 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristi
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
 
-/**
- *
- * @author mil
- */
 @Named
 @ViewScoped
 public class CaracteristicaModel extends DefaultModel<Caracteristica, UUID> {
@@ -55,15 +52,23 @@ public class CaracteristicaModel extends DefaultModel<Caracteristica, UUID> {
         return dato != null ? dato.getIdCaracteristica() : null;
     }
 
+    @PostConstruct
+    public void init() {
+        super.init();
+        cargarTipos();
+    }
+
     public List<TipoCaracteristica> getTipos() {
-        if (this.tipos == null) {
-            this.tipos = tipoCaracteristicaRepository != null
-                    ? tipoCaracteristicaRepository.findAll().stream()
-                            .filter(t -> Boolean.TRUE.equals(t.getActivo()))
-                            .toList()
-                    : new ArrayList<>();
-        }
+        if (this.tipos == null) cargarTipos();
         return tipos;
+    }
+
+    private void cargarTipos() {
+        this.tipos = tipoCaracteristicaRepository == null
+                ? new ArrayList<>()
+                : tipoCaracteristicaRepository.findAll().stream()
+                        .filter(t -> Boolean.TRUE.equals(t.getActivo()))
+                        .toList();
     }
 
     public void setTipos(List<TipoCaracteristica> tipos) {
