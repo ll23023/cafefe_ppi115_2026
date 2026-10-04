@@ -1,42 +1,207 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-    template="/resources/templates/basic.xhtml" xmlns:p="primefaces"
-    xmlns:c="http://xmlns.jcp.org/jsf/composite/components">
-    <ui:define name="page_title">Cafefe - Tipos de Productos</ui:define>
-    <ui:define name="header_title">Tipos de Productos</ui:define>
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">
+        Cafefe - Tipos de Productos
+    </ui:define>
+
+    <ui:define name="header_title">
+        Tipos de Productos
+    </ui:define>
 
     <ui:define name="main_form">
-        <h2>Nuevo Tipo de Producto</h2>
 
-        <h:form id="frmTipoProducto">
-            <h:outputLabel for="nombre" value="Nombre del Producto:" />
-            <p:inputText id="nombre" value="#{tipoProductoModel.registro.nombre}" required="true" />
-            <p:messages for="nombre" />
+        <p:growl id="growl" showDetail="false" />
 
-            <h:outputLabel for="observaciones" value="Observaciones:" />
-            <p:inputTextarea id="observaciones" value="#{tipoProductoModel.registro.observaciones}" rows="3"
-                cols="20" />
-            <p:messages for="observaciones" />
+        <section class="main_form">
 
-            <h:outputLabel for="activo" value="Estado:" />
-            <p:selectBooleanCheckbox id="activo" value="#{tipoProductoModel.registro.activo}" itemLabel="Activo" />
-            <h:panelGroup />
+            <h:form id="frmTipoProducto" styleClass="form_grid">
 
-            <div style="margin-top: 10px;">
-                <c:btnsForm model="#{tipoProductoModel}" saveUpdate="frmTipoProducto frmTablaProducto"
-                    newUpdate="frmTipoProducto frmTablaProducto" />
-            </div>
-        </h:form>
+                <h2>#{tipoProductoModel.tituloFormulario}</h2>
+
+                <div class="custom_input">
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre"
+                                 value="#{tipoProductoModel.registro.nombre}"
+                                 required="true"
+                                 maxlength="155"
+                                 disabled="#{tipoProductoModel.soloLectura}" />
+                    <p:message for="nombre" />
+                </div>
+
+                <div class="custom_input">
+                    <h:outputLabel for="observaciones"
+                                   value="Observaciones:" />
+
+                    <p:inputTextarea id="observaciones"
+                                     value="#{tipoProductoModel.registro.observaciones}"
+                                     rows="3"
+                                     disabled="#{tipoProductoModel.soloLectura}" />
+
+                    <p:message for="observaciones" />
+                </div>
+
+                <div class="custom_input">
+                    <h:outputLabel for="activo" value="Estado:" />
+
+                    <p:selectBooleanCheckbox id="activo"
+                                             value="#{tipoProductoModel.registro.activo}"
+                                             itemLabel="Activo"
+                                             disabled="#{tipoProductoModel.soloLectura}" />
+                </div>
+
+                <div class="form_buttons">
+
+                    <p:commandButton
+                        value="#{tipoProductoModel.editando
+                                 ? 'Guardar edición'
+                                 : 'Guardar'}"
+                        action="#{tipoProductoModel.btnGuardarHandler}"
+                        process="@form"
+                        update=":frmTipoProducto :frmDetalle :frmTablaProducto :growl"
+                        rendered="#{!tipoProductoModel.soloLectura}"
+                        styleClass="btn btn-primary" />
+
+                    <p:commandButton
+                        value="#{tipoProductoModel.soloLectura
+                                 ? 'Nuevo'
+                                 : (tipoProductoModel.editando
+                                 ? 'Cancelar'
+                                 : 'Nuevo')}"
+                        action="#{tipoProductoModel.cancelar}"
+                        process="@this"
+                        resetValues="true"
+                        update=":frmTipoProducto :frmDetalle :frmTablaProducto :growl"
+                        styleClass="btn btn-secondary" />
+
+                </div>
+
+            </h:form>
+
+        </section>
+
+    </ui:define>
+
+    <ui:define name="main_data">
+
+        <section class="item_sublist">
+
+            <h:form id="frmDetalle">
+
+                <div class="item_sublist_header">
+                    <h2>Productos asociados</h2>
+                </div>
+
+                <h:outputText
+                    rendered="#{tipoProductoModel.seleccion == null}"
+                    value="Seleccione un tipo de producto de la lista para ver sus productos asociados." />
+
+                <p:dataTable
+                    id="tblProductosTipo"
+                    var="producto"
+                    value="#{tipoProductoModel.productosDelTipo}"
+                    rendered="#{tipoProductoModel.seleccion != null}"
+                    emptyMessage="Ningún producto tiene este tipo de producto"
+                    styleClass="tabla">
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Estado">
+                        <h:outputText
+                            value="#{producto.activo ? 'ACTIVO' : 'INACTIVO'}" />
+                    </p:column>
+
+                    <p:column headerText="Precio sugerido">
+                        <h:outputText value="#{producto.precioSugerido}">
+                            <f:convertNumber type="currency" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+        </section>
+
     </ui:define>
 
     <ui:define name="main_list">
-        <h2>Lista de Tipos de Producto</h2>
+
         <h:form id="frmTablaProducto">
-            <c:tablaDinamica model="#{tipoProductoModel}" columns="#{tipoProductoModel.columnas}"
-                rowKey="idTipoProducto" editUpdate="frmTipoProducto" deleteUpdate="frmTablaProducto frmTipoProducto" />
+
+            <article class="main_item_list">
+
+                <h2>Lista de tipos de producto</h2>
+
+                <p:dataTable
+                    id="tblTiposProducto"
+                    var="tipo"
+                    value="#{tipoProductoModel.registros}"
+                    rowKey="#{tipo.idTipoProducto}"
+                    selection="#{tipoProductoModel.seleccion}"
+                    selectionMode="single"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="10"
+                    emptyMessage="No hay registros"
+                    styleClass="tabla">
+
+                    <p:ajax
+                        event="rowSelect"
+                        listener="#{tipoProductoModel.onSeleccionar}"
+                        update=":frmTipoProducto :frmDetalle" />
+
+                    <p:columns
+                        value="#{tipoProductoModel.columnas}"
+                        var="column"
+                        headerText="#{column.header}">
+                        #{column.getValue(tipo)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones"
+                              styleClass="col_acciones">
+
+                        <p:commandButton
+                            icon="pi pi-pencil"
+                            title="Editar"
+                            action="#{tipoProductoModel.editar(tipo)}"
+                            process="@this"
+                            update=":frmTipoProducto :frmDetalle :frmTablaProducto"
+                            styleClass="btn btn-edit" />
+
+                        &#160;
+
+                        <p:commandButton
+                            icon="pi pi-trash"
+                            title="#{tipoProductoModel.cantidadProductos(tipo) gt 0
+                                     ? 'No se puede eliminar: tiene productos asociados'
+                                     : 'Eliminar'}"
+                            action="#{tipoProductoModel.eliminar(tipo)}"
+                            process="@this"
+                            disabled="#{tipoProductoModel.cantidadProductos(tipo) gt 0}"
+                            update=":frmTipoProducto :frmDetalle :frmTablaProducto :growl"
+                            onclick="return confirm('¿Eliminar este tipo de producto?');"
+                            styleClass="btn btn-danger" />
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </article>
+
         </h:form>
+
     </ui:define>
 
 </ui:composition>

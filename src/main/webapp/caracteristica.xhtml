@@ -1,71 +1,250 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
-                template="/resources/templates/basic.xhtml"
                 xmlns:p="primefaces"
-                xmlns:c="jakarta.faces.composite/components"
+                template="/resources/templates/basic.xhtml"
                 xmlns:f="jakarta.faces.core">
 
-    <ui:define name="page_title">Cafefe - Características</ui:define>
-    <ui:define name="header_title">Características</ui:define>
+    <ui:define name="page_title">
+        Cafefe - Características
+    </ui:define>
 
-    <ui:define name="content">
-        <div class="card">
-            <h2>Administración de Características</h2>
+    <ui:define name="header_title">
+        Administración de Características
+    </ui:define>
 
-            <h:form id="frmCaracteristica">
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="nombre" value="Nombre:" />
+    <ui:define name="main_form">
+
+        <p:growl id="growl" showDetail="false" />
+
+        <section class="main_form">
+
+            <h:form id="frmCaracteristica"
+                    styleClass="form_grid">
+
+                <h2>#{caracteristicaModel.tituloFormulario}</h2>
+
+                <div class="custom_input">
+                    <h:outputLabel for="nombre"
+                                   value="Nombre:" />
+
                     <p:inputText id="nombre"
                                  value="#{caracteristicaModel.registro.nombre}"
                                  required="true"
-                                 maxlength="155" />
-                    <p:messages for="nombre" />
+                                 maxlength="155"
+                                 disabled="#{caracteristicaModel.soloLectura}" />
 
-                    <h:outputLabel for="tipo" value="Tipo:" />
-                    <p:selectOneMenu id="tipo"
+                    <p:message for="nombre" />
+                </div>
+
+                <div class="custom_input">
+
+                    <h:outputLabel for="tipoCaracteristica"
+                                   value="Tipo de característica:" />
+
+                    <p:selectOneMenu id="tipoCaracteristica"
                                      value="#{caracteristicaModel.registro.idTipoCaracteristica}"
+                                     disabled="#{caracteristicaModel.soloLectura}"
                                      required="true">
-                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{caracteristicaModel.tipos}"
-                                       var="t"
-                                       itemLabel="#{t.nombre}"
-                                       itemValue="#{t}" />
+
+                        <f:selectItem
+                            itemLabel="Seleccione un tipo"
+                            itemValue="#{null}"
+                            noSelectionOption="true" />
+
+                        <f:selectItems
+                            value="#{caracteristicaModel.tipos}"
+                            var="tipo"
+                            itemLabel="#{tipo.nombre}"
+                            itemValue="#{tipo}" />
+
                     </p:selectOneMenu>
-                    <p:messages for="tipo" />
 
-                    <h:outputLabel for="activo" value="Estado:" />
-                    <p:selectBooleanCheckbox id="activo"
-                                             value="#{caracteristicaModel.registro.activo}"
-                                             itemLabel="Activo" />
-                    <h:panelGroup />
+                    <p:message for="tipoCaracteristica" />
 
-                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                </div>
+
+                <div class="custom_input">
+
+                    <h:outputLabel for="observaciones"
+                                   value="Observaciones:" />
+
                     <p:inputTextarea id="observaciones"
                                      value="#{caracteristicaModel.registro.observaciones}"
-                                     rows="3" cols="50" />
-                    <p:messages for="observaciones" />
-                </h:panelGrid>
+                                     rows="3"
+                                     disabled="#{caracteristicaModel.soloLectura}" />
 
-                <div style="margin-top: 10px;">
-                    <c:btnsForm model="#{caracteristicaModel}"
-                                saveUpdate="frmCaracteristica frmTablaCaracteristica"
-                                newUpdate="frmCaracteristica frmTablaCaracteristica" />
+                    <p:message for="observaciones" />
+
                 </div>
-            </h:form>
-        </div>
 
-        <div class="card">
-            <h3>Lista de Características</h3>
-            <h:form id="frmTablaCaracteristica">
-                <c:tablaDinamica model="#{caracteristicaModel}"
-                                  columns="#{caracteristicaModel.columnas}"
-                                  rowKey="idCaracteristica"
-                                  editUpdate="frmCaracteristica"
-                                  deleteUpdate="frmTablaCaracteristica frmCaracteristica" />
+                <div class="custom_input">
+
+                    <p:selectBooleanCheckbox
+                        id="activo"
+                        value="#{caracteristicaModel.registro.activo}"
+                        itemLabel="Activo"
+                        disabled="#{caracteristicaModel.soloLectura}" />
+
+                </div>
+
+                <div class="form_buttons">
+
+                    <p:commandButton
+                        value="#{caracteristicaModel.editando
+                                ? 'Guardar edición'
+                                : 'Guardar'}"
+                        action="#{caracteristicaModel.btnGuardarHandler}"
+                        process="@form"
+                        update=":frmCaracteristica
+                                :frmDetalle
+                                :frmLista
+                                :growl"
+                        rendered="#{!caracteristicaModel.soloLectura}"
+                        styleClass="btn btn-primary" />
+
+                    <p:commandButton
+                        value="#{caracteristicaModel.soloLectura
+                                ? 'Nuevo'
+                                : (caracteristicaModel.editando
+                                ? 'Cancelar'
+                                : 'Nuevo')}"
+                        action="#{caracteristicaModel.cancelar}"
+                        process="@this"
+                        resetValues="true"
+                        update=":frmCaracteristica
+                                :frmDetalle
+                                :frmLista
+                                :growl"
+                        styleClass="btn btn-secondary" />
+
+                </div>
+
             </h:form>
-        </div>
+
+        </section>
+
     </ui:define>
+
+    <ui:define name="main_data">
+
+        <section class="item_sublist">
+
+            <h:form id="frmDetalle">
+
+                <div class="item_sublist_header">
+                    <h2>Productos asociados</h2>
+                </div>
+
+                <h:outputText
+                    rendered="#{caracteristicaModel.seleccion == null}"
+                    value="Seleccione una característica de la lista para ver sus productos asociados." />
+
+                <p:dataTable
+                    id="tblProductosCaracteristica"
+                    var="producto"
+                    value="#{caracteristicaModel.productosDeLaCaracteristica}"
+                    rendered="#{caracteristicaModel.seleccion != null}"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="5"
+                    styleClass="tabla"
+                    emptyMessage="Ningún producto tiene esta característica">
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Estado">
+                        <h:outputText
+                            value="#{producto.activo
+                                    ? 'ACTIVO'
+                                    : 'INACTIVO'}" />
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+        </section>
+
+    </ui:define>
+
+    <ui:define name="main_list">
+
+        <h:form id="frmLista">
+
+            <article class="main_item_list">
+
+                <h2>Lista de características</h2>
+
+                <p:dataTable
+                    id="tblCaracteristicas"
+                    var="c"
+                    value="#{caracteristicaModel.registros}"
+                    rowKey="#{c.idCaracteristica}"
+                    selection="#{caracteristicaModel.seleccion}"
+                    selectionMode="single"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="10"
+                    emptyMessage="No hay registros"
+                    styleClass="tabla">
+
+                    <p:ajax
+                        event="rowSelect"
+                        listener="#{caracteristicaModel.onSeleccionar}"
+                        update=":frmCaracteristica :frmDetalle" />
+
+                    <p:columns
+                        value="#{caracteristicaModel.columnas}"
+                        var="column"
+                        headerText="#{column.header}">
+                        #{column.getValue(c)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones"
+                              styleClass="col_acciones">
+
+                        <p:commandButton
+                            icon="pi pi-pencil"
+                            title="Editar"
+                            action="#{caracteristicaModel.editar(c)}"
+                            process="@this"
+                            update=":frmCaracteristica
+                                    :frmDetalle
+                                    :frmLista"
+                            styleClass="btn btn-edit" />
+
+                        &#160;
+
+                        <p:commandButton
+                            icon="pi pi-trash"
+                            title="#{caracteristicaModel.cantidadProductos(c) gt 0
+                                    ? 'No se puede eliminar: tiene productos asociados'
+                                    : 'Eliminar'}"
+                            action="#{caracteristicaModel.eliminar(c)}"
+                            process="@this"
+                            disabled="#{caracteristicaModel.cantidadProductos(c) gt 0}"
+                            update=":frmCaracteristica
+                                    :frmDetalle
+                                    :frmLista
+                                    :growl"
+                            onclick="return confirm('¿Eliminar esta característica?');"
+                            styleClass="btn btn-danger" />
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </article>
+
+        </h:form>
+
+    </ui:define>
+
 </ui:composition>

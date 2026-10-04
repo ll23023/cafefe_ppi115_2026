@@ -73,9 +73,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     private Descuento nuevoDescuento;
     private sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento nuevoTipoDescuento;
     private List<ColumnaTabla> columnas;
-    private boolean datosVisibles;
+    private boolean soloLectura;
 
-    /** Una fila de la pestaña de características del producto. */
+    /**
+     * Una fila de la pestaña de características del producto.
+     */
     public static class CaracteristicaFila implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -136,7 +138,9 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
     }
 
-    /** Una fila de la pestaña de tipos de producto. */
+    /**
+     * Una fila de la pestaña de tipos de producto.
+     */
     public static class TipoProductoFila implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -170,8 +174,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
     }
 
-    /** Fila editable para asociar un descuento al producto. */
+    /**
+     * Fila editable para asociar un descuento al producto.
+     */
     public static class DescuentoFila implements Serializable {
+
         private static final long serialVersionUID = 1L;
         private sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo;
         private String descuentoNombre;
@@ -180,18 +187,53 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         private Date fechaHasta;
         private boolean persistida;
 
-        public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getTipo() { return tipo; }
-        public void setTipo(sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo) { this.tipo = tipo; }
-        public String getDescuentoNombre() { return descuentoNombre; }
-        public void setDescuentoNombre(String descuentoNombre) { this.descuentoNombre = descuentoNombre; }
-        public Integer getValor() { return valor; }
-        public void setValor(Integer valor) { this.valor = valor; }
-        public Date getFechaDesde() { return fechaDesde; }
-        public void setFechaDesde(Date fechaDesde) { this.fechaDesde = fechaDesde; }
-        public Date getFechaHasta() { return fechaHasta; }
-        public void setFechaHasta(Date fechaHasta) { this.fechaHasta = fechaHasta; }
-        public boolean isPersistida() { return persistida; }
-        public void setPersistida(boolean persistida) { this.persistida = persistida; }
+        public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getTipo() {
+            return tipo;
+        }
+
+        public void setTipo(sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo) {
+            this.tipo = tipo;
+        }
+
+        public String getDescuentoNombre() {
+            return descuentoNombre;
+        }
+
+        public void setDescuentoNombre(String descuentoNombre) {
+            this.descuentoNombre = descuentoNombre;
+        }
+
+        public Integer getValor() {
+            return valor;
+        }
+
+        public void setValor(Integer valor) {
+            this.valor = valor;
+        }
+
+        public Date getFechaDesde() {
+            return fechaDesde;
+        }
+
+        public void setFechaDesde(Date fechaDesde) {
+            this.fechaDesde = fechaDesde;
+        }
+
+        public Date getFechaHasta() {
+            return fechaHasta;
+        }
+
+        public void setFechaHasta(Date fechaHasta) {
+            this.fechaHasta = fechaHasta;
+        }
+
+        public boolean isPersistida() {
+            return persistida;
+        }
+
+        public void setPersistida(boolean persistida) {
+            this.persistida = persistida;
+        }
     }
 
     @Override
@@ -222,7 +264,6 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     public void init() {
         super.init();
         cargarListasRelacionadas();
-        datosVisibles = false;
     }
 
     @Override
@@ -240,13 +281,19 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         nuevoTipoDescuento.setObservaciones("");
         nuevoDescuento = new Descuento(UUID.randomUUID());
         nuevoDescuento.setObservaciones("");
+        this.soloLectura = false;
     }
 
     @Override
     public void seleccionarRegistro(Producto producto) {
-        super.seleccionarRegistro(producto);
         if (producto != null) {
-            cargarRelaciones(producto.getIdProducto());
+            mostrar(producto);
+        }
+    }
+
+    public void onSeleccionar() {
+        if (seleccion != null) {
+            mostrar(seleccion);
         }
     }
 
@@ -254,11 +301,25 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         if (producto == null) {
             return;
         }
-        datosVisibles = true;
         this.seleccion = producto;
-        this.registro = productoRepository.findById(producto.getIdProducto());
+        mostrar(producto);
+        this.soloLectura = false;
         this.estado = ESTADO_CRUD.MODIFICAR;
-        cargarRelaciones(producto.getIdProducto());
+    }
+
+    public void cancelar() {
+        limpiar();
+    }
+
+    private void mostrar(Producto producto) {
+        if (producto == null || producto.getIdProducto() == null) {
+            return;
+        }
+        Producto fresco = productoRepository.findById(producto.getIdProducto());
+        this.registro = fresco != null ? fresco : producto;
+        this.estado = ESTADO_CRUD.NINGUNO;
+        this.soloLectura = true;
+        cargarRelaciones(this.registro.getIdProducto());
     }
 
     public void eliminar(Producto producto) {
@@ -289,7 +350,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     @Override
     @Transactional
     public void btnGuardarHandler() {
-        if (!validarRelaciones()) {
+        if (soloLectura || registro == null || !validarRelaciones()) {
             return;
         }
         try {
@@ -304,12 +365,18 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             sincronizarCaracteristicas(productoGuardado);
             sincronizarTiposProducto(productoGuardado);
             sincronizarDescuentos(productoGuardado);
+            UUID idGuardado = registro.getIdProducto();
             cargarRegistros();
-            this.seleccion = productoGuardado;
-            this.registro = productoGuardado;
-            this.estado = ESTADO_CRUD.MODIFICAR;
-            cargarRelaciones(productoGuardado.getIdProducto());
             cargarListasRelacionadas();
+            Producto guardado = registros.stream()
+                    .filter(p -> idGuardado.equals(p.getIdProducto()))
+                    .findFirst().orElse(null);
+            if (guardado != null) {
+                this.seleccion = guardado;
+                mostrar(guardado);
+            } else {
+                limpiar();
+            }
             mensaje(FacesMessage.SEVERITY_INFO, "Producto guardado correctamente.");
         } catch (RuntimeException exception) {
             LOG.log(Level.SEVERE, "Error al guardar producto y sus relaciones", exception);
@@ -328,8 +395,8 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         tiposProducto = tipoProductoRepository.findAll().stream()
                 .filter(tipo -> Boolean.TRUE.equals(tipo.getActivo()))
                 .toList();
-            descuentos = descuentoRepository.findAllWithTipo();
-            tiposDescuento = tipoDescuentoRepository.findAll().stream()
+        descuentos = descuentoRepository.findAllWithTipo();
+        tiposDescuento = tipoDescuentoRepository.findAll().stream()
                 .filter(tipo -> Boolean.TRUE.equals(tipo.getActivo()))
                 .toList();
     }
@@ -337,39 +404,39 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     private void cargarRelaciones(UUID idProducto) {
         filasCaracteristicas.clear();
         productoCaracteristicaRepository.findByProducto(idProducto).forEach(relacion -> {
-                    CaracteristicaFila fila = new CaracteristicaFila();
-                    fila.setCaracteristica(relacion.getIdCaracteristica());
-                    fila.setTipo(relacion.getIdCaracteristica() == null
-                            ? null : relacion.getIdCaracteristica().getIdTipoCaracteristica());
-                        fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());
-                        fila.setCaracteristicaNombre(fila.getCaracteristica() == null
-                            ? null : fila.getCaracteristica().getNombre());
-                    fila.setValor(relacion.getValor());
-                            fila.setPersistida(true);
-                    filasCaracteristicas.add(fila);
-                });
+            CaracteristicaFila fila = new CaracteristicaFila();
+            fila.setCaracteristica(relacion.getIdCaracteristica());
+            fila.setTipo(relacion.getIdCaracteristica() == null
+                    ? null : relacion.getIdCaracteristica().getIdTipoCaracteristica());
+            fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());
+            fila.setCaracteristicaNombre(fila.getCaracteristica() == null
+                    ? null : fila.getCaracteristica().getNombre());
+            fila.setValor(relacion.getValor());
+            fila.setPersistida(true);
+            filasCaracteristicas.add(fila);
+        });
 
         filasTiposProducto.clear();
         productoTipoProductoRepository.findByProducto(idProducto).forEach(relacion -> {
-                    TipoProductoFila fila = new TipoProductoFila();
-                fila.setTipo(relacion.getIdTipoProducto());
-                    fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());
-                    fila.setPersistida(true);
-                    filasTiposProducto.add(fila);
-                });
+            TipoProductoFila fila = new TipoProductoFila();
+            fila.setTipo(relacion.getIdTipoProducto());
+            fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());
+            fila.setPersistida(true);
+            filasTiposProducto.add(fila);
+        });
 
         filasDescuentos.clear();
         descuentoProductoRepository.findByProducto(idProducto).forEach(relacion -> {
-                    DescuentoFila fila = new DescuentoFila();
-                    Descuento descuento = relacion.getIdDescuento();
-                    fila.setTipo(descuento == null ? null : descuento.getIdTipoDescuento());
-                    fila.setDescuentoNombre(descuento == null ? null : descuento.getNombre());
-                    fila.setValor(relacion.getValor());
-                    fila.setFechaDesde(relacion.getFechaDesde());
-                    fila.setFechaHasta(relacion.getFechaHasta());
-                    fila.setPersistida(true);
-                    filasDescuentos.add(fila);
-                });
+            DescuentoFila fila = new DescuentoFila();
+            Descuento descuento = relacion.getIdDescuento();
+            fila.setTipo(descuento == null ? null : descuento.getIdTipoDescuento());
+            fila.setDescuentoNombre(descuento == null ? null : descuento.getNombre());
+            fila.setValor(relacion.getValor());
+            fila.setFechaDesde(relacion.getFechaDesde());
+            fila.setFechaHasta(relacion.getFechaHasta());
+            fila.setPersistida(true);
+            filasDescuentos.add(fila);
+        });
     }
 
     public List<Descuento> getDescuentosPorTipo(
@@ -410,27 +477,31 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             boolean vacia = fila.getTipo() == null
                     && (fila.getDescuentoNombre() == null || fila.getDescuentoNombre().isBlank())
                     && fila.getValor() == null;
-            if (vacia) continue;
+            if (vacia) {
+                continue;
+            }
             if (fila.getTipo() == null || fila.getDescuentoNombre() == null
                     || fila.getDescuentoNombre().isBlank() || fila.getValor() == null) {
                 mensaje(FacesMessage.SEVERITY_ERROR, "Cada descuento debe tener tipo, nombre y valor.");
                 return false;
             }
             Descuento descuento = descuentos.stream()
-                .filter(d -> d.getNombre() != null
-                && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
-                .findFirst().orElse(null);
+                    .filter(d -> d.getNombre() != null
+                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
+                    .findFirst().orElse(null);
             if (descuento != null && (descuento.getIdTipoDescuento() == null
-                || !fila.getTipo().getIdTipoDescuento().equals(
-                    descuento.getIdTipoDescuento().getIdTipoDescuento()))) {
-            mensaje(FacesMessage.SEVERITY_ERROR,
-                "El descuento seleccionado no corresponde al tipo indicado.");
-            return false;
+                    || !fila.getTipo().getIdTipoDescuento().equals(
+                            descuento.getIdTipoDescuento().getIdTipoDescuento()))) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "El descuento seleccionado no corresponde al tipo indicado.");
+                return false;
             }
         }
         for (CaracteristicaFila fila : filasCaracteristicas) {
             if (fila.getTipo() == null || fila.getCaracteristicaNombre() == null
-                || fila.getCaracteristicaNombre().isBlank()) continue;
+                    || fila.getCaracteristicaNombre().isBlank()) {
+                continue;
+            }
             Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());
             if (caracteristica != null && caracteristica.getIdTipoCaracteristica() != null
                     && !fila.getTipo().getIdTipoCaracteristica()
@@ -448,7 +519,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 continue;
             }
             TipoCaracteristica tipo = fila.getTipo();
-                Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());
+            Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());
             if (caracteristica == null) {
                 caracteristica = new Caracteristica(UUID.randomUUID());
                 caracteristica.setNombre(fila.getCaracteristicaNombre().trim());
@@ -478,7 +549,9 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
         for (DescuentoFila fila : filasDescuentos) {
             if (fila.getTipo() == null || fila.getDescuentoNombre() == null
-                || fila.getDescuentoNombre().isBlank()) continue;
+                    || fila.getDescuentoNombre().isBlank()) {
+                continue;
+            }
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
                     .findFirst().orElse(null);
@@ -505,7 +578,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
         return caracteristicaRepository.findAll().stream()
                 .filter(c -> c.getNombre() != null
-                && c.getNombre().equalsIgnoreCase(nombre.trim()))
+                        && c.getNombre().equalsIgnoreCase(nombre.trim()))
                 .findFirst().orElse(null);
     }
 
@@ -515,8 +588,8 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
         return caracteristicas.stream()
                 .filter(caracteristica -> caracteristica.getIdTipoCaracteristica() != null
-                && tipo.getIdTipoCaracteristica().equals(
-                        caracteristica.getIdTipoCaracteristica().getIdTipoCaracteristica()))
+                        && tipo.getIdTipoCaracteristica().equals(
+                                caracteristica.getIdTipoCaracteristica().getIdTipoCaracteristica()))
                 .toList();
     }
 
@@ -534,7 +607,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             }
             ProductoCaracteristica relacion = new ProductoCaracteristica(UUID.randomUUID());
             relacion.setIdProducto(producto);
-                relacion.setIdCaracteristica(fila.getCaracteristica());
+            relacion.setIdCaracteristica(fila.getCaracteristica());
             relacion.setValor(fila.getValor());
             productoCaracteristicaRepository.crear(relacion);
             fila.setPersistida(true);
@@ -566,9 +639,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             }
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null && fila.getDescuentoNombre() != null
-                    && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
+                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
                     .findFirst().orElse(null);
-            if (descuento == null) continue;
+            if (descuento == null) {
+                continue;
+            }
             DescuentoProducto relacion = new DescuentoProducto(UUID.randomUUID());
             relacion.setIdProducto(producto);
             relacion.setIdDescuento(descuento);
@@ -582,17 +657,6 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
     public void agregarCaracteristica() {
         filasCaracteristicas.add(new CaracteristicaFila());
-    }
-
-    @Override
-    public void btnNuevoHandler() {
-        if (isEditando()) {
-            datosVisibles = false;
-            super.btnNuevoHandler();
-            return;
-        }
-        datosVisibles = true;
-        super.btnNuevoHandler();
     }
 
     public void quitarCaracteristica(CaracteristicaFila fila) {
@@ -611,7 +675,9 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
     }
 
-    public void agregarDescuento() { filasDescuentos.add(new DescuentoFila()); }
+    public void agregarDescuento() {
+        filasDescuentos.add(new DescuentoFila());
+    }
 
     public void onCambioTipoDescuento(DescuentoFila fila) {
         if (fila != null && !fila.isPersistida()) {
@@ -695,19 +761,57 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, texto, null));
     }
 
-    public List<Caracteristica> getCaracteristicas() { return caracteristicas; }
-    public List<TipoCaracteristica> getTiposCaracteristica() { return tiposCaracteristica; }
-    public List<TipoProducto> getTiposProducto() { return tiposProducto; }
-    public List<CaracteristicaFila> getFilasCaracteristicas() { return filasCaracteristicas; }
-    public List<TipoProductoFila> getFilasTiposProducto() { return filasTiposProducto; }
-    public TipoCaracteristica getNuevoTipoCaracteristica() { return nuevoTipoCaracteristica; }
-    public void setNuevoTipoCaracteristica(TipoCaracteristica nuevoTipoCaracteristica) { this.nuevoTipoCaracteristica = nuevoTipoCaracteristica; }
-    public List<Descuento> getDescuentos() { return descuentos; }
-    public List<sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento> getTiposDescuento() { return tiposDescuento; }
-    public List<DescuentoFila> getFilasDescuentos() { return filasDescuentos; }
-    public boolean isDatosVisibles() { return datosVisibles; }
-    public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getNuevoTipoDescuento() { return nuevoTipoDescuento; }
-    public Descuento getNuevoDescuento() { return nuevoDescuento; }
+    public List<Caracteristica> getCaracteristicas() {
+        return caracteristicas;
+    }
+
+    public List<TipoCaracteristica> getTiposCaracteristica() {
+        return tiposCaracteristica;
+    }
+
+    public List<TipoProducto> getTiposProducto() {
+        return tiposProducto;
+    }
+
+    public List<CaracteristicaFila> getFilasCaracteristicas() {
+        return filasCaracteristicas;
+    }
+
+    public List<TipoProductoFila> getFilasTiposProducto() {
+        return filasTiposProducto;
+    }
+
+    public TipoCaracteristica getNuevoTipoCaracteristica() {
+        return nuevoTipoCaracteristica;
+    }
+
+    public void setNuevoTipoCaracteristica(TipoCaracteristica nuevoTipoCaracteristica) {
+        this.nuevoTipoCaracteristica = nuevoTipoCaracteristica;
+    }
+
+    public List<Descuento> getDescuentos() {
+        return descuentos;
+    }
+
+    public List<sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento> getTiposDescuento() {
+        return tiposDescuento;
+    }
+
+    public List<DescuentoFila> getFilasDescuentos() {
+        return filasDescuentos;
+    }
+
+    public boolean isSoloLectura() {
+        return soloLectura;
+    }
+
+    public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getNuevoTipoDescuento() {
+        return nuevoTipoDescuento;
+    }
+
+    public Descuento getNuevoDescuento() {
+        return nuevoDescuento;
+    }
 
     public List<ColumnaTabla> getColumnas() {
         if (columnas == null) {
@@ -721,6 +825,10 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     }
 
     public String getTituloFormulario() {
+        if (soloLectura) {
+            return "Detalle del producto";
+        }
         return isEditando() ? "Editar producto" : "Nuevo producto";
     }
+
 }

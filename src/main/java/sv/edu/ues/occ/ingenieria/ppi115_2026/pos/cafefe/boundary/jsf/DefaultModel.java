@@ -171,6 +171,7 @@ public abstract class DefaultModel<T, ID> implements Serializable {
     /**
      * Indica si el formulario está en modo creación (el único modo en que se
      * permiten cambios en listas de selección y ventanas emergentes).
+     * @return <code>true</code> si se está creando un nuevo registro; <code>false</code> si no.
      */
     public boolean isCreando() {
         return this.estado == ESTADO_CRUD.CREAR;

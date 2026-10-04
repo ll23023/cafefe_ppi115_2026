@@ -39,7 +39,10 @@
                      emptyMessage="No hay registros"
                      styleClass="tabla">
             <!-- La selección solo identifica la fila; Editar inicia explícitamente la edición. -->
-            <p:ajax event="rowSelect" />
+            <p:ajax event="rowSelect"
+                    listener="#{cc.attrs.model.onSeleccionar}"
+                    update="#{cc.attrs.editUpdate}" />
+            
             <p:ajax event="rowUnselect" />
             <!-- Componente de PrimeFaces que crea una columna visual por cada definición recibida. -->
             <p:columns value="#{cc.attrs.columns}" var="column"
