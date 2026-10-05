@@ -121,7 +121,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         public void setTipoNombre(String tipoNombre) {
             this.tipoNombre = tipoNombre;
         }
-        
+
         public String getTipoId() {
             return tipoId;
         }
@@ -405,28 +405,28 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     private void cargarListasRelacionadas() {
         caracteristicas = new ArrayList<>(caracteristicaRepository.findAll().stream()
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList());
         tiposCaracteristica = new ArrayList<>(tipoCaracteristicaRepository.findAll().stream()
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList());
         tiposProducto = new ArrayList<>(tipoProductoRepository.findAll().stream()
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList());
         descuentos = new ArrayList<>(descuentoRepository.findAllWithTipo().stream()
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList());
         tiposDescuento = new ArrayList<>(tipoDescuentoRepository.findAll().stream()
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList());
     }
 
@@ -476,11 +476,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
         return descuentos.stream()
                 .filter(d -> d != null
-                        && d.getIdTipoDescuento() != null
-                        && idTipo.equals(d.getIdTipoDescuento().getIdTipoDescuento()))
+                && d.getIdTipoDescuento() != null
+                && idTipo.equals(d.getIdTipoDescuento().getIdTipoDescuento()))
                 .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                        a.getNombre() == null ? "" : a.getNombre(),
-                        b.getNombre() == null ? "" : b.getNombre()))
+                a.getNombre() == null ? "" : a.getNombre(),
+                b.getNombre() == null ? "" : b.getNombre()))
                 .toList();
     }
 
@@ -539,7 +539,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null
-                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
+                    && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
                     .findFirst().orElse(null);
             if (descuento == null) {
                 mensaje(FacesMessage.SEVERITY_ERROR, "El descuento seleccionado no existe.");
@@ -603,14 +603,15 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 return false;
             }
 
-            String valor = fila.getCaracteristicaNombre().trim();
+            String valor = fila.getValor() == null ? "" : fila.getValor().trim();
             String expresionRegular = fila.getTipo().getExpresionRegular();
 
             if (expresionRegular != null && !expresionRegular.isBlank()) {
                 try {
                     if (!Pattern.matches(expresionRegular, valor)) {
                         mensaje(FacesMessage.SEVERITY_ERROR,
-                                "La característica \"" + valor
+                                "El valor \"" + valor + "\" de la característica \""
+                                + caracteristica.getNombre()
                                 + "\" no cumple con la expresión regular del tipo \""
                                 + fila.getTipo().getNombre() + "\".");
                         return false;
@@ -618,8 +619,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 } catch (PatternSyntaxException ex) {
                     mensaje(FacesMessage.SEVERITY_ERROR,
                             "La expresión regular del tipo de característica \""
-                            + fila.getTipo().getNombre()
-                            + "\" no es válida.");
+                            + fila.getTipo().getNombre() + "\" no es válida.");
                     return false;
                 }
             }
@@ -688,11 +688,11 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null
-                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
-                            && d.getIdTipoDescuento() != null
-                            && fila.getTipo().getIdTipoDescuento() != null
-                            && fila.getTipo().getIdTipoDescuento().equals(
-                                    d.getIdTipoDescuento().getIdTipoDescuento()))
+                    && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
+                    && d.getIdTipoDescuento() != null
+                    && fila.getTipo().getIdTipoDescuento() != null
+                    && fila.getTipo().getIdTipoDescuento().equals(
+                            d.getIdTipoDescuento().getIdTipoDescuento()))
                     .findFirst().orElse(null);
             if (descuento == null) {
                 descuento = new Descuento(UUID.randomUUID());
@@ -720,7 +720,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         }
         return caracteristicaRepository.findAll().stream()
                 .filter(c -> c.getNombre() != null
-                        && c.getNombre().equalsIgnoreCase(nombre.trim()))
+                && c.getNombre().equalsIgnoreCase(nombre.trim()))
                 .findFirst().orElse(null);
     }
 
@@ -733,12 +733,12 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
         return caracteristicaRepository.findAll().stream()
                 .filter(caracteristica -> caracteristica.getIdTipoCaracteristica() != null
-                        && idTipo.equals(
-                                caracteristica.getIdTipoCaracteristica()
-                                        .getIdTipoCaracteristica()))
+                && idTipo.equals(
+                        caracteristica.getIdTipoCaracteristica()
+                                .getIdTipoCaracteristica()))
                 .toList();
     }
-    
+
     public List<Caracteristica> getCaracteristicasPorTipoId(String tipoId) {
         if (tipoId == null || tipoId.isBlank()) {
             return new ArrayList<>();
@@ -746,13 +746,13 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
         return caracteristicaRepository.findAll().stream()
                 .filter(caracteristica -> caracteristica != null
-                        && caracteristica.getIdTipoCaracteristica() != null
-                        && caracteristica.getIdTipoCaracteristica()
-                                .getIdTipoCaracteristica() != null
-                        && tipoId.equals(
-                                caracteristica.getIdTipoCaracteristica()
-                                        .getIdTipoCaracteristica()
-                                        .toString()))
+                && caracteristica.getIdTipoCaracteristica() != null
+                && caracteristica.getIdTipoCaracteristica()
+                        .getIdTipoCaracteristica() != null
+                && tipoId.equals(
+                        caracteristica.getIdTipoCaracteristica()
+                                .getIdTipoCaracteristica()
+                                .toString()))
                 .toList();
     }
 
@@ -766,9 +766,9 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         if (fila.getTipoId() != null) {
             tipo = tiposCaracteristica.stream()
                     .filter(t -> t != null
-                            && t.getIdTipoCaracteristica() != null
-                            && fila.getTipoId().equals(
-                                    t.getIdTipoCaracteristica().toString()))
+                    && t.getIdTipoCaracteristica() != null
+                    && fila.getTipoId().equals(
+                            t.getIdTipoCaracteristica().toString()))
                     .findFirst()
                     .orElse(null);
         }
@@ -785,8 +785,8 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
         return tiposCaracteristica.stream()
                 .filter(tipo -> tipo != null
-                        && tipo.getNombre() != null
-                        && tipo.getNombre().equalsIgnoreCase(nombre.trim()))
+                && tipo.getNombre() != null
+                && tipo.getNombre().equalsIgnoreCase(nombre.trim()))
                 .findFirst()
                 .orElse(null);
     }
@@ -830,12 +830,12 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             }
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null && fila.getDescuentoNombre() != null
-                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
-                            && d.getIdTipoDescuento() != null
-                            && fila.getTipo() != null
-                            && fila.getTipo().getIdTipoDescuento() != null
-                            && fila.getTipo().getIdTipoDescuento().equals(
-                                    d.getIdTipoDescuento().getIdTipoDescuento()))
+                    && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
+                    && d.getIdTipoDescuento() != null
+                    && fila.getTipo() != null
+                    && fila.getTipo().getIdTipoDescuento() != null
+                    && fila.getTipo().getIdTipoDescuento().equals(
+                            d.getIdTipoDescuento().getIdTipoDescuento()))
                     .findFirst().orElse(null);
             if (descuento == null) {
                 throw new IllegalStateException(
