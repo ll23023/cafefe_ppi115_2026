@@ -7,6 +7,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CaracteristicaRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
@@ -84,6 +88,7 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         private TipoCaracteristica tipo;
         private Caracteristica caracteristica;
         private String tipoNombre;
+        private String tipoId;
         private String caracteristicaNombre;
         private String valor;
         private boolean persistida;
@@ -94,6 +99,10 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
         public void setTipo(TipoCaracteristica tipo) {
             this.tipo = tipo;
+            this.tipoNombre = tipo == null ? null : tipo.getNombre();
+            this.tipoId = tipo == null || tipo.getIdTipoCaracteristica() == null
+                    ? null
+                    : tipo.getIdTipoCaracteristica().toString();
         }
 
         public Caracteristica getCaracteristica() {
@@ -111,6 +120,14 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
 
         public void setTipoNombre(String tipoNombre) {
             this.tipoNombre = tipoNombre;
+        }
+        
+        public String getTipoId() {
+            return tipoId;
+        }
+
+        public void setTipoId(String tipoId) {
+            this.tipoId = tipoId;
         }
 
         public String getCaracteristicaNombre() {
@@ -386,19 +403,31 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     }
 
     private void cargarListasRelacionadas() {
-        caracteristicas = caracteristicaRepository.findAll().stream()
-                .filter(caracteristica -> Boolean.TRUE.equals(caracteristica.getActivo()))
-                .toList();
-        tiposCaracteristica = tipoCaracteristicaRepository.findAll().stream()
-                .filter(tipo -> Boolean.TRUE.equals(tipo.getActivo()))
-                .toList();
-        tiposProducto = tipoProductoRepository.findAll().stream()
-                .filter(tipo -> Boolean.TRUE.equals(tipo.getActivo()))
-                .toList();
-        descuentos = descuentoRepository.findAllWithTipo();
-        tiposDescuento = tipoDescuentoRepository.findAll().stream()
-                .filter(tipo -> Boolean.TRUE.equals(tipo.getActivo()))
-                .toList();
+        caracteristicas = new ArrayList<>(caracteristicaRepository.findAll().stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList());
+        tiposCaracteristica = new ArrayList<>(tipoCaracteristicaRepository.findAll().stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList());
+        tiposProducto = new ArrayList<>(tipoProductoRepository.findAll().stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList());
+        descuentos = new ArrayList<>(descuentoRepository.findAllWithTipo().stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList());
+        tiposDescuento = new ArrayList<>(tipoDescuentoRepository.findAll().stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList());
     }
 
     private void cargarRelaciones(UUID idProducto) {
@@ -442,10 +471,17 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     public List<Descuento> getDescuentosPorTipo(
             sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo) {
         UUID idTipo = tipo == null ? null : tipo.getIdTipoDescuento();
-        if (idTipo == null) {
+        if (idTipo == null || descuentos == null) {
             return new ArrayList<>();
         }
-        return descuentoRepository.findByTipoDescuento(idTipo);
+        return descuentos.stream()
+                .filter(d -> d != null
+                        && d.getIdTipoDescuento() != null
+                        && idTipo.equals(d.getIdTipoDescuento().getIdTipoDescuento()))
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
+                        a.getNombre() == null ? "" : a.getNombre(),
+                        b.getNombre() == null ? "" : b.getNombre()))
+                .toList();
     }
 
     private boolean validarRelaciones() {
@@ -469,44 +505,134 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 mensaje(FacesMessage.SEVERITY_ERROR, "Complete el tipo y la característica.");
                 return false;
             }
+            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se puede asignar un tipo de característica inactivo: "
+                        + fila.getTipo().getNombre());
+                return false;
+            }
         }
         for (DescuentoFila fila : filasDescuentos) {
             if (fila.isPersistida()) {
                 continue;
             }
+
             boolean vacia = fila.getTipo() == null
                     && (fila.getDescuentoNombre() == null || fila.getDescuentoNombre().isBlank())
                     && fila.getValor() == null;
             if (vacia) {
                 continue;
             }
+
             if (fila.getTipo() == null || fila.getDescuentoNombre() == null
                     || fila.getDescuentoNombre().isBlank() || fila.getValor() == null) {
                 mensaje(FacesMessage.SEVERITY_ERROR, "Cada descuento debe tener tipo, nombre y valor.");
                 return false;
             }
+
+            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se puede asignar un tipo de descuento inactivo: "
+                        + fila.getTipo().getNombre());
+                return false;
+            }
+
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null
                             && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
                     .findFirst().orElse(null);
-            if (descuento != null && (descuento.getIdTipoDescuento() == null
+            if (descuento == null) {
+                mensaje(FacesMessage.SEVERITY_ERROR, "El descuento seleccionado no existe.");
+                return false;
+            }
+
+            if (descuento.getIdTipoDescuento() == null
                     || !fila.getTipo().getIdTipoDescuento().equals(
-                            descuento.getIdTipoDescuento().getIdTipoDescuento()))) {
+                            descuento.getIdTipoDescuento().getIdTipoDescuento())) {
                 mensaje(FacesMessage.SEVERITY_ERROR,
                         "El descuento seleccionado no corresponde al tipo indicado.");
                 return false;
             }
+
+            if (!Boolean.TRUE.equals(descuento.getIdTipoDescuento().getActivo())) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se puede asignar un descuento cuyo tipo está inactivo: "
+                        + descuento.getNombre());
+                return false;
+            }
+
+            Integer maximo = fila.getTipo().getDescuentoMaximo();
+
+            if (maximo == null) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "El tipo de descuento seleccionado no tiene un máximo definido.");
+                return false;
+            }
+
+            if (fila.getValor() > maximo) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "El valor del descuento \"" + descuento.getNombre()
+                        + "\" no puede ser mayor a " + maximo + "%.");
+                return false;
+            }
         }
+
         for (CaracteristicaFila fila : filasCaracteristicas) {
             if (fila.getTipo() == null || fila.getCaracteristicaNombre() == null
                     || fila.getCaracteristicaNombre().isBlank()) {
                 continue;
             }
+
             Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());
-            if (caracteristica != null && caracteristica.getIdTipoCaracteristica() != null
+            if (caracteristica == null) {
+                mensaje(FacesMessage.SEVERITY_ERROR, "La característica seleccionada no existe.");
+                return false;
+            }
+
+            if (!Boolean.TRUE.equals(caracteristica.getActivo())) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se puede asignar una característica inactiva: "
+                        + caracteristica.getNombre());
+                return false;
+            }
+
+            if (caracteristica.getIdTipoCaracteristica() != null
                     && !fila.getTipo().getIdTipoCaracteristica()
                             .equals(caracteristica.getIdTipoCaracteristica().getIdTipoCaracteristica())) {
                 mensaje(FacesMessage.SEVERITY_ERROR, "El tipo no corresponde a la característica seleccionada.");
+                return false;
+            }
+
+            String valor = fila.getCaracteristicaNombre().trim();
+            String expresionRegular = fila.getTipo().getExpresionRegular();
+
+            if (expresionRegular != null && !expresionRegular.isBlank()) {
+                try {
+                    if (!Pattern.matches(expresionRegular, valor)) {
+                        mensaje(FacesMessage.SEVERITY_ERROR,
+                                "La característica \"" + valor
+                                + "\" no cumple con la expresión regular del tipo \""
+                                + fila.getTipo().getNombre() + "\".");
+                        return false;
+                    }
+                } catch (PatternSyntaxException ex) {
+                    mensaje(FacesMessage.SEVERITY_ERROR,
+                            "La expresión regular del tipo de característica \""
+                            + fila.getTipo().getNombre()
+                            + "\" no es válida.");
+                    return false;
+                }
+            }
+        }
+
+        for (TipoProductoFila fila : filasTiposProducto) {
+            if (fila.getTipo() == null) {
+                continue;
+            }
+            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {
+                mensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se puede asignar un tipo de producto inactivo: "
+                        + fila.getTipo().getNombre());
                 return false;
             }
         }
@@ -518,8 +644,10 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             if (fila.getCaracteristicaNombre() == null || fila.getCaracteristicaNombre().isBlank()) {
                 continue;
             }
+
             TipoCaracteristica tipo = fila.getTipo();
             Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());
+
             if (caracteristica == null) {
                 caracteristica = new Caracteristica(UUID.randomUUID());
                 caracteristica.setNombre(fila.getCaracteristicaNombre().trim());
@@ -528,13 +656,16 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 caracteristica.setIdTipoCaracteristica(tipo);
                 caracteristicaRepository.crear(caracteristica);
             }
+
             fila.setTipo(tipo);
             fila.setCaracteristica(caracteristica);
         }
+
         for (TipoProductoFila fila : filasTiposProducto) {
             if (fila.getTipoNombre() == null || fila.getTipoNombre().isBlank()) {
                 continue;
             }
+
             TipoProducto tipo = tipoProductoRepository.findAll().stream()
                     .filter(t -> t.getNombre() != null && t.getNombre().equalsIgnoreCase(fila.getTipoNombre().trim()))
                     .findFirst().orElse(null);
@@ -545,15 +676,23 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 tipo.setObservaciones("");
                 tipoProductoRepository.crear(tipo);
             }
+
             fila.setTipo(tipo);
         }
+
         for (DescuentoFila fila : filasDescuentos) {
             if (fila.getTipo() == null || fila.getDescuentoNombre() == null
                     || fila.getDescuentoNombre().isBlank()) {
                 continue;
             }
+
             Descuento descuento = descuentos.stream()
-                    .filter(d -> d.getNombre() != null && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
+                    .filter(d -> d.getNombre() != null
+                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
+                            && d.getIdTipoDescuento() != null
+                            && fila.getTipo().getIdTipoDescuento() != null
+                            && fila.getTipo().getIdTipoDescuento().equals(
+                                    d.getIdTipoDescuento().getIdTipoDescuento()))
                     .findFirst().orElse(null);
             if (descuento == null) {
                 descuento = new Descuento(UUID.randomUUID());
@@ -562,12 +701,15 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
                 descuentoRepository.crear(descuento);
                 descuentos.add(descuento);
             }
+
             if (fila.getFechaDesde() == null) {
                 fila.setFechaDesde(descuento.getFechaDesde());
             }
+
             if (fila.getFechaHasta() == null) {
                 fila.setFechaHasta(descuento.getFechaHasta());
             }
+
             fila.setDescuentoNombre(descuento.getNombre());
         }
     }
@@ -583,21 +725,70 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
     }
 
     public List<Caracteristica> getCaracteristicasPorTipo(TipoCaracteristica tipo) {
-        if (tipo == null) {
+        if (tipo == null || tipo.getIdTipoCaracteristica() == null) {
             return new ArrayList<>();
         }
-        return caracteristicas.stream()
+
+        UUID idTipo = tipo.getIdTipoCaracteristica();
+
+        return caracteristicaRepository.findAll().stream()
                 .filter(caracteristica -> caracteristica.getIdTipoCaracteristica() != null
-                        && tipo.getIdTipoCaracteristica().equals(
-                                caracteristica.getIdTipoCaracteristica().getIdTipoCaracteristica()))
+                        && idTipo.equals(
+                                caracteristica.getIdTipoCaracteristica()
+                                        .getIdTipoCaracteristica()))
+                .toList();
+    }
+    
+    public List<Caracteristica> getCaracteristicasPorTipoId(String tipoId) {
+        if (tipoId == null || tipoId.isBlank()) {
+            return new ArrayList<>();
+        }
+
+        return caracteristicaRepository.findAll().stream()
+                .filter(caracteristica -> caracteristica != null
+                        && caracteristica.getIdTipoCaracteristica() != null
+                        && caracteristica.getIdTipoCaracteristica()
+                                .getIdTipoCaracteristica() != null
+                        && tipoId.equals(
+                                caracteristica.getIdTipoCaracteristica()
+                                        .getIdTipoCaracteristica()
+                                        .toString()))
                 .toList();
     }
 
     public void onCambioTipoCaracteristica(CaracteristicaFila fila) {
-        if (fila != null && !fila.isPersistida()) {
-            fila.setCaracteristica(null);
-            fila.setCaracteristicaNombre(null);
+        if (fila == null || fila.isPersistida()) {
+            return;
         }
+
+        TipoCaracteristica tipo = null;
+
+        if (fila.getTipoId() != null) {
+            tipo = tiposCaracteristica.stream()
+                    .filter(t -> t != null
+                            && t.getIdTipoCaracteristica() != null
+                            && fila.getTipoId().equals(
+                                    t.getIdTipoCaracteristica().toString()))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        fila.setTipo(tipo);
+        fila.setCaracteristica(null);
+        fila.setCaracteristicaNombre(null);
+    }
+
+    private TipoCaracteristica buscarTipoCaracteristicaPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            return null;
+        }
+
+        return tiposCaracteristica.stream()
+                .filter(tipo -> tipo != null
+                        && tipo.getNombre() != null
+                        && tipo.getNombre().equalsIgnoreCase(nombre.trim()))
+                .findFirst()
+                .orElse(null);
     }
 
     private void sincronizarCaracteristicas(Producto producto) {
@@ -639,10 +830,17 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
             }
             Descuento descuento = descuentos.stream()
                     .filter(d -> d.getNombre() != null && fila.getDescuentoNombre() != null
-                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))
+                            && d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())
+                            && d.getIdTipoDescuento() != null
+                            && fila.getTipo() != null
+                            && fila.getTipo().getIdTipoDescuento() != null
+                            && fila.getTipo().getIdTipoDescuento().equals(
+                                    d.getIdTipoDescuento().getIdTipoDescuento()))
                     .findFirst().orElse(null);
             if (descuento == null) {
-                continue;
+                throw new IllegalStateException(
+                        "No se pudo resolver el descuento "
+                        + fila.getDescuentoNombre() + "para el tipo seleccionado.");
             }
             DescuentoProducto relacion = new DescuentoProducto(UUID.randomUUID());
             relacion.setIdProducto(producto);
@@ -733,6 +931,12 @@ public class ProductoModel extends DefaultModel<Producto, UUID> {
         if (nuevoDescuento.getFechaHasta() != null
                 && nuevoDescuento.getFechaHasta().before(nuevoDescuento.getFechaDesde())) {
             mensaje(FacesMessage.SEVERITY_ERROR, "La fecha final no puede ser anterior a la fecha inicial.");
+            return;
+        }
+        if (!Boolean.TRUE.equals(nuevoDescuento.getIdTipoDescuento().getActivo())) {
+            mensaje(FacesMessage.SEVERITY_ERROR,
+                    "No se puede crear un descuento con un tipo de descuento inactivo: "
+                    + nuevoDescuento.getIdTipoDescuento().getNombre());
             return;
         }
         descuentoRepository.crear(nuevoDescuento);

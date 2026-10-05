@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CaracteristicaRepository;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
@@ -171,6 +173,19 @@ public class TipoCaracteristicaModel extends DefaultModel<TipoCaracteristica, UU
         if (nombre.isEmpty()) {
             error("Indique el nombre del tipo de característica.");
             return;
+        }
+
+        registro.setNombre(nombre);
+
+        String expresionRegular = registro.getExpresionRegular();
+
+        if (expresionRegular != null && !expresionRegular.isBlank()) {
+            try {
+                Pattern.compile(expresionRegular);
+            } catch (PatternSyntaxException ex) {
+                error("La expresión regular indicada no es válida.");
+                return;
+            }
         }
 
         registro.setNombre(nombre);

@@ -122,7 +122,6 @@ public class CaracteristicaModel extends DefaultModel<Caracteristica, UUID> {
         this.tipos = tipoCaracteristicaRepository == null
                 ? new ArrayList<>()
                 : tipoCaracteristicaRepository.findAll().stream()
-                        .filter(t -> Boolean.TRUE.equals(t.getActivo()))
                         .sorted((a, b) ->
                                 String.CASE_INSENSITIVE_ORDER.compare(
                                         a.getNombre() == null

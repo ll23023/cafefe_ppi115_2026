@@ -115,15 +115,20 @@
                         <p:dataTable id="tblCaracteristicas" var="fila" value="#{productoModel.filasCaracteristicas}"
                                      emptyMessage="Sin características asignadas">
                             <p:column>
-                                <p:selectOneMenu value="#{fila.tipo}" placeholder="Tipo de característica"
+                                <p:selectOneMenu value="#{fila.tipoId}" placeholder="Tipo de característica"
                                                  disabled="#{productoModel.soloLectura or fila.persistida}">
                                     <f:selectItem itemLabel="Tipo de característica" itemValue="#{null}"
                                                   noSelectionOption="true" />
-                                    <p:ajax event="change" listener="#{productoModel.onCambioTipoCaracteristica(fila)}"
+
+                                    <p:ajax event="change"
+                                            listener="#{productoModel.onCambioTipoCaracteristica(fila)}"
                                             process="@this"
                                             update=":frmRelacionesProducto:relacionesProducto:tblCaracteristicas" />
+
                                     <f:selectItems value="#{productoModel.tiposCaracteristica}" var="tipo"
-                                                   itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                                                   itemLabel="#{tipo.nombre}#{tipo.activo ? '' : ' - inactivo'}"
+                                                   itemValue="#{tipo.idTipoCaracteristica}"
+                                                   itemDisabled="#{!tipo.activo}" />
                                 </p:selectOneMenu>
                             </p:column>
 
@@ -134,9 +139,11 @@
                                     <f:selectItem itemLabel="Característica" itemValue=""
                                                   noSelectionOption="true" />
                                     <p:ajax event="change" process="@this" update="@none" />
-                                    <f:selectItems value="#{productoModel.getCaracteristicasPorTipo(fila.tipo)}"
+                                    <f:selectItems value="#{productoModel.getCaracteristicasPorTipoId(fila.tipoId)}"
                                                    var="caracteristica"
-                                                   itemLabel="#{caracteristica.nombre}" itemValue="#{caracteristica.nombre}" />
+                                                   itemLabel="#{caracteristica.nombre}#{caracteristica.activo ? '' : ' - inactivo'}"
+                                                   itemValue="#{caracteristica.nombre}"
+                                                   itemDisabled="#{!caracteristica.activo}" />
                                 </p:selectOneMenu>
                             </p:column>
 
@@ -172,7 +179,9 @@
                                                  placeholder="Tipo de producto" disabled="#{productoModel.soloLectura or fila.persistida}">
                                     <p:ajax event="change" process="@this" update="@none" />
                                     <f:selectItems value="#{productoModel.tiposProducto}" var="tipo"
-                                                   itemLabel="#{tipo.nombre}" itemValue="#{tipo.nombre}" />
+                                                   itemLabel="#{tipo.nombre}#{tipo.activo ? '' : ' - inactivo'}"
+                                                   itemValue="#{tipo.nombre}"
+                                                   itemDisabled="#{!tipo.activo}" />
                                 </p:selectOneMenu>
                             </p:column>
 
@@ -203,7 +212,9 @@
                                             process="@this"
                                             update=":frmRelacionesProducto:relacionesProducto:tblDescuentos" />
                                     <f:selectItems value="#{productoModel.tiposDescuento}" var="tipo"
-                                                   itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                                                   itemLabel="#{tipo.nombre}#{tipo.activo ? '' : ' - inactivo'}"
+                                                   itemValue="#{tipo}"
+                                                   itemDisabled="#{!tipo.activo}" />
                                 </p:selectOneMenu>
                             </p:column>
 
@@ -213,15 +224,20 @@
                                                  disabled="#{productoModel.soloLectura or fila.persistida}">
                                     <f:selectItem itemLabel="Descuento" itemValue=""
                                                   noSelectionOption="true" />
+                                    <p:ajax event="change" process="@this" update="@none" />
                                     <f:selectItems value="#{productoModel.getDescuentosPorTipo(fila.tipo)}"
                                                    var="descuento"
-                                                   itemLabel="#{descuento.nombre}" itemValue="#{descuento.nombre}" />
+                                                   itemLabel="#{descuento.nombre}#{descuento.idTipoDescuento != null and descuento.idTipoDescuento.activo ? '' : ' - inactivo'}"
+                                                   itemValue="#{descuento.nombre}"
+                                                   itemDisabled="#{descuento.idTipoDescuento == null or !descuento.idTipoDescuento.activo}" />
                                 </p:selectOneMenu>
                             </p:column>
 
                             <p:column>
                                 <p:inputNumber value="#{fila.valor}" placeholder="Valor" minValue="0"
-                                               disabled="#{productoModel.soloLectura or fila.persistida}" />
+                                               disabled="#{productoModel.soloLectura or fila.persistida}">
+                                    <p:ajax event="blur" process="@this" update="@none" />
+                                </p:inputNumber>
                             </p:column>
                             <p:column styleClass="col_acciones" rendered="#{!productoModel.soloLectura}">
                                 <p:commandButton icon="fa-solid fa-minus" title="Quitar descuento"
@@ -293,7 +309,9 @@
                                              value="#{productoModel.nuevoDescuento.idTipoDescuento}"
                                              placeholder="Tipo de descuento">
                                 <f:selectItems value="#{productoModel.tiposDescuento}" var="tipo"
-                                               itemLabel="#{tipo.nombre}" itemValue="#{tipo}" />
+                                               itemLabel="#{tipo.nombre}#{tipo.activo ? '' : ' - inactivo'}"
+                                               itemValue="#{tipo}"
+                                               itemDisabled="#{!tipo.activo}" />
                             </p:selectOneMenu>
                             <p:message for="tipoDescuentoNuevo" />
                         </div>
