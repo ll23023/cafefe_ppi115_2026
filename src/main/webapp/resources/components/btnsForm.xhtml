@@ -13,13 +13,13 @@
         <cc:attribute name="newUpdate" required="true" />
     </cc:interface>
     <cc:implementation>
-        <p:commandButton value="#{cc.attrs.model.editando ? 'Guardar edición' : 'Guardar'}"
+        <p:commandButton value="#{cc.attrs.model.editando ? msg['crud.guardarEdicion'] : msg['crud.guardar']}"
                          action="#{cc.attrs.model.btnGuardarHandler}"
                          process="#{cc.attrs.process}"
                          update="#{cc.attrs.saveUpdate}"
                          styleClass="btn btn-primary" />
         &#160;
-        <p:commandButton value="#{cc.attrs.model.editando ? 'Cancelar' : 'Nuevo'}"
+        <p:commandButton value="#{cc.attrs.model.editando ? msg['crud.cancelar'] : msg['crud.nuevo']}"
                          action="#{cc.attrs.model.btnNuevoHandler}"
                          process="@this"
                          resetValues="true"

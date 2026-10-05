@@ -323,3 +323,19 @@ footer {
 
     box-shadow: var(--default-shadow);
 }
+
+
+.selector_idioma {
+    margin-left: auto;
+    padding-left: 1rem;
+}
+
+.selector_idioma select {
+    padding: 4px 10px;
+    font-family: inherit;
+    color: var(--text-color);
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+}

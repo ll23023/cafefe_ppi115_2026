@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
     xmlns:p="primefaces" xmlns:ui="jakarta.faces.facelets">
 
-<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8" locale="#{sesionUsuario.locale}">
     <h:head>
         <h:outputStylesheet library="css" name="main.css" />
         <!-- Librería de FontAwesome para íconos -->
@@ -35,6 +35,16 @@
                         Título por defecto
                     </ui:insert>
                 </h2>
+
+                <!-- Selector de idioma: está en la plantilla, así que sale en TODAS las vistas -->
+                <h:form id="frmIdioma" styleClass="selector_idioma">
+                    <h:selectOneMenu id="cbxIdioma"
+                                     value="#{sesionUsuario.localidad}"
+                                     title="#{msg['crud.idioma']}"
+                                     onchange="this.form.submit()">
+                        <f:selectItems value="#{sesionUsuario.listaIdiomas}" />
+                    </h:selectOneMenu>
+                </h:form>
             </div>
         </header>
 
@@ -153,6 +163,43 @@
         <footer>
             <p>&copy; 2026 Todos los derechos reservados</p>
         </footer>
+
+        <!-- Traductor de botones: cambia SOLO el texto de los botones (y su tooltip),
+             sin tocar las vistas. Clave = texto en español, valor = traducción del bundle.
+             Si todas tus vistas usan btnsForm/btnsTabla, podés borrar este bloque. -->
+        <script type="text/javascript">
+        //<![CDATA[
+        (function () {
+            var T = {
+                "Guardar edición": "#{msg['crud.guardarEdicion']}",
+                "Guardar":         "#{msg['crud.guardar']}",
+                "Nuevo":           "#{msg['crud.nuevo']}",
+                "Cancelar":        "#{msg['crud.cancelar']}",
+                "Editar":          "#{msg['crud.editar']}",
+                "Eliminar":        "#{msg['crud.eliminar']}",
+                "Actualizar":      "#{msg['crud.actualizar']}",
+                "Buscar":          "#{msg['crud.buscar']}"
+            };
+
+            function traducir() {
+                observer.disconnect();
+                document.querySelectorAll('button, input[type="submit"], input[type="button"]').forEach(function (b) {
+                    b.querySelectorAll('.ui-button-text').forEach(function (sp) {
+                        var k = sp.textContent.trim();
+                        if (T[k] && T[k] !== k) { sp.textContent = T[k]; }
+                    });
+                    if (b.value && T[b.value] && T[b.value] !== b.value) { b.value = T[b.value]; }
+                    var t = b.getAttribute('title');
+                    if (t && T[t] && T[t] !== t) { b.setAttribute('title', T[t]); }
+                });
+                observer.observe(document.body, {childList: true, subtree: true});
+            }
+
+            var observer = new MutationObserver(traducir);
+            document.addEventListener('DOMContentLoaded', traducir);
+        })();
+        //]]>
+        </script>
     </h:body>
 </f:view>
 

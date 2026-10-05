@@ -11,7 +11,7 @@
         <cc:attribute name="deleteUpdate" required="true" />
     </cc:interface>
     <cc:implementation>
-        <p:commandButton value="Editar"
+        <p:commandButton value="#{msg['crud.editar']}"
                          action="#{cc.attrs.model.btnEditarHandler}"
                          rendered="#{not empty cc.attrs.model.seleccion}"
                          update="#{cc.attrs.editUpdate}"
@@ -20,7 +20,7 @@
                                          target="#{cc.attrs.model.registro}" />
         </p:commandButton>
         &#160;
-        <p:commandButton value="Eliminar"
+        <p:commandButton value="#{msg['crud.eliminar']}"
                          action="#{cc.attrs.model.btnEliminarHandler}"
                          rendered="#{not empty cc.attrs.model.seleccion}"
                          update="#{cc.attrs.deleteUpdate}"
