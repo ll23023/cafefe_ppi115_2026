@@ -51,10 +51,12 @@
                                      disabled="#{caracteristicaModel.soloLectura}"
                                      required="true">
 
-                        <f:selectItem
-                            itemLabel="Seleccione un tipo"
-                            itemValue="#{null}"
-                            noSelectionOption="true" />
+                        <f:selectItems
+                            value="#{caracteristicaModel.tipos}"
+                            var="tipo"
+                            itemLabel="#{tipo.nombre}#{tipo.activo ? '' : ' - inactivo'}"
+                            itemValue="#{tipo}"
+                            itemDisabled="#{!tipo.activo}" />
 
                         <f:selectItems
                             value="#{caracteristicaModel.tipos}"

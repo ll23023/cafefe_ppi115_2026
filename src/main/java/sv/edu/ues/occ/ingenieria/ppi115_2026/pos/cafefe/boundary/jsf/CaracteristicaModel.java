@@ -216,7 +216,7 @@ public class CaracteristicaModel extends DefaultModel<Caracteristica, UUID> {
             return;
         }
 
-        if (!Boolean.TRUE.equals(
+        if (isCreando() && !Boolean.TRUE.equals(
                 registro.getIdTipoCaracteristica().getActivo())) {
 
             error("No se puede asignar un tipo de característica inactivo.");
