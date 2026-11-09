@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -47,8 +48,10 @@ public class EmpleadoRol implements Serializable {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     @ManyToOne
     private Rol idRol;
+    @JsonbTransient
     @OneToMany(mappedBy = "idEmpleadoRol")
     private List<Factura> facturaList;
+    @JsonbTransient
     @OneToMany(mappedBy = "idEmpleadoRol")
     private List<Orden> ordenList;
 
@@ -139,5 +142,5 @@ public class EmpleadoRol implements Serializable {
     public String toString() {
         return "sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol[ idEmpleadoRol=" + idEmpleadoRol + " ]";
     }
-    
+
 }

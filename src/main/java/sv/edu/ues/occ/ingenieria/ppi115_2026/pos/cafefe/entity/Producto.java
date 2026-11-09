@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -59,12 +60,16 @@ public class Producto implements Serializable {
     @DecimalMax(value = "50.00", message = "El precio máximo permitido es 50.00")
     @Column(name = "precio_sugerido", nullable = false, precision = 8, scale = 2)
     private BigDecimal precioSugerido;
+    @JsonbTransient
     @OneToMany(mappedBy = "idProducto")
     private List<ProductoCaracteristica> productoCaracteristicaList;
+    @JsonbTransient
     @OneToMany(mappedBy = "idProducto")
     private List<OrdenProducto> ordenProductoList;
+    @JsonbTransient
     @OneToMany(mappedBy = "idProducto")
     private List<DescuentoProducto> descuentoProductoList;
+    @JsonbTransient
     @OneToMany(mappedBy = "idProducto")
     private List<ProductoTipoProducto> productoTipoProductoList;
 

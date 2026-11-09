@@ -24,7 +24,7 @@ public class EmpleadoRepository extends DefaultRepository<Empleado, UUID> {
     }
     
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
     

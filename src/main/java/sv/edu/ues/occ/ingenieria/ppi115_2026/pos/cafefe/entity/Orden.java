@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -40,6 +41,7 @@ public class Orden implements Serializable {
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
+    @JsonbTransient
     @OneToMany(mappedBy = "idOrden")
     private List<OrdenProducto> ordenProductoList;
     @JoinColumn(name = "id_empleado_rol", referencedColumnName = "id_empleado_rol")

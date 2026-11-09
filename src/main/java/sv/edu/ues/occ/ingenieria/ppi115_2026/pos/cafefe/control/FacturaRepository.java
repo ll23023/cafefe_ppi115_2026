@@ -26,4 +26,24 @@ public class FacturaRepository extends DefaultRepository<Factura, UUID> {
     public EntityManager getEntityManager() {
         return em;
     }
+
+    /**
+     * Cantidad de pagos de la factura.
+     */
+    public long countPagos(UUID idFactura) {
+        return getEntityManager()
+                .createQuery("SELECT COUNT(p) FROM Pago p WHERE p.idFactura.idFactura = :id", Long.class)
+                .setParameter("id", idFactura)
+                .getSingleResult();
+    }
+
+    /**
+     * Cantidad de líneas (factura_orden_producto) de la factura.
+     */
+    public long countLineas(UUID idFactura) {
+        return getEntityManager()
+                .createQuery("SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id", Long.class)
+                .setParameter("id", idFactura)
+                .getSingleResult();
+    }
 }

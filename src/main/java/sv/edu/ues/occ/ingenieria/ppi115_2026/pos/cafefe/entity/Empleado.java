@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +46,7 @@ public class Empleado implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "comentarios", length = 2147483647)
     private String comentarios;
+    @JsonbTransient
     @OneToMany(mappedBy = "idEmpleado")
     private List<EmpleadoRol> empleadoRolList;
 

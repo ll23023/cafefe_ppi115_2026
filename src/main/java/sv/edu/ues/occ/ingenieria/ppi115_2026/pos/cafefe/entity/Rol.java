@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
-
+import jakarta.json.bind.annotation.JsonbTransient;
 /**
  *
  * @author mikelb
@@ -43,6 +43,7 @@ public class Rol implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "observaciones", length = 2147483647)
     private String observaciones;
+    @JsonbTransient
     @OneToMany(mappedBy = "idRol")
     private List<EmpleadoRol> empleadoRolList;
 
@@ -117,5 +118,5 @@ public class Rol implements Serializable {
     public String toString() {
         return "sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol[ idRol=" + idRol + " ]";
     }
-    
+
 }

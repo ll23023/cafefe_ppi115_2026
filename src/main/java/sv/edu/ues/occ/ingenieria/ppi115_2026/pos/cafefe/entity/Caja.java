@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -43,6 +44,7 @@ public class Caja implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "observaciones", length = 2147483647)
     private String observaciones;
+    @JsonbTransient
     @OneToMany(mappedBy = "idCaja")
     private List<Factura> facturaList;
 
@@ -117,5 +119,5 @@ public class Caja implements Serializable {
     public String toString() {
         return "sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja[ idCaja=" + idCaja + " ]";
     }
-    
+
 }
