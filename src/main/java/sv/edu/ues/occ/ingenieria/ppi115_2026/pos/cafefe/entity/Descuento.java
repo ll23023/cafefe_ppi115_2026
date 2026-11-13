@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -58,6 +59,7 @@ public class Descuento implements Serializable {
     @JoinColumn(name = "id_tipo_descuento", referencedColumnName = "id_tipo_descuento")
     @ManyToOne
     private TipoDescuento idTipoDescuento;
+    @JsonbTransient
     @OneToMany(mappedBy = "idDescuento")
     private List<DescuentoProducto> descuentoProductoList;
 
