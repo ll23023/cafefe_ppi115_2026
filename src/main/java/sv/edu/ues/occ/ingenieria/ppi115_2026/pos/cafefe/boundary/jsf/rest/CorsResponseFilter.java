@@ -23,7 +23,7 @@ public class CorsResponseFilter implements ContainerRequestFilter, ContainerResp
 
     public static final String METODOS_PERMITIDOS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
     // 30 minutos para el cache
-    public static final int MAXIMO_CACHE = 30 * 60;
+    public static final int MAXIMO_CACHE = 180 * 60;
     public static final String CABECERAS_PERMITIDAS = "origin, accept, content-type";
     // Se exponen todos los encabezados de ResponseHeaders (sin ellos el navegador no puede leer
     // Not-Found, Violates-Business-Rules, etc.) y Location
