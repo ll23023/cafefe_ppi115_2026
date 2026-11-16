@@ -28,11 +28,20 @@ public class TipoProductoResource implements Serializable {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findRange(@QueryParam("desde") @DefaultValue("1") int desde,
+    public Response findRange(@QueryParam("desde") @DefaultValue("0") int desde,
             @QueryParam("hasta") @DefaultValue("50") int hasta) {
-        if (!(0 < desde && desde < hasta)) return Response.status(422).header("Wrong-Param", "cantidad").build();
-        try { return Response.ok(repository.findRange(desde, hasta)).build(); }
-        catch (Exception exception) { return error(exception); }
+        if (desde < 0 || hasta <= 0 || hasta > 50) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .header(ResponseHeaders.WRONG_PARAMETER.toString(), "Parámetros de paginación inválidos")
+                    .build();
+        }
+        try {
+            return Response.ok(repository.findRange(desde, hasta))
+                    .header(ResponseHeaders.TOTAL_REGISTROS.toString(), repository.count())
+                    .build();
+        } catch (Exception exception) {
+            return error(exception);
+        }
     }
 
     @GET
