@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Detalle de Pagos</ui:define>
+    <ui:define name="header_title">Detalle de Pagos</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Detalle de Pagos</h2>
+
+            <h:form id="frmPagoDetalle">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="pago" value="Pago:" />
+                    <p:selectOneMenu id="pago"
+                                     value="#{pagoDetalleModel.registro.idPago}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{pagoDetalleModel.pagos}"
+                                       var="pg"
+                                       itemLabel="#{pg.idFactura.cliente} - #{pg.estado}"
+                                       itemValue="#{pg}" />
+                    </p:selectOneMenu>
+                    <p:messages for="pago" />
+
+                    <h:outputLabel for="monto" value="Monto:" />
+                    <p:inputNumber id="monto"
+                                   value="#{pagoDetalleModel.registro.monto}"
+                                   required="true"
+                                   symbol="$ "
+                                   decimalPlaces="2"
+                                   minValue="0" />
+                    <p:messages for="monto" />
+
+                    <h:outputLabel for="tipoPago" value="Tipo de pago:" />
+                    <p:selectOneMenu id="tipoPago"
+                                     value="#{pagoDetalleModel.registro.tipoPago}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{pagoDetalleModel.tiposPagoDisponibles}"
+                                       var="t"
+                                       itemLabel="#{t}"
+                                       itemValue="#{t}" />
+                    </p:selectOneMenu>
+                    <p:messages for="tipoPago" />
+
+                    <h:outputLabel for="referenciaExterna" value="Referencia externa:" />
+                    <p:inputText id="referenciaExterna"
+                                 value="#{pagoDetalleModel.registro.referenciaExterna}" />
+                    <h:panelGroup />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{pagoDetalleModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{pagoDetalleModel}"
+                                saveUpdate="frmPagoDetalle frmTablaPagoDetalle"
+                                newUpdate="frmPagoDetalle frmTablaPagoDetalle" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Detalle de Pagos</h3>
+            <h:form id="frmTablaPagoDetalle">
+                <c:tablaDinamica model="#{pagoDetalleModel}"
+                                  columns="#{pagoDetalleModel.columnas}"
+                                  rowKey="idPagoDetalle"
+                                  editUpdate="frmPagoDetalle"
+                                  deleteUpdate="frmTablaPagoDetalle frmPagoDetalle" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

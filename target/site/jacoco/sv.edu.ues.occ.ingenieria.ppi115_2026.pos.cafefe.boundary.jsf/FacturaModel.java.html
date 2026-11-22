@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacturaModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">FacturaModel.java</span></div><h1>FacturaModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CajaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L25">public class FacturaModel extends DefaultModel&lt;Factura, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private FacturaRepository facturaRepository;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    private CajaRepository cajaRepository;
+
+    private Date fechaSeleccionada;
+    private Date horaSeleccionada;
+    private List&lt;EmpleadoRol&gt; empleadoRoles;
+    private List&lt;Caja&gt; cajas;
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public FacturaRepository getRepository() {
+<span class="nc" id="L46">        return facturaRepository;</span>
+    }
+
+    @Override
+    public Factura instanciarRegistro() {
+<span class="nc" id="L51">        Factura f = new Factura(UUID.randomUUID());</span>
+<span class="nc" id="L52">        f.setFechaFacturacion(new Date());</span>
+<span class="nc" id="L53">        f.setEstado(&quot;PENDIENTE&quot;);</span>
+<span class="nc" id="L54">        f.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L55">        return f;</span>
+    }
+
+    @Override
+    public Factura getRegistroById(Object id) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        return id == null ? null : facturaRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Factura dato) {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        return dato != null ? dato.getIdFactura() : null;</span>
+    }
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L70">        super.limpiar();</span>
+<span class="nc" id="L71">        Date ahora = new Date();</span>
+<span class="nc" id="L72">        this.fechaSeleccionada = ahora;</span>
+<span class="nc" id="L73">        this.horaSeleccionada = ahora;</span>
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    public void seleccionarRegistro(Factura r) {
+<span class="nc" id="L78">        super.seleccionarRegistro(r);</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (r != null &amp;&amp; r.getFechaFacturacion() != null) {</span>
+<span class="nc" id="L80">            this.fechaSeleccionada = r.getFechaFacturacion();</span>
+<span class="nc" id="L81">            this.horaSeleccionada = r.getFechaFacturacion();</span>
+        }
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc" id="L87">        combinarFechaHora();</span>
+<span class="nc" id="L88">        super.btnGuardarHandler();</span>
+<span class="nc" id="L89">    }</span>
+
+    private void combinarFechaHora() {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (this.registro != null) {</span>
+<span class="nc" id="L93">            Calendar calFecha = Calendar.getInstance();</span>
+<span class="nc" id="L94">            Calendar calHora = Calendar.getInstance();</span>
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (this.fechaSeleccionada != null) {</span>
+<span class="nc" id="L97">                calFecha.setTime(this.fechaSeleccionada);</span>
+            }
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (this.horaSeleccionada != null) {</span>
+<span class="nc" id="L100">                calHora.setTime(this.horaSeleccionada);</span>
+            }
+
+<span class="nc" id="L103">            Calendar combinado = Calendar.getInstance();</span>
+<span class="nc" id="L104">            combinado.set(Calendar.YEAR, calFecha.get(Calendar.YEAR));</span>
+<span class="nc" id="L105">            combinado.set(Calendar.MONTH, calFecha.get(Calendar.MONTH));</span>
+<span class="nc" id="L106">            combinado.set(Calendar.DAY_OF_MONTH, calFecha.get(Calendar.DAY_OF_MONTH));</span>
+<span class="nc" id="L107">            combinado.set(Calendar.HOUR_OF_DAY, calHora.get(Calendar.HOUR_OF_DAY));</span>
+<span class="nc" id="L108">            combinado.set(Calendar.MINUTE, calHora.get(Calendar.MINUTE));</span>
+<span class="nc" id="L109">            combinado.set(Calendar.SECOND, 0);</span>
+<span class="nc" id="L110">            combinado.set(Calendar.MILLISECOND, 0);</span>
+
+<span class="nc" id="L112">            this.registro.setFechaFacturacion(combinado.getTime());</span>
+        }
+<span class="nc" id="L114">    }</span>
+
+    public Date getFechaSeleccionada() {
+<span class="nc" id="L117">        return fechaSeleccionada;</span>
+    }
+
+    public void setFechaSeleccionada(Date fechaSeleccionada) {
+<span class="nc" id="L121">        this.fechaSeleccionada = fechaSeleccionada;</span>
+<span class="nc" id="L122">    }</span>
+
+    public Date getHoraSeleccionada() {
+<span class="nc" id="L125">        return horaSeleccionada;</span>
+    }
+
+    public void setHoraSeleccionada(Date horaSeleccionada) {
+<span class="nc" id="L129">        this.horaSeleccionada = horaSeleccionada;</span>
+<span class="nc" id="L130">    }</span>
+
+    public List&lt;String&gt; getEstadosDisponibles() {
+<span class="nc" id="L133">        return Arrays.asList(&quot;PENDIENTE&quot;, &quot;CANCELADO&quot;);</span>
+    }
+
+    // Carga perezosa para el combo de Empleado-Rol (quien atendió la factura).
+    public List&lt;EmpleadoRol&gt; getEmpleadoRoles() {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (this.empleadoRoles == null) {</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            this.empleadoRoles = empleadoRolRepository != null</span>
+<span class="nc" id="L140">                    ? empleadoRolRepository.findAll()</span>
+<span class="nc" id="L141">                    : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L143">        return empleadoRoles;</span>
+    }
+
+    public void setEmpleadoRoles(List&lt;EmpleadoRol&gt; empleadoRoles) {
+<span class="nc" id="L147">        this.empleadoRoles = empleadoRoles;</span>
+<span class="nc" id="L148">    }</span>
+
+    // Carga perezosa para el combo de Caja.
+    public List&lt;Caja&gt; getCajas() {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (this.cajas == null) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            this.cajas = cajaRepository != null ? cajaRepository.findAll() : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L155">        return cajas;</span>
+    }
+
+    public void setCajas(List&lt;Caja&gt; cajas) {
+<span class="nc" id="L159">        this.cajas = cajas;</span>
+<span class="nc" id="L160">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L164">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;cliente&quot;, &quot;Cliente&quot;),
+                    new ColumnaTabla(&quot;fechaFacturacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE),
+                    new ColumnaTabla(&quot;estado&quot;, &quot;Estado&quot;),
+                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.nombre&quot;, &quot;Atendido por&quot;),
+                    new ColumnaTabla(&quot;idCaja.nombre&quot;, &quot;Caja&quot;),
+                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+            );
+        }
+<span class="nc" id="L173">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

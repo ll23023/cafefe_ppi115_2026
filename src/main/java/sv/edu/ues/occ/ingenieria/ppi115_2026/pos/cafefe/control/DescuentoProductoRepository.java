@@ -25,7 +25,8 @@ public class DescuentoProductoRepository extends DefaultRepository<DescuentoProd
     }
 
     public List<DescuentoProducto> findByProducto(UUID idProducto) {
-        return em.createNamedQuery("DescuentoProducto.findByProducto", DescuentoProducto.class)
+        requireArgument(idProducto, "idProducto");
+        return requireEntityManager().createNamedQuery("DescuentoProducto.findByProducto", DescuentoProducto.class)
                 .setParameter("idProducto", idProducto)
                 .getResultList();
     }

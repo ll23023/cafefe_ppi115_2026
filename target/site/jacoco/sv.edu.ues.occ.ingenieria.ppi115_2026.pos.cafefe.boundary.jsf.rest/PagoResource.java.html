@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PagoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">PagoResource.java</span></div><h1>PagoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.PagoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Pago;
+
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.badRequest;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.conflicto;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.notFound;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.serverError;
+
+/**
+ * Pagos de una factura (tabla pago). Cada pago tiene sus líneas en pago_detalle.
+ *
+ * @author mil
+ */
+@Path(&quot;pago&quot;)
+<span class="nc" id="L41">public class PagoResource {</span>
+
+<span class="nc" id="L43">    private static final Logger LOG = Logger.getLogger(PagoResource.class.getName());</span>
+    private static final int ESTADO_MAX = 20;
+
+    @Inject
+    PagoRepository pagoRepository;
+
+    @Inject
+    FacturaRepository facturaRepository;
+
+    /**
+     * Lista pagos. Con ?idFactura=... devuelve solo los de esa factura.
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max,
+            @QueryParam(&quot;idFactura&quot;) UUID idFactura) {
+        try {
+<span class="nc bnc" id="L62" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+                List&lt;Pago&gt; pagos;
+                Long total;
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                if (idFactura != null) {</span>
+<span class="nc" id="L66">                    pagos = pagoRepository.findByFactura(idFactura, first, max);</span>
+<span class="nc" id="L67">                    total = pagoRepository.countByFactura(idFactura);</span>
+                } else {
+<span class="nc" id="L69">                    pagos = pagoRepository.findRange(first, max);</span>
+<span class="nc" id="L70">                    total = pagoRepository.count();</span>
+                }
+<span class="nc" id="L72">                return Response.ok(pagos)</span>
+<span class="nc" id="L73">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L74">                        .build();</span>
+            }
+<span class="nc" id="L76">            return badRequest(&quot;Los parametros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;);</span>
+<span class="nc" id="L77">        } catch (Exception ex) {</span>
+<span class="nc" id="L78">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L79">            return serverError(ex);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L88">            return badRequest(&quot;id nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L91">            Pago encontrado = pagoRepository.findById(id);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (encontrado != null) {</span>
+<span class="nc" id="L93">                return Response.ok(encontrado).build();</span>
+            }
+<span class="nc" id="L95">            return notFound(id);</span>
+<span class="nc" id="L96">        } catch (Exception ex) {</span>
+<span class="nc" id="L97">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L98">            return serverError(ex);</span>
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response create(PagoRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L107" title="All 4 branches missed.">        if (request == null || request.idFactura == null) {</span>
+<span class="nc" id="L108">            return badRequest(&quot;idFactura es obligatorio&quot;);</span>
+        }
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        String estado = request.estado != null ? request.estado.trim() : null;</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">        if (estado != null &amp;&amp; estado.length() &gt; ESTADO_MAX) {</span>
+<span class="nc" id="L112">            return badRequest(&quot;El estado no puede superar &quot; + ESTADO_MAX + &quot; caracteres&quot;);</span>
+        }
+        try {
+<span class="nc" id="L115">            Factura factura = facturaRepository.findById(request.idFactura);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (factura == null) {</span>
+<span class="nc" id="L117">                return conflicto(&quot;La factura no existe: &quot; + request.idFactura);</span>
+            }
+
+<span class="nc" id="L120">            Pago nuevo = new Pago(UUID.randomUUID());</span>
+<span class="nc" id="L121">            nuevo.setIdFactura(factura);</span>
+<span class="nc" id="L122">            nuevo.setEstado(estado);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            nuevo.setObservaciones(request.observaciones != null ? request.observaciones : &quot;&quot;);</span>
+<span class="nc" id="L124">            pagoRepository.crear(nuevo);</span>
+
+<span class="nc" id="L126">            URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L127">                    .path(String.valueOf(nuevo.getIdPago()))</span>
+<span class="nc" id="L128">                    .build();</span>
+<span class="nc" id="L129">            return Response.created(location).build();</span>
+
+<span class="nc" id="L131">        } catch (Exception ex) {</span>
+<span class="nc" id="L132">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L133">            return serverError(ex);</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, PagoRequest request) {
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L144">            return badRequest(&quot;ID o cuerpo nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L147">            Pago existente = pagoRepository.findById(id);</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L149">                return notFound(id);</span>
+            }
+
+            // La factura de un pago no se cambia
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (request.idFactura != null</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdFactura() == null</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                    || !request.idFactura.equals(existente.getIdFactura().getIdFactura()))) {</span>
+<span class="nc" id="L156">                return conflicto(&quot;No se puede cambiar la factura de un pago existente; elimínelo y cree otro.&quot;);</span>
+            }
+
+            // Validar todo ANTES de modificar la entidad
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            String estado = request.estado != null ? request.estado.trim() : null;</span>
+<span class="nc bnc" id="L161" title="All 4 branches missed.">            if (estado != null &amp;&amp; estado.length() &gt; ESTADO_MAX) {</span>
+<span class="nc" id="L162">                return badRequest(&quot;El estado no puede superar &quot; + ESTADO_MAX + &quot; caracteres&quot;);</span>
+            }
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            if (estado != null) {</span>
+<span class="nc" id="L166">                existente.setEstado(estado);</span>
+            }
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (request.observaciones != null) {</span>
+<span class="nc" id="L169">                existente.setObservaciones(request.observaciones);</span>
+            }
+
+<span class="nc" id="L172">            pagoRepository.modificar(existente);</span>
+<span class="nc" id="L173">            return Response.ok(existente).build();</span>
+
+<span class="nc" id="L175">        } catch (Exception ex) {</span>
+<span class="nc" id="L176">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L177">            return serverError(ex);</span>
+        }
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L186">            return badRequest(&quot;El ID no puede ser nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L189">            Pago encontrado = pagoRepository.findById(id);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (encontrado == null) {</span>
+<span class="nc" id="L191">                return notFound(id);</span>
+            }
+
+            // Revisar lo que impide borrar ANTES de borrar
+<span class="nc" id="L195">            long detalles = pagoRepository.countDetalles(id);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (detalles &gt; 0) {</span>
+<span class="nc" id="L197">                return conflicto(&quot;No se pudo eliminar el pago porque está asociado a &quot;</span>
+                        + detalles + &quot; detalle(s) de pago. Elimine primero sus detalles.&quot;);
+            }
+
+<span class="nc" id="L201">            pagoRepository.eliminar(encontrado);</span>
+<span class="nc" id="L202">            return Response.noContent().build();</span>
+
+<span class="nc" id="L204">        } catch (Exception ex) {</span>
+<span class="nc" id="L205">            LOG.log(Level.SEVERE, &quot;Error al eliminar pago: &quot; + id, ex);</span>
+<span class="nc" id="L206">            return serverError(ex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.converter</a> &gt; <span class="el_source">DefaultConverter.java</span></div><h1>DefaultConverter.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.converter;
+
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.Converter;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
+
+/**
+ * Converter genérico reutilizable por cualquier entidad administrada por un
+ * {@link DefaultRepository}. Centraliza la lógica repetida en los converters
+ * concretos: &quot;si el String viene vacío devolver null&quot;, &quot;buscar por id&quot; y
+ * &quot;convertir la entidad de vuelta a String usando su id&quot;.
+ *
+ * &lt;p&gt;JSF exige que cada {@code @FacesConverter(forClass = ...)} se declare en
+ * una clase distinta (no es posible registrar un único converter para varias
+ * entidades), por lo que no se puede eliminar del todo la clase por entidad.
+ * Lo que sí se elimina es la duplicación de lógica: cada subclase concreta
+ * solo indica su repositorio, cómo parsear el id recibido y cómo obtener el
+ * id desde la entidad. Sigue el mismo espíritu que {@code DefaultModel} y
+ * {@code DefaultRepository}.&lt;/p&gt;
+ *
+ * @param &lt;T&gt;  tipo de entidad administrada
+ * @param &lt;ID&gt; tipo del identificador de la entidad
+ */
+<span class="nc" id="L25">public abstract class DefaultConverter&lt;T, ID&gt; implements Converter&lt;T&gt; {</span>
+
+    /**
+     * @return repositorio usado para buscar la entidad por su id
+     */
+    protected abstract DefaultRepository&lt;T, ID&gt; getRepository();
+
+    /**
+     * Convierte el texto recibido del componente JSF al tipo del id.
+     *
+     * @param value texto recibido; nunca es {@code null} ni está vacío
+     * @return id ya convertido al tipo correcto
+     */
+    protected abstract ID parseId(String value);
+
+    /**
+     * @param entidad entidad de la que se extraerá el id
+     * @return id de la entidad
+     */
+    protected abstract ID getId(T entidad);
+
+    @Override
+    public T getAsObject(FacesContext ctx, UIComponent comp, String value) {
+<span class="nc bnc" id="L48" title="All 4 branches missed.">        if (value == null || value.isBlank()) {</span>
+<span class="nc" id="L49">            return null;</span>
+        }
+<span class="nc" id="L51">        return getRepository().findById(parseId(value));</span>
+    }
+
+    @Override
+    public String getAsString(FacesContext ctx, UIComponent comp, T entidad) {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (entidad == null) {</span>
+<span class="nc" id="L57">            return &quot;&quot;;</span>
+        }
+<span class="nc" id="L59">        ID id = getId(entidad);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        return id != null ? id.toString() : &quot;&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

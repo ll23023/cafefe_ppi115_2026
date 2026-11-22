@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SesionUsuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">SesionUsuario.java</span></div><h1>SesionUsuario.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import jakarta.faces.context.FacesContext;
+/**
+*@author mil
+*/
+@Named
+@SessionScoped
+<span class="nc" id="L15">public class SesionUsuario implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+    private static final String IDIOMA_DEFECTO = &quot;es&quot;;
+
+    /** texto visible en el combo -&gt; código de idioma. */
+<span class="nc" id="L21">    private static final Map&lt;String, String&gt; IDIOMAS = new LinkedHashMap&lt;&gt;();</span>
+    static {
+<span class="nc" id="L23">        IDIOMAS.put(&quot;Español&quot;, &quot;es&quot;);</span>
+<span class="nc" id="L24">        IDIOMAS.put(&quot;English&quot;, &quot;en&quot;);</span>
+<span class="nc" id="L25">        IDIOMAS.put(&quot;Português&quot;, &quot;pt&quot;);</span>
+<span class="nc" id="L26">        IDIOMAS.put(&quot;Français&quot;, &quot;fr&quot;);</span>
+<span class="nc" id="L27">    }</span>
+
+<span class="nc" id="L29">    private String localidad = IDIOMA_DEFECTO;</span>
+
+    
+    public String getLocalidad() {
+<span class="nc" id="L33">        return localidad;</span>
+    }
+
+    public void setLocalidad(String localidad) {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">    this.localidad = IDIOMAS.containsValue(localidad) ? localidad : IDIOMA_DEFECTO;</span>
+
+<span class="nc" id="L39">    FacesContext fc = FacesContext.getCurrentInstance();</span>
+<span class="nc bnc" id="L40" title="All 4 branches missed.">    if (fc != null &amp;&amp; fc.getViewRoot() != null) {</span>
+<span class="nc" id="L41">        fc.getViewRoot().setLocale(getLocale());</span>
+    }
+<span class="nc" id="L43">}</span>
+
+    public Map&lt;String, String&gt; getListaIdiomas() {
+<span class="nc" id="L46">        return IDIOMAS;</span>
+    }
+
+    public Locale getLocale() {
+<span class="nc" id="L50">        return Locale.forLanguageTag(localidad);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DescuentoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">DescuentoModel.java</span></div><h1>DescuentoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
+
+/**
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L34">public class DescuentoModel extends DefaultModel&lt;Descuento, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L38">    private static final Logger LOG = Logger.getLogger(DescuentoModel.class.getName());</span>
+<span class="nc" id="L39">    private static final DateTimeFormatter FORMATO_FECHA_HORA = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy HH:mm&quot;);</span>
+
+    @Inject
+    private DescuentoRepository descuentoRepository;
+    @Inject
+    private TipoDescuentoRepository tipoDescuentoRepository;
+    @Inject
+    private DescuentoProductoRepository descuentoProductoRepository;
+
+<span class="nc" id="L48">    private List&lt;TipoDescuento&gt; tiposDescuento = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L49">    private List&lt;DescuentoProducto&gt; productosDelDescuento = new ArrayList&lt;&gt;();</span>
+    private String idTipoSel;
+
+    @Override
+    public DescuentoRepository getRepository() {
+<span class="nc" id="L54">        return descuentoRepository;</span>
+    }
+
+    @Override
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L60">        cargarTipos();</span>
+<span class="nc" id="L61">        super.init();</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    public Descuento instanciarRegistro() {
+<span class="nc" id="L66">        Descuento r = new Descuento(UUID.randomUUID());</span>
+<span class="nc" id="L67">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L68">        return r;</span>
+    }
+
+    @Override
+    public Descuento getRegistroById(Object id) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        return id == null ? null : descuentoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Descuento dato) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        return dato == null ? null : dato.getIdDescuento();</span>
+    }
+
+    @Override
+    public void cargarRegistros() {
+<span class="nc" id="L83">        super.cargarRegistros();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (this.registros != null) {</span>
+<span class="nc" id="L85">            List&lt;Descuento&gt; ordenados = new ArrayList&lt;&gt;(this.registros);</span>
+<span class="nc" id="L86">            ordenados.sort((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                    a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    b.getNombre() == null ? &quot;&quot; : b.getNombre()));</span>
+<span class="nc" id="L89">            this.registros = ordenados;</span>
+        }
+<span class="nc" id="L91">        refrescarProductos();</span>
+<span class="nc" id="L92">    }</span>
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L96">        super.limpiar();             </span>
+<span class="nc" id="L97">        this.idTipoSel = null;</span>
+<span class="nc" id="L98">        refrescarProductos();</span>
+<span class="nc" id="L99">    }</span>
+
+    public void onSeleccionarDescuento() {
+<span class="nc" id="L102">        refrescarProductos();</span>
+<span class="nc" id="L103">    }</span>
+
+    private void cargarTipos() {
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (tipoDescuentoRepository == null) {</span>
+<span class="nc" id="L107">            this.tiposDescuento = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L108">            return;</span>
+        }
+<span class="nc" id="L110">        this.tiposDescuento = tipoDescuentoRepository.findAll().stream()</span>
+<span class="nc" id="L111">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                        a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                        b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L114">                .toList();</span>
+<span class="nc" id="L115">    }</span>
+
+    private void refrescarProductos() {
+<span class="nc" id="L118">        List&lt;DescuentoProducto&gt; lista = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L119" title="All 6 branches missed.">        if (seleccion != null &amp;&amp; seleccion.getIdDescuento() != null &amp;&amp; descuentoProductoRepository != null) {</span>
+<span class="nc" id="L120">            UUID idDescuento = seleccion.getIdDescuento();</span>
+<span class="nc" id="L121">            List&lt;DescuentoProducto&gt; todos = descuentoProductoRepository.findAll();</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            if (todos != null) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                for (DescuentoProducto dp : todos) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                    if (dp != null</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                            &amp;&amp; dp.getIdDescuento() != null</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                            &amp;&amp; idDescuento.equals(dp.getIdDescuento().getIdDescuento())) {</span>
+<span class="nc" id="L127">                        lista.add(dp);</span>
+                    }
+<span class="nc" id="L129">                }</span>
+            }
+<span class="nc" id="L131">            lista.sort((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L132" title="All 4 branches missed.">                    a.getIdProducto() == null || a.getIdProducto().getNombre() == null ? &quot;&quot; : a.getIdProducto().getNombre(),</span>
+<span class="nc bnc" id="L133" title="All 4 branches missed.">                    b.getIdProducto() == null || b.getIdProducto().getNombre() == null ? &quot;&quot; : b.getIdProducto().getNombre()));</span>
+        }
+<span class="nc" id="L135">        this.productosDelDescuento = lista;</span>
+<span class="nc" id="L136">    }</span>
+
+    private Descuento buscarEnRegistros(UUID id) {
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        if (id == null || registros == null) {</span>
+<span class="nc" id="L140">            return null;</span>
+        }
+<span class="nc" id="L142">        return registros.stream()</span>
+<span class="nc" id="L143">                .filter(x -&gt; id.equals(x.getIdDescuento()))</span>
+<span class="nc" id="L144">                .findFirst()</span>
+<span class="nc" id="L145">                .orElse(null);</span>
+    }
+
+    private TipoDescuento tipoPorId(String id) {
+<span class="nc bnc" id="L149" title="All 4 branches missed.">        if (id == null || id.isBlank()) {</span>
+<span class="nc" id="L150">            return null;</span>
+        }
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        for (TipoDescuento t : tiposDescuento) {</span>
+<span class="nc bnc" id="L153" title="All 4 branches missed.">            if (t.getIdTipoDescuento() != null &amp;&amp; id.equals(t.getIdTipoDescuento().toString())) {</span>
+<span class="nc" id="L154">                return t;</span>
+            }
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">        return null;</span>
+    }
+
+    public void editar(Descuento d) {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (d == null) {</span>
+<span class="nc" id="L162">            return;</span>
+        }
+<span class="nc" id="L164">        UUID id = d.getIdDescuento();</span>
+<span class="nc" id="L165">        cargarRegistros();</span>
+<span class="nc" id="L166">        Descuento fresco = buscarEnRegistros(id);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (fresco == null) {</span>
+<span class="nc" id="L168">            fresco = d;</span>
+        }
+<span class="nc" id="L170">        seleccionarRegistro(fresco);</span>
+<span class="nc" id="L171">        this.seleccion = fresco;</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        this.idTipoSel = (fresco.getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                &amp;&amp; fresco.getIdTipoDescuento().getIdTipoDescuento() != null)</span>
+<span class="nc" id="L174">                ? fresco.getIdTipoDescuento().getIdTipoDescuento().toString()</span>
+<span class="nc" id="L175">                : null;</span>
+<span class="nc" id="L176">        refrescarProductos();</span>
+<span class="nc" id="L177">    }</span>
+
+    public void cancelar() {
+<span class="nc" id="L180">        cargarRegistros();</span>
+<span class="nc" id="L181">        limpiar();</span>
+<span class="nc" id="L182">    }</span>
+
+    public void eliminar(Descuento d) {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (d == null) {</span>
+<span class="nc" id="L186">            return;</span>
+        }
+        try {
+<span class="nc" id="L189">            descuentoRepository.eliminar(d);</span>
+<span class="nc bnc" id="L190" title="All 4 branches missed.">            boolean eraElDelFormulario = registro != null &amp;&amp; d.getIdDescuento() != null</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                    &amp;&amp; d.getIdDescuento().equals(registro.getIdDescuento());</span>
+<span class="nc bnc" id="L192" title="All 4 branches missed.">            boolean eraElSeleccionado = seleccion != null &amp;&amp; d.getIdDescuento() != null</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                    &amp;&amp; d.getIdDescuento().equals(seleccion.getIdDescuento());</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            if (eraElSeleccionado) {</span>
+<span class="nc" id="L195">                this.seleccion = null;</span>
+            }
+<span class="nc" id="L197">            cargarRegistros();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (eraElDelFormulario) {</span>
+<span class="nc" id="L199">                limpiar();</span>
+            }
+<span class="nc" id="L201">            info(&quot;Descuento eliminado.&quot;);</span>
+<span class="nc" id="L202">        } catch (Exception ex) {</span>
+<span class="nc" id="L203">            LOG.log(Level.SEVERE, &quot;Error al eliminar descuento&quot;, ex);</span>
+<span class="nc" id="L204">            cargarRegistros();</span>
+<span class="nc" id="L205">            error(&quot;No se pudo eliminar el descuento. Verifique que no esté asignado a ningún producto.&quot;);</span>
+<span class="nc" id="L206">        }</span>
+<span class="nc" id="L207">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if (registro == null) {</span>
+<span class="nc" id="L212">            return;</span>
+        }
+<span class="nc" id="L214">        boolean esNuevo = isCreando();</span>
+
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        if (esNuevo) {</span>
+<span class="nc" id="L217">            TipoDescuento tipo = tipoPorId(idTipoSel);</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">            if (tipo == null) {</span>
+<span class="nc" id="L219">                error(&quot;Seleccione el tipo de descuento.&quot;);</span>
+<span class="nc" id="L220">                return;</span>
+            }
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(tipo.getActivo())) {</span>
+<span class="nc" id="L223">                error(&quot;No se puede asignar un tipo de descuento inactivo: &quot; + tipo.getNombre());</span>
+<span class="nc" id="L224">                return;</span>
+            }
+<span class="nc" id="L226">            registro.setIdTipoDescuento(tipo);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        } else if (registro.getIdTipoDescuento() == null) {</span>
+<span class="nc" id="L228">            error(&quot;El descuento no tiene tipo asignado.&quot;);</span>
+<span class="nc" id="L229">            return;</span>
+        }
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        String nombre = registro.getNombre() == null ? &quot;&quot; : registro.getNombre().trim();</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        if (nombre.isEmpty()) {</span>
+<span class="nc" id="L234">            error(&quot;Indique el nombre del descuento.&quot;);</span>
+<span class="nc" id="L235">            return;</span>
+        }
+<span class="nc" id="L237">        registro.setNombre(nombre);</span>
+
+<span class="nc" id="L239">        LocalDateTime desde = aLocalDateTime(registro.getFechaDesde());</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">        if (desde == null) {</span>
+<span class="nc" id="L241">            error(&quot;Indique la fecha de inicio del descuento.&quot;);</span>
+<span class="nc" id="L242">            return;</span>
+        }
+
+<span class="nc" id="L245">        LocalDateTime hasta = aLocalDateTime(registro.getFechaHasta());</span>
+<span class="nc bnc" id="L246" title="All 4 branches missed.">        if (hasta != null &amp;&amp; hasta.isBefore(desde)) {</span>
+<span class="nc" id="L247">            error(&quot;La fecha de finalización no puede ser anterior a la fecha de inicio.&quot;);</span>
+<span class="nc" id="L248">            return;</span>
+        }
+
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (registro.getObservaciones() == null) {</span>
+<span class="nc" id="L252">            registro.setObservaciones(&quot;&quot;);</span>
+        }
+
+        try {
+<span class="nc bnc" id="L256" title="All 2 branches missed.">            if (esNuevo) {</span>
+<span class="nc" id="L257">                getRepository().crear(registro);</span>
+            } else {
+<span class="nc" id="L259">                getRepository().modificar(registro);</span>
+            }
+<span class="nc" id="L261">            UUID idGuardado = registro.getIdDescuento();</span>
+<span class="nc" id="L262">            cargarRegistros();</span>
+<span class="nc" id="L263">            limpiar();</span>
+<span class="nc" id="L264">            this.seleccion = buscarEnRegistros(idGuardado);</span>
+<span class="nc" id="L265">            refrescarProductos();</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">            info(esNuevo ? &quot;Descuento creado.&quot; : &quot;Descuento modificado.&quot;);</span>
+<span class="nc" id="L267">        } catch (Exception ex) {</span>
+<span class="nc" id="L268">            LOG.log(Level.SEVERE, &quot;Error al guardar descuento&quot;, ex);</span>
+<span class="nc" id="L269">            error(&quot;No se pudo guardar el descuento: &quot; + ex.getMessage());</span>
+<span class="nc" id="L270">        }</span>
+<span class="nc" id="L271">    }</span>
+
+    public String fechaTexto(Object fecha) {
+<span class="nc" id="L274">        LocalDateTime f = aLocalDateTime(fecha);</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        return f == null ? &quot;&quot; : f.format(FORMATO_FECHA_HORA);</span>
+    }
+
+    public String fechaHastaTexto(Object fecha) {
+<span class="nc" id="L279">        LocalDateTime f = aLocalDateTime(fecha);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        return f == null ? &quot;Sin fecha de finalización&quot; : f.format(FORMATO_FECHA_HORA);</span>
+    }
+
+    private static LocalDateTime aLocalDateTime(Object o) {
+<span class="nc bnc" id="L284" title="All 2 branches missed.">        if (o == null) {</span>
+<span class="nc" id="L285">            return null;</span>
+        }
+<span class="nc" id="L287">        ZoneId zona = ZoneId.systemDefault();</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">        if (o instanceof LocalDateTime ldt) {</span>
+<span class="nc" id="L289">            return ldt;</span>
+        }
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        if (o instanceof LocalDate ld) {</span>
+<span class="nc" id="L292">            return ld.atStartOfDay();</span>
+        }
+<span class="nc bnc" id="L294" title="All 2 branches missed.">        if (o instanceof OffsetDateTime odt) {</span>
+<span class="nc" id="L295">            return odt.atZoneSameInstant(zona).toLocalDateTime();</span>
+        }
+<span class="nc bnc" id="L297" title="All 2 branches missed.">        if (o instanceof ZonedDateTime zdt) {</span>
+<span class="nc" id="L298">            return zdt.withZoneSameInstant(zona).toLocalDateTime();</span>
+        }
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        if (o instanceof Instant i) {</span>
+<span class="nc" id="L301">            return LocalDateTime.ofInstant(i, zona);</span>
+        }
+<span class="nc bnc" id="L303" title="All 2 branches missed.">        if (o instanceof java.sql.Date sd) {</span>
+<span class="nc" id="L304">            return sd.toLocalDate().atStartOfDay();</span>
+        }
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (o instanceof Date d) {</span>
+<span class="nc" id="L307">            return LocalDateTime.ofInstant(d.toInstant(), zona);</span>
+        }
+<span class="nc" id="L309">        return null;</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L313">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L315">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L318">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L320">    }</span>
+
+    public List&lt;TipoDescuento&gt; getTiposDescuento() {
+<span class="nc" id="L323">        return tiposDescuento;</span>
+    }
+
+    public List&lt;DescuentoProducto&gt; getProductosDelDescuento() {
+<span class="nc" id="L327">        return productosDelDescuento;</span>
+    }
+
+    public String getIdTipoSel() {
+<span class="nc" id="L331">        return idTipoSel;</span>
+    }
+
+    public void setIdTipoSel(String idTipoSel) {
+<span class="nc" id="L335">        this.idTipoSel = idTipoSel;</span>
+<span class="nc" id="L336">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CajaModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">CajaModel.java</span></div><h1>CajaModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CajaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja;
+
+/**
+ *
+ * @author mikelb
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L16">public class CajaModel extends DefaultModel&lt;Caja, UUID&gt; {</span>
+
+    @Inject
+    private CajaRepository cajaRepository;
+
+    @Override
+    public CajaRepository getRepository() {
+<span class="nc" id="L23">        return cajaRepository;</span>
+    }
+
+    @Override
+    public Caja instanciarRegistro() {
+<span class="nc" id="L28">        Caja caja = new Caja(UUID.randomUUID());</span>
+<span class="nc" id="L29">        caja.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L30">        caja.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L31">        return caja;</span>
+    }
+
+    @Override
+    public Caja getRegistroById(Object id) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        return id == null ? null : cajaRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Caja dato) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        return dato != null ? dato.getIdCaja() : null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

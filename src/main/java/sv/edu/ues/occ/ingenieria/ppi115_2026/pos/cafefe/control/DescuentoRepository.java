@@ -25,12 +25,13 @@ public class DescuentoRepository extends DefaultRepository<Descuento, UUID> {
     }
 
     public List<Descuento> findAllWithTipo() {
-        return em.createNamedQuery("Descuento.findAllWithTipo", Descuento.class)
+        return requireEntityManager().createNamedQuery("Descuento.findAllWithTipo", Descuento.class)
                 .getResultList();
     }
 
     public List<Descuento> findByTipoDescuento(UUID idTipoDescuento) {
-        return em.createNamedQuery("Descuento.findByTipoDescuento", Descuento.class)
+        requireArgument(idTipoDescuento, "idTipoDescuento");
+        return requireEntityManager().createNamedQuery("Descuento.findByTipoDescuento", Descuento.class)
                 .setParameter("idTipoDescuento", idTipoDescuento)
                 .getResultList();
     }

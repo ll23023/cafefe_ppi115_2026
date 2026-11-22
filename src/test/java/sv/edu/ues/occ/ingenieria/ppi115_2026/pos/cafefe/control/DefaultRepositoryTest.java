@@ -80,6 +80,12 @@ class DefaultRepositoryTest {
     }
 
     @Test
+    void crear_conRegistroNulo_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.crear(null));
+        verifyNoInteractions(em);
+    }
+
+    @Test
     void modificar_devuelveLoQueRegresaMerge() {
         Producto original = new Producto(UUID.randomUUID());
         Producto mezclado = new Producto(UUID.randomUUID());
@@ -88,6 +94,12 @@ class DefaultRepositoryTest {
         Producto resultado = repositorio.modificar(original);
 
         assertSame(mezclado, resultado);
+    }
+
+    @Test
+    void modificar_conRegistroNulo_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.modificar(null));
+        verifyNoInteractions(em);
     }
 
     // eliminar: todas las ramas
@@ -175,6 +187,12 @@ class DefaultRepositoryTest {
     }
 
     @Test
+    void findById_conIdNulo_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.findById(null));
+        verifyNoInteractions(em);
+    }
+
+    @Test
     void findAll_devuelveLaListaDelQuery() {
         Producto p = new Producto(UUID.randomUUID());
         when(em.getCriteriaBuilder()).thenReturn(cb);
@@ -206,6 +224,36 @@ class DefaultRepositoryTest {
         assertEquals(1, resultado.size());
         verify(query, times(1)).setFirstResult(5);
         verify(query, times(1)).setMaxResults(10);
+    }
+
+    @Test
+    void findRange_conRangoNegativo_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.findRange(-1, 10));
+        assertThrows(IllegalArgumentException.class, () -> repositorio.findRange(0, -1));
+        verifyNoInteractions(em);
+    }
+
+    @Test
+    void findAll_sinEntityManager_lanzaIllegalStateException() {
+        DefaultRepository<Producto, UUID> sinEntityManager = new DefaultRepository<>(Producto.class) {
+            @Override
+            protected EntityManager getEntityManager() {
+                return null;
+            }
+        };
+
+        assertThrows(IllegalStateException.class, sinEntityManager::findAll);
+    }
+
+    @Test
+    void constructor_conClaseNula_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new DefaultRepository<Producto, UUID>(null) {
+                    @Override
+                    protected EntityManager getEntityManager() {
+                        return em;
+                    }
+                });
     }
 
     @Test

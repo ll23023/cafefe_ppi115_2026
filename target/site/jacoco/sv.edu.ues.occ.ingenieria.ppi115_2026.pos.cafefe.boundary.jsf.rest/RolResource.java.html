@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RolResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">RolResource.java</span></div><h1>RolResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+
+@Path(&quot;rol&quot;)
+<span class="nc" id="L30">public class RolResource implements Serializable {</span>
+
+<span class="nc" id="L32">    private static final Logger LOG = Logger.getLogger(RolResource.class.getName());</span>
+
+    @Inject
+    RolRepository rolRepository;
+
+    @Inject
+    EmpleadoRolRepository empleadoRolRepository;
+
+    /**
+     * GET /rol?first=0&amp;max=50
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max) {
+        try {
+<span class="nc bnc" id="L49" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+<span class="nc" id="L50">                List&lt;Rol&gt; roles = rolRepository.findRange(first, max);</span>
+<span class="nc" id="L51">                Long total = rolRepository.count();</span>
+                
+<span class="nc" id="L53">                Response.ResponseBuilder responseBuilder = Response.ok(roles)</span>
+<span class="nc" id="L54">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L55">                        .type(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L56">                return responseBuilder.build();</span>
+            } else {
+<span class="nc" id="L58">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L59">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(),</span>
+                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)
+<span class="nc" id="L61">                        .build();</span>
+            }
+<span class="nc" id="L63">        } catch (Exception ex) {</span>
+<span class="nc" id="L64">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L65">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L66">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L67">                    .build();</span>
+        }
+    }
+
+    /**
+     * GET /rol/{id}
+     */
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L80">                Rol encontrado = rolRepository.findById(id);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L82">                    return Response.ok(encontrado).type(MediaType.APPLICATION_JSON).build();</span>
+                }
+<span class="nc" id="L84">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L85">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;id: &quot; + id)</span>
+<span class="nc" id="L86">                        .build();</span>
+<span class="nc" id="L87">            } catch (Exception ex) {</span>
+<span class="nc" id="L88">                LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L89">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L90">                        .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L91">                        .build();</span>
+            }
+        }
+<span class="nc" id="L94">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L95">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;id: &quot; + id)</span>
+<span class="nc" id="L96">                .build();</span>
+    }
+
+    /**
+     * POST /rol
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(Rol nuevo, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L106" title="All 4 branches missed.">        if (nuevo != null &amp;&amp; nuevo.getIdRol() == null) {</span>
+            try {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                String nombre = nuevo.getNombre() == null ? &quot;&quot; : nuevo.getNombre().trim();</span>
+<span class="nc" id="L109">                nuevo.setNombre(nombre);</span>
+                
+                // Validación: El nombre no se puede repetir
+<span class="nc" id="L112">                boolean repetido = rolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                        .anyMatch(o -&gt; o.getNombre() != null</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                        &amp;&amp; o.getNombre().trim().equalsIgnoreCase(nombre));</span>
+                
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                if (repetido) {</span>
+<span class="nc" id="L117">                    return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
+<span class="nc" id="L118">                            .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), </span>
+                                    &quot;Ya existe un rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)
+<span class="nc" id="L120">                            .build();</span>
+                }
+
+<span class="nc" id="L123">                nuevo.setIdRol(UUID.randomUUID());</span>
+<span class="nc" id="L124">                rolRepository.crear(nuevo);</span>
+                
+<span class="nc" id="L126">                URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L127">                        .path(String.valueOf(nuevo.getIdRol()))</span>
+<span class="nc" id="L128">                        .build();</span>
+<span class="nc" id="L129">                return Response.created(location).build(); // 201 Created</span>
+                
+<span class="nc" id="L131">            } catch (Exception ex) {</span>
+<span class="nc" id="L132">                LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L133">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L134">                        .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L135">                        .build();</span>
+            }
+        }
+<span class="nc" id="L138">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L139">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El recurso no puede ser nulo y no debe tener un ID asignado&quot;)</span>
+<span class="nc" id="L140">                .build();</span>
+    }
+
+    /**
+     * PUT /rol/{id}
+     */
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam(&quot;id&quot;) UUID id, Rol nuevo) {
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        if (nuevo != null &amp;&amp; id != null) {</span>
+            try {
+<span class="nc" id="L153">                Rol existente = rolRepository.findById(id);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                if (existente != null) {</span>
+                    
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                    String nombre = nuevo.getNombre() == null ? &quot;&quot; : nuevo.getNombre().trim();</span>
+<span class="nc" id="L157">                    nuevo.setNombre(nombre);</span>
+                    
+                    // Validación: El nombre no se puede repetir (excluyendo el mismo rol)
+<span class="nc" id="L160">                    boolean repetido = rolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                            .anyMatch(o -&gt; o.getNombre() != null</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                            &amp;&amp; o.getNombre().trim().equalsIgnoreCase(nombre)</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">                            &amp;&amp; !o.getIdRol().equals(id)); </span>
+                    
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (repetido) {</span>
+<span class="nc" id="L166">                        return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
+<span class="nc" id="L167">                                .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), </span>
+                                        &quot;Ya existe otro rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)
+<span class="nc" id="L169">                                .build();</span>
+                    }
+                    
+<span class="nc" id="L172">                    nuevo.setIdRol(id);</span>
+<span class="nc" id="L173">                    rolRepository.modificar(nuevo);</span>
+<span class="nc" id="L174">                    return Response.ok(nuevo).build();</span>
+                }
+<span class="nc" id="L176">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L177">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;Recurso no encontrado&quot;)</span>
+<span class="nc" id="L178">                        .build();</span>
+<span class="nc" id="L179">            } catch (Exception ex) {</span>
+<span class="nc" id="L180">                LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L181">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L182">                        .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L183">                        .build();</span>
+            }
+        }
+<span class="nc" id="L186">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L187">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El recurso no puede ser nulo y debe tener un ID asignado&quot;)</span>
+<span class="nc" id="L188">                .build();</span>
+    }
+
+    /**
+     * DELETE /rol/{id}
+     */
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L199">                Rol encontrado = rolRepository.findById(id);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">                if (encontrado != null) {</span>
+                    
+                    // Validación: No se puede borrar un rol con empleados asignados
+<span class="nc" id="L203">                    long asignados = empleadoRolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L204" title="All 4 branches missed.">                            .filter(er -&gt; er.getIdRol() != null &amp;&amp; er.getIdRol().getIdRol().equals(id))</span>
+<span class="nc" id="L205">                            .count();</span>
+                    
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                    if (asignados &gt; 0) {</span>
+<span class="nc" id="L208">                        return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
+<span class="nc" id="L209">                                .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), </span>
+<span class="nc" id="L210">                                        &quot;No se puede eliminar \&quot;&quot; + encontrado.getNombre() + &quot;\&quot;: lo tienen &quot; + asignados + &quot; empleado(s). Puede marcarlo como inactivo en su lugar.&quot;)</span>
+<span class="nc" id="L211">                                .build();</span>
+                    }
+                    
+<span class="nc" id="L214">                    rolRepository.eliminar(encontrado);</span>
+<span class="nc" id="L215">                    return Response.noContent().build(); // 204 No Content</span>
+                }
+<span class="nc" id="L217">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L218">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;Recurso no encontrado&quot;)</span>
+<span class="nc" id="L219">                        .build();</span>
+<span class="nc" id="L220">            } catch (Exception ex) {</span>
+<span class="nc" id="L221">                LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L222">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L223">                        .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L224">                        .build();</span>
+            }
+        }
+<span class="nc" id="L227">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L228">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El ID no puede ser nulo&quot;)</span>
+<span class="nc" id="L229">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

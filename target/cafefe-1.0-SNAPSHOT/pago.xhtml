@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Pagos</ui:define>
+    <ui:define name="header_title">Pagos</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Pagos</h2>
+
+            <h:form id="frmPago">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="factura" value="Factura:" />
+                    <p:selectOneMenu id="factura"
+                                     value="#{pagoModel.registro.idFactura}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{pagoModel.facturas}"
+                                       var="f"
+                                       itemLabel="#{f.cliente} (#{f.estado})"
+                                       itemValue="#{f}" />
+                    </p:selectOneMenu>
+                    <p:messages for="factura" />
+
+                    <h:outputLabel for="estado" value="Estado:" />
+                    <p:selectOneMenu id="estado"
+                                     value="#{pagoModel.registro.estado}"
+                                     required="true">
+                        <f:selectItems value="#{pagoModel.estadosDisponibles}"
+                                       var="e"
+                                       itemLabel="#{e}"
+                                       itemValue="#{e}" />
+                    </p:selectOneMenu>
+                    <h:panelGroup />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{pagoModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{pagoModel}"
+                                saveUpdate="frmPago frmTablaPago"
+                                newUpdate="frmPago frmTablaPago" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Pagos</h3>
+            <h:form id="frmTablaPago">
+                <c:tablaDinamica model="#{pagoModel}"
+                                  columns="#{pagoModel.columnas}"
+                                  rowKey="idPago"
+                                  editUpdate="frmPago"
+                                  deleteUpdate="frmTablaPago frmPago" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -32,7 +32,8 @@ public class EmpleadoRolRepository extends DefaultRepository<EmpleadoRol, UUID> 
      * Asignaciones de rol que tiene un empleado.
      */
     public List<EmpleadoRol> findByEmpleado(UUID idEmpleado) {
-        return getEntityManager()
+        requireArgument(idEmpleado, "idEmpleado");
+        return requireEntityManager()
                 .createQuery("SELECT er FROM EmpleadoRol er WHERE er.idEmpleado.idEmpleado = :id", EmpleadoRol.class)
                 .setParameter("id", idEmpleado)
                 .getResultList();
@@ -42,7 +43,8 @@ public class EmpleadoRolRepository extends DefaultRepository<EmpleadoRol, UUID> 
      * Cantidad de facturas que referencian esta asignación.
      */
     public long countFacturas(UUID idEmpleadoRol) {
-        return getEntityManager()
+        requireArgument(idEmpleadoRol, "idEmpleadoRol");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(f) FROM Factura f WHERE f.idEmpleadoRol.idEmpleadoRol = :id", Long.class)
                 .setParameter("id", idEmpleadoRol)
                 .getSingleResult();
@@ -52,7 +54,8 @@ public class EmpleadoRolRepository extends DefaultRepository<EmpleadoRol, UUID> 
      * Cantidad de órdenes que referencian esta asignación.
      */
     public long countOrdenes(UUID idEmpleadoRol) {
-        return getEntityManager()
+        requireArgument(idEmpleadoRol, "idEmpleadoRol");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(o) FROM Orden o WHERE o.idEmpleadoRol.idEmpleadoRol = :id", Long.class)
                 .setParameter("id", idEmpleadoRol)
                 .getSingleResult();

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:cc="jakarta.faces.composite"
+              xmlns:p="primefaces"
+              xmlns:f="jakarta.faces.core">
+    <cc:interface>
+        <cc:attribute name="model" required="true" />
+        <!-- IDs que se procesan al guardar; por defecto procesa el formulario actual. -->
+        <cc:attribute name="process" default="@form" />
+        <cc:attribute name="saveUpdate" required="true" />
+        <cc:attribute name="newUpdate" required="true" />
+    </cc:interface>
+    <cc:implementation>
+        <p:commandButton value="#{cc.attrs.model.editando ? msg['crud.guardarEdicion'] : msg['crud.guardar']}"
+                         action="#{cc.attrs.model.btnGuardarHandler}"
+                         process="#{cc.attrs.process}"
+                         update="#{cc.attrs.saveUpdate}"
+                         styleClass="btn btn-primary" />
+        &#160;
+        <p:commandButton value="#{cc.attrs.model.editando ? msg['crud.cancelar'] : msg['crud.nuevo']}"
+                         action="#{cc.attrs.model.btnNuevoHandler}"
+                         process="@this"
+                         resetValues="true"
+                         update="#{cc.attrs.newUpdate}"
+                         styleClass="btn btn-secondary" />
+    </cc:implementation>
+</ui:component>

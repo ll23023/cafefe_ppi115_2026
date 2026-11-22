@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CorsResponseFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     public static final String METODOS_PERMITIDOS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
-    // 30 minutos para el cache
+   
     public static final int MAXIMO_CACHE = 180 * 60;
     public static final String CABECERAS_PERMITIDAS = "origin, accept, content-type";
     // Se exponen todos los encabezados de ResponseHeaders (sin ellos el navegador no puede leer

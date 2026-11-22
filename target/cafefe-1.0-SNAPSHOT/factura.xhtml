@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:c="jakarta.faces.composite/components"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Administración de Facturas</ui:define>
+    <ui:define name="header_title">Facturas</ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Facturas</h2>
+
+            <h:form id="frmFactura">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="cliente" value="Cliente:" />
+                    <p:inputText id="cliente"
+                                 value="#{facturaModel.registro.cliente}"
+                                 required="true"
+                                 maxlength="155" />
+                    <p:messages for="cliente" />
+
+                    <h:outputLabel for="fecha" value="Fecha:" />
+                    <p:calendar id="fecha"
+                                value="#{facturaModel.fechaSeleccionada}"
+                                pattern="dd/MM/yyyy"
+                                required="true" />
+                    <p:messages for="fecha" />
+
+                    <h:outputLabel for="hora" value="Hora:" />
+                    <p:calendar id="hora"
+                                value="#{facturaModel.horaSeleccionada}"
+                                timeOnly="true"
+                                pattern="HH:mm" />
+                    <h:panelGroup />
+
+                    <h:outputLabel for="estado" value="Estado:" />
+                    <p:selectOneMenu id="estado"
+                                     value="#{facturaModel.registro.estado}"
+                                     required="true">
+                        <f:selectItems value="#{facturaModel.estadosDisponibles}"
+                                       var="e"
+                                       itemLabel="#{e}"
+                                       itemValue="#{e}" />
+                    </p:selectOneMenu>
+                    <h:panelGroup />
+
+                    <h:outputLabel for="empleadoRol" value="Atendido por:" />
+                    <p:selectOneMenu id="empleadoRol"
+                                     value="#{facturaModel.registro.idEmpleadoRol}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{facturaModel.empleadoRoles}"
+                                       var="er"
+                                       itemLabel="#{er.idEmpleado.nombre} #{er.idEmpleado.apellido} - #{er.idRol.nombre}"
+                                       itemValue="#{er}" />
+                    </p:selectOneMenu>
+                    <p:messages for="empleadoRol" />
+
+                    <h:outputLabel for="caja" value="Caja:" />
+                    <p:selectOneMenu id="caja"
+                                     value="#{facturaModel.registro.idCaja}"
+                                     required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{facturaModel.cajas}"
+                                       var="c"
+                                       itemLabel="#{c.nombre}"
+                                       itemValue="#{c}" />
+                    </p:selectOneMenu>
+                    <p:messages for="caja" />
+
+                    <h:outputLabel for="observaciones" value="Observaciones:" />
+                    <p:inputTextarea id="observaciones"
+                                     value="#{facturaModel.registro.observaciones}"
+                                     rows="3" cols="50" />
+                    <p:messages for="observaciones" />
+                </h:panelGrid>
+
+                <div style="margin-top: 10px;">
+                    <c:btnsForm model="#{facturaModel}"
+                                saveUpdate="frmFactura frmTablaFactura"
+                                newUpdate="frmFactura frmTablaFactura" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Facturas</h3>
+            <h:form id="frmTablaFactura">
+                <c:tablaDinamica model="#{facturaModel}"
+                                  columns="#{facturaModel.columnas}"
+                                  rowKey="idFactura"
+                                  editUpdate="frmFactura"
+                                  deleteUpdate="frmTablaFactura frmFactura" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

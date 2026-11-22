@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:cc="jakarta.faces.composite"
+              xmlns:p="primefaces"
+              xmlns:h="jakarta.faces.html"
+              xmlns:f="jakarta.faces.core"
+              xmlns:c="jakarta.faces.composite/components">
+
+    <!-- esto me daba error: xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+    Componente creado para poder agregar tablas de una mánera más fácil en HTML.
+
+    Valores recibidos del modelo:
+    - registros: Lista que se mostrará como filas.
+    - seleccion:Propiedad donde se guardará la fila seleccionada.
+    - registro: Objeto usado por el formulario de edición.
+    - btnEditarHandler() y btnEliminarHandler(): Métodos de los botones ditar y eliminar respectivamente..
+
+    Atributos personalizados:
+    - model: El módelo de datos a usar dentro de la tabla.
+    - columns: Es la lista de columnas que mostrará la tabla.
+    - rowKey: Es la llave primaria del registro de cada fila (su UUID).
+    - editUpdate y deleteUpdate: ID que se actualiza después de editar y eliminar respectivamente.
+    -->
+    <cc:interface>
+        <cc:attribute name="model" required="true" />
+        <cc:attribute name="columns" required="true" />
+        <cc:attribute name="rowKey" required="true" />
+        <cc:attribute name="editUpdate" required="true" />
+        <cc:attribute name="deleteUpdate" required="true" />
+    </cc:interface>
+    <cc:implementation>
+        <p:dataTable value="#{cc.attrs.model.registros}" var="item"
+                     selectionMode="single"
+                     selection="#{cc.attrs.model.seleccion}"
+                     rowKey="#{item[cc.attrs.rowKey]}"
+                     paginator="true" paginatorPosition="bottom" rows="10"
+                     emptyMessage="No hay registros"
+                     styleClass="tabla">
+            <!-- La selección solo identifica la fila; Editar inicia explícitamente la edición. -->
+            <p:ajax event="rowSelect"
+                    listener="#{cc.attrs.model.onSeleccionar}"
+                    update="#{cc.attrs.editUpdate}" />
+            
+            <p:ajax event="rowUnselect" />
+            <!-- Componente de PrimeFaces que crea una columna visual por cada definición recibida. -->
+            <p:columns value="#{cc.attrs.columns}" var="column"
+                       headerText="#{column.header}">
+                #{column.getValue(item)}
+            </p:columns>
+
+            <!-- Las acciones pertenecen a cada fila; seleccionar no inicia la edición. -->
+            <p:column headerText="Acciones" styleClass="col_acciones">
+                <p:commandButton icon="fa-solid fa-pen" title="Editar"
+                                 action="#{cc.attrs.model.editar(item)}"
+                                 process="@this"
+                                 update="#{cc.attrs.editUpdate}"
+                                 styleClass="btn btn-edit" />
+                &#160;
+                <p:commandButton icon="fa-solid fa-trash-can" title="Eliminar"
+                                 action="#{cc.attrs.model.eliminar(item)}"
+                                 process="@this"
+                                 update="#{cc.attrs.deleteUpdate}"
+                                 onclick="return confirm('¿Eliminar este registro?');"
+                                 styleClass="btn btn-danger" />
+            </p:column>
+        </p:dataTable>
+    </cc:implementation>
+</ui:component>

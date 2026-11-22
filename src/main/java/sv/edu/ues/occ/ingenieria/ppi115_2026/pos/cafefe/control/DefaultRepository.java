@@ -16,19 +16,48 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
      private final Class<T> entityClass;
 
     public DefaultRepository(Class<T> entityClass) {
+        if (entityClass == null) {
+            throw new IllegalArgumentException("entityClass no puede ser null");
+        }
         this.entityClass = entityClass;
     }
 
     protected abstract EntityManager getEntityManager();
 
+    protected final EntityManager requireEntityManager() {
+        EntityManager em = getEntityManager();
+        if (em == null) {
+            throw new IllegalStateException("El EntityManager no está disponible");
+        }
+        return em;
+    }
+
+    protected final <V> V requireArgument(V argument, String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " no puede ser null");
+        }
+        return argument;
+    }
+
+    protected final void requirePage(int first, int max) {
+        if (first < 0) {
+            throw new IllegalArgumentException("first no puede ser negativo");
+        }
+        if (max < 0) {
+            throw new IllegalArgumentException("max no puede ser negativo");
+        }
+    }
+
     @Override
     public void crear(T entity) {
-        getEntityManager().persist(entity);
+        requireArgument(entity, "entity");
+        requireEntityManager().persist(entity);
     }
 
     @Override
     public T modificar(T entity) {
-        return getEntityManager().merge(entity);
+        requireArgument(entity, "entity");
+        return requireEntityManager().merge(entity);
     }
 
     /**
@@ -46,7 +75,7 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
         if (entity == null) {
             return;
         }
-        EntityManager em = getEntityManager();
+        EntityManager em = requireEntityManager();
         if (em.contains(entity)) {
             em.remove(entity);
             return;
@@ -63,12 +92,13 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
 
     @Override
     public T findById(ID id) {
-        return getEntityManager().find(entityClass, id);
+        requireArgument(id, "id");
+        return requireEntityManager().find(entityClass, id);
     }
 
     @Override
     public List<T> findAll() {
-        EntityManager em = getEntityManager();
+        EntityManager em = requireEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         cq.select(cq.from(entityClass));
@@ -77,7 +107,8 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
 
     @Override
     public List<T> findRange(int start, int max) {
-        EntityManager em = getEntityManager();
+        requirePage(start, max);
+        EntityManager em = requireEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         cq.select(cq.from(entityClass));
@@ -89,7 +120,7 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
 
     @Override
     public Long count() {
-        EntityManager em = getEntityManager();
+        EntityManager em = requireEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<T> rt = cq.from(entityClass);

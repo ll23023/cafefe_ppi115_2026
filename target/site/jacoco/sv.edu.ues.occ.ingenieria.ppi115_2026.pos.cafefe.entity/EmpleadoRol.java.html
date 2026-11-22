@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpleadoRol.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">EmpleadoRol.java</span></div><h1>EmpleadoRol.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;empleado_rol&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;EmpleadoRol.findAll&quot;, query = &quot;SELECT e FROM EmpleadoRol e&quot;),
+    @NamedQuery(name = &quot;EmpleadoRol.findByActivo&quot;, query = &quot;SELECT e FROM EmpleadoRol e WHERE e.activo = :activo&quot;),
+    @NamedQuery(name = &quot;EmpleadoRol.findByObservaciones&quot;, query = &quot;SELECT e FROM EmpleadoRol e WHERE e.observaciones = :observaciones&quot;)})
+public class EmpleadoRol implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_empleado_rol&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idEmpleadoRol;
+    @Column(name = &quot;activo&quot;)
+    private Boolean activo;
+    @Size(max = 2147483647)
+    @Column(name = &quot;observaciones&quot;, length = 2147483647)
+    private String observaciones;
+    @JoinColumn(name = &quot;id_empleado&quot;, referencedColumnName = &quot;id_empleado&quot;)
+    @ManyToOne
+    private Empleado idEmpleado;
+    @JoinColumn(name = &quot;id_rol&quot;, referencedColumnName = &quot;id_rol&quot;)
+    @ManyToOne
+    private Rol idRol;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idEmpleadoRol&quot;)
+    private List&lt;Factura&gt; facturaList;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idEmpleadoRol&quot;)
+    private List&lt;Orden&gt; ordenList;
+
+<span class="nc" id="L58">    public EmpleadoRol() {</span>
+<span class="nc" id="L59">    }</span>
+
+<span class="nc" id="L61">    public EmpleadoRol(UUID idEmpleadoRol) {</span>
+<span class="nc" id="L62">        this.idEmpleadoRol = idEmpleadoRol;</span>
+<span class="nc" id="L63">    }</span>
+
+    public UUID getIdEmpleadoRol() {
+<span class="nc" id="L66">        return idEmpleadoRol;</span>
+    }
+
+    public void setIdEmpleadoRol(UUID idEmpleadoRol) {
+<span class="nc" id="L70">        this.idEmpleadoRol = idEmpleadoRol;</span>
+<span class="nc" id="L71">    }</span>
+
+    public Boolean getActivo() {
+<span class="nc" id="L74">        return activo;</span>
+    }
+
+    public void setActivo(Boolean activo) {
+<span class="nc" id="L78">        this.activo = activo;</span>
+<span class="nc" id="L79">    }</span>
+
+    public String getObservaciones() {
+<span class="nc" id="L82">        return observaciones;</span>
+    }
+
+    public void setObservaciones(String observaciones) {
+<span class="nc" id="L86">        this.observaciones = observaciones;</span>
+<span class="nc" id="L87">    }</span>
+
+    public Empleado getIdEmpleado() {
+<span class="nc" id="L90">        return idEmpleado;</span>
+    }
+
+    public void setIdEmpleado(Empleado idEmpleado) {
+<span class="nc" id="L94">        this.idEmpleado = idEmpleado;</span>
+<span class="nc" id="L95">    }</span>
+
+    public Rol getIdRol() {
+<span class="nc" id="L98">        return idRol;</span>
+    }
+
+    public void setIdRol(Rol idRol) {
+<span class="nc" id="L102">        this.idRol = idRol;</span>
+<span class="nc" id="L103">    }</span>
+
+    public List&lt;Factura&gt; getFacturaList() {
+<span class="nc" id="L106">        return facturaList;</span>
+    }
+
+    public void setFacturaList(List&lt;Factura&gt; facturaList) {
+<span class="nc" id="L110">        this.facturaList = facturaList;</span>
+<span class="nc" id="L111">    }</span>
+
+    public List&lt;Orden&gt; getOrdenList() {
+<span class="nc" id="L114">        return ordenList;</span>
+    }
+
+    public void setOrdenList(List&lt;Orden&gt; ordenList) {
+<span class="nc" id="L118">        this.ordenList = ordenList;</span>
+<span class="nc" id="L119">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L123">        int hash = 0;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        hash += (idEmpleadoRol != null ? idEmpleadoRol.hashCode() : 0);</span>
+<span class="nc" id="L125">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (!(object instanceof EmpleadoRol)) {</span>
+<span class="nc" id="L132">            return false;</span>
+        }
+<span class="nc" id="L134">        EmpleadoRol other = (EmpleadoRol) object;</span>
+<span class="nc bnc" id="L135" title="All 8 branches missed.">        if ((this.idEmpleadoRol == null &amp;&amp; other.idEmpleadoRol != null) || (this.idEmpleadoRol != null &amp;&amp; !this.idEmpleadoRol.equals(other.idEmpleadoRol))) {</span>
+<span class="nc" id="L136">            return false;</span>
+        }
+<span class="nc" id="L138">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L143">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol[ idEmpleadoRol=&quot; + idEmpleadoRol + &quot; ]&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

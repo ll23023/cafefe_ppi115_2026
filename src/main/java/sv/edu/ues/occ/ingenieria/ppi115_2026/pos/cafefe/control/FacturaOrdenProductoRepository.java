@@ -30,7 +30,9 @@ public class FacturaOrdenProductoRepository extends DefaultRepository<FacturaOrd
      * Líneas de una factura, paginadas.
      */
     public List<FacturaOrdenProducto> findByFactura(UUID idFactura, int first, int max) {
-        return getEntityManager()
+        requireArgument(idFactura, "idFactura");
+        requirePage(first, max);
+        return requireEntityManager()
                 .createQuery("SELECT f FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id", FacturaOrdenProducto.class)
                 .setParameter("id", idFactura)
                 .setFirstResult(first)
@@ -42,7 +44,8 @@ public class FacturaOrdenProductoRepository extends DefaultRepository<FacturaOrd
      * Cantidad de líneas de una factura.
      */
     public Long countByFactura(UUID idFactura) {
-        return getEntityManager()
+        requireArgument(idFactura, "idFactura");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id", Long.class)
                 .setParameter("id", idFactura)
                 .getSingleResult();
@@ -52,7 +55,9 @@ public class FacturaOrdenProductoRepository extends DefaultRepository<FacturaOrd
      * Cuántas veces ya está incluido un orden_producto en una factura.
      */
     public long countByFacturaAndOrdenProducto(UUID idFactura, UUID idOrdenProducto) {
-        return getEntityManager()
+        requireArgument(idFactura, "idFactura");
+        requireArgument(idOrdenProducto, "idOrdenProducto");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(f) FROM FacturaOrdenProducto f "
                         + "WHERE f.idFactura.idFactura = :fac AND f.idOrdenProducto.idOrdenProducto = :op", Long.class)
                 .setParameter("fac", idFactura)

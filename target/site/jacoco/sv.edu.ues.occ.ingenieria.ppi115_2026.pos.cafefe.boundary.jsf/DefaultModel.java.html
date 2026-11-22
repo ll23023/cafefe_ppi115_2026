@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">DefaultModel.java</span></div><h1>DefaultModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.annotation.PostConstruct;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepository;
+
+/**
+ *
+ * @author mil
+ * 
+ * @param &lt;T&gt; tipo de entidad administrada por la pantalla
+ * @param &lt;ID&gt; tipo del identificador de la entidad
+ */
+<span class="nc" id="L16">public abstract class DefaultModel&lt;T, ID&gt; implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    protected List&lt;T&gt; registros;
+    protected T registro;
+    protected T seleccion;
+<span class="nc" id="L23">    protected ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;</span>
+
+    /**
+     * Crea la instancia inicial que utilizará el formulario de alta.
+     *
+     * @return entidad nueva con los valores predeterminados de la pantalla
+     */
+    public abstract T instanciarRegistro();
+
+    /**
+     * Busca una entidad por su identificador.
+     *
+     * @param id identificador recibido por la vista o por otra operación CRUD
+     * @return entidad encontrada o {@code null} si no existe
+     */
+    public abstract T getRegistroById(Object id);
+
+    /**
+     * Extrae el identificador de una entidad.
+     *
+     * @param dato entidad de la que se obtendrá el identificador
+     * @return identificador de {@code dato}, o {@code null} si {@code dato} es
+     * null
+     */
+    public abstract Object getIdByRegistro(T dato);
+
+    /**
+     * Proporciona el repositorio utilizado por las operaciones CRUD comunes.
+     *
+     * @return repositorio de la entidad administrada
+     */
+    public abstract DefaultRepository&lt;T, ID&gt; getRepository();
+
+    /**
+     * Carga los registros iniciales y prepara el formulario en modo creación.
+     */
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L61">        this.cargarRegistros();</span>
+<span class="nc" id="L62">        this.limpiar();</span>
+<span class="nc" id="L63">    }</span>
+
+    /**
+     * Recarga la lista desde el repositorio. Si el repositorio aún no está
+     * disponible, deja una lista vacía para evitar errores durante la vista.
+     */
+    public void cargarRegistros() {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (getRepository() != null) {</span>
+<span class="nc" id="L71">            this.registros = getRepository().findAll();</span>
+        } else {
+<span class="nc" id="L73">            this.registros = new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L75">    }</span>
+
+    /**
+     * Reinicia el formulario y la selección de la tabla.
+     *
+     * &lt;p&gt;
+     * La entidad concreta decide sus valores iniciales mediante
+     * {@link #instanciarRegistro()}. Por ejemplo, puede establecer un estado
+     * activo por defecto o generar un UUID antes de mostrar el formulario.
+     * &lt;/p&gt;
+     */
+    public void limpiar() {
+<span class="nc" id="L87">        this.registro = this.instanciarRegistro();</span>
+<span class="nc" id="L88">        this.seleccion = null;</span>
+<span class="nc" id="L89">        this.estado = ESTADO_CRUD.CREAR;</span>
+<span class="nc" id="L90">    }</span>
+
+    /**
+     * Activa el flujo de creación y descarta cualquier edición o selección
+     * previa.
+     */
+    public void btnNuevoHandler() {
+<span class="nc" id="L97">        this.limpiar();</span>
+<span class="nc" id="L98">    }</span>
+
+    /**
+     * Persiste el registro actual como nuevo o como modificación según
+     * {@link #estado}; después actualiza la tabla y reinicia el formulario.
+     */
+    public void btnGuardarHandler() {
+        // El estado decide si el mismo botón crea un registro o guarda una edición.
+<span class="nc bnc" id="L106" title="All 4 branches missed.">        if (this.registro != null &amp;&amp; getRepository() != null) {</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (this.estado == ESTADO_CRUD.MODIFICAR) {</span>
+<span class="nc" id="L108">                getRepository().modificar(this.registro);</span>
+            } else {
+<span class="nc" id="L110">                getRepository().crear(this.registro);</span>
+            }
+<span class="nc" id="L112">            this.cargarRegistros();</span>
+<span class="nc" id="L113">            this.limpiar();</span>
+        }
+<span class="nc" id="L115">    }</span>
+
+    /**
+     * Mantiene el método de modificación directa para páginas antiguas que aún
+     * lo utilizan; las páginas nuevas pueden usar el flujo unificado de
+     * guardar.
+     */
+    public void btnModificarHandler() {
+<span class="nc bnc" id="L123" title="All 4 branches missed.">        if (this.registro != null &amp;&amp; getRepository() != null) {</span>
+<span class="nc" id="L124">            getRepository().modificar(this.registro);</span>
+<span class="nc" id="L125">            this.cargarRegistros();</span>
+<span class="nc" id="L126">            this.limpiar();</span>
+        }
+<span class="nc" id="L128">    }</span>
+
+    /**
+     * Elimina el registro actual, recarga la tabla y limpia la selección.
+     */
+    public void btnEliminarHandler() {
+<span class="nc bnc" id="L134" title="All 4 branches missed.">        if (this.registro != null &amp;&amp; getRepository() != null) {</span>
+<span class="nc" id="L135">            getRepository().eliminar(this.registro);</span>
+<span class="nc" id="L136">            this.cargarRegistros();</span>
+<span class="nc" id="L137">            this.limpiar();</span>
+        }
+<span class="nc" id="L139">    }</span>
+
+    /**
+     * Carga una fila seleccionada en el formulario y cambia el modelo a
+     * edición.
+     *
+     * @param r entidad seleccionada en la tabla; {@code null} no modifica el
+     * estado
+     */
+    public void seleccionarRegistro(T r) {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (r != null) {</span>
+<span class="nc" id="L150">            this.registro = r;</span>
+<span class="nc" id="L151">            this.estado = ESTADO_CRUD.MODIFICAR;</span>
+        }
+<span class="nc" id="L153">    }</span>
+
+    /**
+     * Copia la selección actual al formulario si existe una fila seleccionada.
+     */
+    public void btnEditarHandler() {
+<span class="nc" id="L159">        this.seleccionarRegistro(this.seleccion);</span>
+<span class="nc" id="L160">    }</span>
+
+    /**
+     * Indica si el formulario está editando un registro existente.
+     *
+     * @return {@code true} cuando el estado actual es {@code MODIFICAR}
+     */
+    public boolean isEditando() {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        return this.estado == ESTADO_CRUD.MODIFICAR;</span>
+    }
+
+    /**
+     * Indica si el formulario está en modo creación (el único modo en que se
+     * permiten cambios en listas de selección y ventanas emergentes).
+     * @return &lt;code&gt;true&lt;/code&gt; si se está creando un nuevo registro; &lt;code&gt;false&lt;/code&gt; si no.
+     */
+    public boolean isCreando() {
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        return this.estado == ESTADO_CRUD.CREAR;</span>
+    }
+
+    // Getters y Setters
+    public List&lt;T&gt; getRegistros() {
+<span class="nc" id="L182">        return registros;</span>
+    }
+
+    public void setRegistros(List&lt;T&gt; registros) {
+<span class="nc" id="L186">        this.registros = registros;</span>
+<span class="nc" id="L187">    }</span>
+
+    public T getRegistro() {
+<span class="nc" id="L190">        return registro;</span>
+    }
+
+    public void setRegistro(T registro) {
+<span class="nc" id="L194">        this.registro = registro;</span>
+<span class="nc" id="L195">    }</span>
+
+    public T getSeleccion() {
+<span class="nc" id="L198">        return seleccion;</span>
+    }
+
+    public void setSeleccion(T seleccion) {
+<span class="nc" id="L202">        this.seleccion = seleccion;</span>
+<span class="nc" id="L203">    }</span>
+
+    public ESTADO_CRUD getEstado() {
+<span class="nc" id="L206">        return estado;</span>
+    }
+
+    public void setEstado(ESTADO_CRUD estado) {
+<span class="nc" id="L210">        this.estado = estado;</span>
+<span class="nc" id="L211">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DescuentoProductoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">DescuentoProductoModel.java</span></div><h1>DescuentoProductoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
+
+@Named
+@ViewScoped
+<span class="nc" id="L19">public class DescuentoProductoModel extends DefaultModel&lt;DescuentoProducto, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private DescuentoProductoRepository descuentoProductoRepository;
+    @Inject
+    private DescuentoRepository descuentoRepository;
+    @Inject
+    private ProductoRepository productoRepository;
+
+    private List&lt;Descuento&gt; descuentos;
+    private List&lt;Producto&gt; productos;
+<span class="nc" id="L32">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
+            new ColumnaTabla(&quot;idDescuentoProducto&quot;, &quot;ID&quot;),
+            new ColumnaTabla(&quot;idDescuento.nombre&quot;, &quot;Descuento&quot;),
+            new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),
+            new ColumnaTabla(&quot;fechaDesde&quot;, &quot;Desde&quot;, FORMATO_COLUMNA.DATE),
+            new ColumnaTabla(&quot;fechaHasta&quot;, &quot;Hasta&quot;, FORMATO_COLUMNA.DATE),
+            new ColumnaTabla(&quot;valor&quot;, &quot;Valor&quot;),
+            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+    );
+
+    @Override
+    public DescuentoProductoRepository getRepository() {
+<span class="nc" id="L44">        return descuentoProductoRepository;</span>
+    }
+
+    @Override
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L50">        super.init();</span>
+<span class="nc" id="L51">        descuentos = descuentoRepository.findAll();</span>
+<span class="nc" id="L52">        productos = productoRepository.findAll();</span>
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    public DescuentoProducto instanciarRegistro() {
+<span class="nc" id="L57">        return new DescuentoProducto(UUID.randomUUID());</span>
+    }
+
+    @Override
+    public DescuentoProducto getRegistroById(Object id) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        return id == null ? null : descuentoProductoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(DescuentoProducto dato) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        return dato == null ? null : dato.getIdDescuentoProducto();</span>
+    }
+
+    public List&lt;Descuento&gt; getDescuentos() {
+<span class="nc" id="L71">        return descuentos;</span>
+    }
+
+    public List&lt;Producto&gt; getProductos() {
+<span class="nc" id="L75">        return productos;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc" id="L79">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

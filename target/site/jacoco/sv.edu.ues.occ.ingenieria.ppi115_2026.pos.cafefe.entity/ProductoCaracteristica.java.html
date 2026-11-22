@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoCaracteristica.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">ProductoCaracteristica.java</span></div><h1>ProductoCaracteristica.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;producto_caracteristica&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;ProductoCaracteristica.findAll&quot;, query = &quot;SELECT p FROM ProductoCaracteristica p&quot;),
+    @NamedQuery(name = &quot;ProductoCaracteristica.findByProducto&quot;, query = &quot;SELECT p FROM ProductoCaracteristica p JOIN FETCH p.idCaracteristica c JOIN FETCH c.idTipoCaracteristica WHERE p.idProducto.idProducto = :idProducto&quot;),
+    @NamedQuery(name = &quot;ProductoCaracteristica.findByValor&quot;, query = &quot;SELECT p FROM ProductoCaracteristica p WHERE p.valor = :valor&quot;)})
+public class ProductoCaracteristica implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_producto_caracteristica&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idProductoCaracteristica;
+    @Size(max = 2147483647)
+    @Column(name = &quot;valor&quot;, length = 2147483647)
+    private String valor;
+    @JoinColumn(name = &quot;id_caracteristica&quot;, referencedColumnName = &quot;id_caracteristica&quot;)
+    @ManyToOne
+    private Caracteristica idCaracteristica;
+    @JoinColumn(name = &quot;id_producto&quot;, referencedColumnName = &quot;id_producto&quot;)
+    @ManyToOne
+    private Producto idProducto;
+
+<span class="nc" id="L47">    public ProductoCaracteristica() {</span>
+<span class="nc" id="L48">    }</span>
+
+<span class="nc" id="L50">    public ProductoCaracteristica(UUID idProductoCaracteristica) {</span>
+<span class="nc" id="L51">        this.idProductoCaracteristica = idProductoCaracteristica;</span>
+<span class="nc" id="L52">    }</span>
+
+    public UUID getIdProductoCaracteristica() {
+<span class="nc" id="L55">        return idProductoCaracteristica;</span>
+    }
+
+    public void setIdProductoCaracteristica(UUID idProductoCaracteristica) {
+<span class="nc" id="L59">        this.idProductoCaracteristica = idProductoCaracteristica;</span>
+<span class="nc" id="L60">    }</span>
+
+    public String getValor() {
+<span class="nc" id="L63">        return valor;</span>
+    }
+
+    public void setValor(String valor) {
+<span class="nc" id="L67">        this.valor = valor;</span>
+<span class="nc" id="L68">    }</span>
+
+    public Caracteristica getIdCaracteristica() {
+<span class="nc" id="L71">        return idCaracteristica;</span>
+    }
+
+    public void setIdCaracteristica(Caracteristica idCaracteristica) {
+<span class="nc" id="L75">        this.idCaracteristica = idCaracteristica;</span>
+<span class="nc" id="L76">    }</span>
+
+    public Producto getIdProducto() {
+<span class="nc" id="L79">        return idProducto;</span>
+    }
+
+    public void setIdProducto(Producto idProducto) {
+<span class="nc" id="L83">        this.idProducto = idProducto;</span>
+<span class="nc" id="L84">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L88">        int hash = 0;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        hash += (idProductoCaracteristica != null ? idProductoCaracteristica.hashCode() : 0);</span>
+<span class="nc" id="L90">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (!(object instanceof ProductoCaracteristica)) {</span>
+<span class="nc" id="L97">            return false;</span>
+        }
+<span class="nc" id="L99">        ProductoCaracteristica other = (ProductoCaracteristica) object;</span>
+<span class="nc bnc" id="L100" title="All 8 branches missed.">        if ((this.idProductoCaracteristica == null &amp;&amp; other.idProductoCaracteristica != null) || (this.idProductoCaracteristica != null &amp;&amp; !this.idProductoCaracteristica.equals(other.idProductoCaracteristica))) {</span>
+<span class="nc" id="L101">            return false;</span>
+        }
+<span class="nc" id="L103">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L108">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoCaracteristica[ idProductoCaracteristica=&quot; + idProductoCaracteristica + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">ProductoModel.java</span></div><h1>ProductoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoCaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoTipoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoCaracteristica;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L44">public class ProductoModel extends DefaultModel&lt;Producto, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+<span class="nc" id="L47">    private static final Logger LOG = Logger.getLogger(ProductoModel.class.getName());</span>
+
+    @Inject
+    private ProductoRepository productoRepository;
+    @Inject
+    private ProductoCaracteristicaRepository productoCaracteristicaRepository;
+    @Inject
+    private ProductoTipoProductoRepository productoTipoProductoRepository;
+    @Inject
+    private CaracteristicaRepository caracteristicaRepository;
+    @Inject
+    private TipoCaracteristicaRepository tipoCaracteristicaRepository;
+    @Inject
+    private TipoProductoRepository tipoProductoRepository;
+    @Inject
+    private DescuentoProductoRepository descuentoProductoRepository;
+    @Inject
+    private DescuentoRepository descuentoRepository;
+    @Inject
+    private sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository tipoDescuentoRepository;
+
+<span class="nc" id="L68">    private List&lt;Caracteristica&gt; caracteristicas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">    private List&lt;TipoCaracteristica&gt; tiposCaracteristica = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L70">    private List&lt;TipoProducto&gt; tiposProducto = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L71">    private List&lt;Descuento&gt; descuentos = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L72">    private List&lt;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento&gt; tiposDescuento = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L73">    private final List&lt;CaracteristicaFila&gt; filasCaracteristicas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L74">    private final List&lt;TipoProductoFila&gt; filasTiposProducto = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L75">    private final List&lt;DescuentoFila&gt; filasDescuentos = new ArrayList&lt;&gt;();</span>
+    private TipoCaracteristica nuevoTipoCaracteristica;
+    private Descuento nuevoDescuento;
+    private sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento nuevoTipoDescuento;
+    private List&lt;ColumnaTabla&gt; columnas;
+    private boolean soloLectura;
+
+    /**
+     * Una fila de la pestaña de características del producto.
+     */
+<span class="nc" id="L85">    public static class CaracteristicaFila implements Serializable {</span>
+
+        private static final long serialVersionUID = 1L;
+        private TipoCaracteristica tipo;
+        private Caracteristica caracteristica;
+        private String tipoNombre;
+        private String tipoId;
+        private String caracteristicaNombre;
+        private String valor;
+        private boolean persistida;
+
+        public TipoCaracteristica getTipo() {
+<span class="nc" id="L97">            return tipo;</span>
+        }
+
+        public void setTipo(TipoCaracteristica tipo) {
+<span class="nc" id="L101">            this.tipo = tipo;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            this.tipoNombre = tipo == null ? null : tipo.getNombre();</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">            this.tipoId = tipo == null || tipo.getIdTipoCaracteristica() == null</span>
+<span class="nc" id="L104">                    ? null</span>
+<span class="nc" id="L105">                    : tipo.getIdTipoCaracteristica().toString();</span>
+<span class="nc" id="L106">        }</span>
+
+        public Caracteristica getCaracteristica() {
+<span class="nc" id="L109">            return caracteristica;</span>
+        }
+
+        public void setCaracteristica(Caracteristica caracteristica) {
+<span class="nc" id="L113">            this.caracteristica = caracteristica;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            this.caracteristicaNombre = caracteristica == null ? null : caracteristica.getNombre();</span>
+<span class="nc" id="L115">        }</span>
+
+        public String getTipoNombre() {
+<span class="nc" id="L118">            return tipoNombre;</span>
+        }
+
+        public void setTipoNombre(String tipoNombre) {
+<span class="nc" id="L122">            this.tipoNombre = tipoNombre;</span>
+<span class="nc" id="L123">        }</span>
+
+        public String getTipoId() {
+<span class="nc" id="L126">            return tipoId;</span>
+        }
+
+        public void setTipoId(String tipoId) {
+<span class="nc" id="L130">            this.tipoId = tipoId;</span>
+<span class="nc" id="L131">        }</span>
+
+        public String getCaracteristicaNombre() {
+<span class="nc" id="L134">            return caracteristicaNombre;</span>
+        }
+
+        public void setCaracteristicaNombre(String caracteristicaNombre) {
+<span class="nc" id="L138">            this.caracteristicaNombre = caracteristicaNombre;</span>
+<span class="nc" id="L139">        }</span>
+
+        public String getValor() {
+<span class="nc" id="L142">            return valor;</span>
+        }
+
+        public void setValor(String valor) {
+<span class="nc" id="L146">            this.valor = valor;</span>
+<span class="nc" id="L147">        }</span>
+
+        public boolean isPersistida() {
+<span class="nc" id="L150">            return persistida;</span>
+        }
+
+        public void setPersistida(boolean persistida) {
+<span class="nc" id="L154">            this.persistida = persistida;</span>
+<span class="nc" id="L155">        }</span>
+    }
+
+    /**
+     * Una fila de la pestaña de tipos de producto.
+     */
+<span class="nc" id="L161">    public static class TipoProductoFila implements Serializable {</span>
+
+        private static final long serialVersionUID = 1L;
+        private TipoProducto tipo;
+        private String tipoNombre;
+        private boolean persistida;
+
+        public TipoProducto getTipo() {
+<span class="nc" id="L169">            return tipo;</span>
+        }
+
+        public void setTipo(TipoProducto tipo) {
+<span class="nc" id="L173">            this.tipo = tipo;</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            this.tipoNombre = tipo == null ? null : tipo.getNombre();</span>
+<span class="nc" id="L175">        }</span>
+
+        public String getTipoNombre() {
+<span class="nc" id="L178">            return tipoNombre;</span>
+        }
+
+        public void setTipoNombre(String tipoNombre) {
+<span class="nc" id="L182">            this.tipoNombre = tipoNombre;</span>
+<span class="nc" id="L183">        }</span>
+
+        public boolean isPersistida() {
+<span class="nc" id="L186">            return persistida;</span>
+        }
+
+        public void setPersistida(boolean persistida) {
+<span class="nc" id="L190">            this.persistida = persistida;</span>
+<span class="nc" id="L191">        }</span>
+    }
+
+    /**
+     * Fila editable para asociar un descuento al producto.
+     */
+<span class="nc" id="L197">    public static class DescuentoFila implements Serializable {</span>
+
+        private static final long serialVersionUID = 1L;
+        private sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo;
+        private String descuentoNombre;
+        private Integer valor;
+        private Date fechaDesde;
+        private Date fechaHasta;
+        private boolean persistida;
+
+        public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getTipo() {
+<span class="nc" id="L208">            return tipo;</span>
+        }
+
+        public void setTipo(sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo) {
+<span class="nc" id="L212">            this.tipo = tipo;</span>
+<span class="nc" id="L213">        }</span>
+
+        public String getDescuentoNombre() {
+<span class="nc" id="L216">            return descuentoNombre;</span>
+        }
+
+        public void setDescuentoNombre(String descuentoNombre) {
+<span class="nc" id="L220">            this.descuentoNombre = descuentoNombre;</span>
+<span class="nc" id="L221">        }</span>
+
+        public Integer getValor() {
+<span class="nc" id="L224">            return valor;</span>
+        }
+
+        public void setValor(Integer valor) {
+<span class="nc" id="L228">            this.valor = valor;</span>
+<span class="nc" id="L229">        }</span>
+
+        public Date getFechaDesde() {
+<span class="nc" id="L232">            return fechaDesde;</span>
+        }
+
+        public void setFechaDesde(Date fechaDesde) {
+<span class="nc" id="L236">            this.fechaDesde = fechaDesde;</span>
+<span class="nc" id="L237">        }</span>
+
+        public Date getFechaHasta() {
+<span class="nc" id="L240">            return fechaHasta;</span>
+        }
+
+        public void setFechaHasta(Date fechaHasta) {
+<span class="nc" id="L244">            this.fechaHasta = fechaHasta;</span>
+<span class="nc" id="L245">        }</span>
+
+        public boolean isPersistida() {
+<span class="nc" id="L248">            return persistida;</span>
+        }
+
+        public void setPersistida(boolean persistida) {
+<span class="nc" id="L252">            this.persistida = persistida;</span>
+<span class="nc" id="L253">        }</span>
+    }
+
+    @Override
+    public ProductoRepository getRepository() {
+<span class="nc" id="L258">        return productoRepository;</span>
+    }
+
+    @Override
+    public Producto instanciarRegistro() {
+<span class="nc" id="L263">        Producto p = new Producto(UUID.randomUUID());</span>
+<span class="nc" id="L264">        p.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L265">        p.setComentarios(&quot;&quot;);</span>
+<span class="nc" id="L266">        return p;</span>
+    }
+
+    @Override
+    public Producto getRegistroById(Object id) {
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        return id == null ? null : productoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Producto dato) {
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        return dato != null ? dato.getIdProducto() : null;</span>
+    }
+
+    @Override
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L282">        super.init();</span>
+<span class="nc" id="L283">        cargarListasRelacionadas();</span>
+<span class="nc" id="L284">    }</span>
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L288">        super.limpiar();</span>
+<span class="nc" id="L289">        filasCaracteristicas.clear();</span>
+<span class="nc" id="L290">        filasTiposProducto.clear();</span>
+<span class="nc" id="L291">        filasDescuentos.clear();</span>
+<span class="nc" id="L292">        nuevoTipoCaracteristica = new TipoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L293">        nuevoTipoCaracteristica.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L294">        nuevoTipoCaracteristica.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L295">        nuevoTipoDescuento = new sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento(UUID.randomUUID());</span>
+<span class="nc" id="L296">        nuevoTipoDescuento.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L297">        nuevoTipoDescuento.setDescuentoMaximo(90);</span>
+<span class="nc" id="L298">        nuevoTipoDescuento.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L299">        nuevoDescuento = new Descuento(UUID.randomUUID());</span>
+<span class="nc" id="L300">        nuevoDescuento.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L301">        this.soloLectura = false;</span>
+<span class="nc" id="L302">    }</span>
+
+    @Override
+    public void seleccionarRegistro(Producto producto) {
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (producto != null) {</span>
+<span class="nc" id="L307">            mostrar(producto);</span>
+        }
+<span class="nc" id="L309">    }</span>
+
+    public void onSeleccionar() {
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L313">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L315">    }</span>
+
+    public void editar(Producto producto) {
+<span class="nc bnc" id="L318" title="All 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L319">            return;</span>
+        }
+<span class="nc" id="L321">        this.seleccion = producto;</span>
+<span class="nc" id="L322">        mostrar(producto);</span>
+<span class="nc" id="L323">        this.soloLectura = false;</span>
+<span class="nc" id="L324">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L325">    }</span>
+
+    public void cancelar() {
+<span class="nc" id="L328">        limpiar();</span>
+<span class="nc" id="L329">    }</span>
+
+    private void mostrar(Producto producto) {
+<span class="nc bnc" id="L332" title="All 4 branches missed.">        if (producto == null || producto.getIdProducto() == null) {</span>
+<span class="nc" id="L333">            return;</span>
+        }
+<span class="nc" id="L335">        Producto fresco = productoRepository.findById(producto.getIdProducto());</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">        this.registro = fresco != null ? fresco : producto;</span>
+<span class="nc" id="L337">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L338">        this.soloLectura = true;</span>
+<span class="nc" id="L339">        cargarRelaciones(this.registro.getIdProducto());</span>
+<span class="nc" id="L340">    }</span>
+
+    public void eliminar(Producto producto) {
+<span class="nc bnc" id="L343" title="All 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L344">            return;</span>
+        }
+<span class="nc" id="L346">        productoCaracteristicaRepository.findAll().stream()</span>
+<span class="nc" id="L347">                .filter(relacion -&gt; perteneceA(relacion.getIdProducto(), producto))</span>
+<span class="nc" id="L348">                .forEach(productoCaracteristicaRepository::eliminar);</span>
+<span class="nc" id="L349">        productoTipoProductoRepository.findAll().stream()</span>
+<span class="nc" id="L350">                .filter(relacion -&gt; perteneceA(relacion.getIdProducto(), producto))</span>
+<span class="nc" id="L351">                .forEach(productoTipoProductoRepository::eliminar);</span>
+<span class="nc" id="L352">        descuentoProductoRepository.findAll().stream()</span>
+<span class="nc" id="L353">                .filter(relacion -&gt; perteneceA(relacion.getIdProducto(), producto))</span>
+<span class="nc" id="L354">                .forEach(descuentoProductoRepository::eliminar);</span>
+<span class="nc" id="L355">        productoRepository.eliminar(producto);</span>
+<span class="nc" id="L356">        cargarRegistros();</span>
+<span class="nc" id="L357">        limpiar();</span>
+<span class="nc" id="L358">        mensaje(FacesMessage.SEVERITY_INFO, &quot;Producto eliminado correctamente.&quot;);</span>
+<span class="nc" id="L359">    }</span>
+
+    private boolean perteneceA(Producto productoRelacionado, Producto producto) {
+<span class="nc bnc" id="L362" title="All 4 branches missed.">        return productoRelacionado != null &amp;&amp; productoRelacionado.getIdProducto() != null</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">                &amp;&amp; producto.getIdProducto() != null</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">                &amp;&amp; producto.getIdProducto().equals(productoRelacionado.getIdProducto());</span>
+    }
+
+    @Override
+    @Transactional
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L370" title="All 6 branches missed.">        if (soloLectura || registro == null || !validarRelaciones()) {</span>
+<span class="nc" id="L371">            return;</span>
+        }
+        try {
+<span class="nc" id="L374">            resolverRelacionesIngresadas();</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">            boolean nuevo = estado != ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc bnc" id="L376" title="All 2 branches missed.">            if (nuevo) {</span>
+<span class="nc" id="L377">                productoRepository.crear(registro);</span>
+            } else {
+<span class="nc" id="L379">                productoRepository.modificar(registro);</span>
+            }
+<span class="nc" id="L381">            Producto productoGuardado = productoRepository.findById(registro.getIdProducto());</span>
+<span class="nc" id="L382">            sincronizarCaracteristicas(productoGuardado);</span>
+<span class="nc" id="L383">            sincronizarTiposProducto(productoGuardado);</span>
+<span class="nc" id="L384">            sincronizarDescuentos(productoGuardado);</span>
+<span class="nc" id="L385">            UUID idGuardado = registro.getIdProducto();</span>
+<span class="nc" id="L386">            cargarRegistros();</span>
+<span class="nc" id="L387">            cargarListasRelacionadas();</span>
+<span class="nc" id="L388">            Producto guardado = registros.stream()</span>
+<span class="nc" id="L389">                    .filter(p -&gt; idGuardado.equals(p.getIdProducto()))</span>
+<span class="nc" id="L390">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">            if (guardado != null) {</span>
+<span class="nc" id="L392">                this.seleccion = guardado;</span>
+<span class="nc" id="L393">                mostrar(guardado);</span>
+            } else {
+<span class="nc" id="L395">                limpiar();</span>
+            }
+<span class="nc" id="L397">            mensaje(FacesMessage.SEVERITY_INFO, &quot;Producto guardado correctamente.&quot;);</span>
+<span class="nc" id="L398">        } catch (RuntimeException exception) {</span>
+<span class="nc" id="L399">            LOG.log(Level.SEVERE, &quot;Error al guardar producto y sus relaciones&quot;, exception);</span>
+<span class="nc" id="L400">            mensaje(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L401">                    &quot;No se pudo guardar el producto: &quot; + exception.getMessage());</span>
+<span class="nc" id="L402">        }</span>
+<span class="nc" id="L403">    }</span>
+
+    private void cargarListasRelacionadas() {
+<span class="nc" id="L406">        caracteristicas = new ArrayList&lt;&gt;(caracteristicaRepository.findAll().stream()</span>
+<span class="nc" id="L407">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L408" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L410">                .toList());</span>
+<span class="nc" id="L411">        tiposCaracteristica = new ArrayList&lt;&gt;(tipoCaracteristicaRepository.findAll().stream()</span>
+<span class="nc" id="L412">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L414" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L415">                .toList());</span>
+<span class="nc" id="L416">        tiposProducto = new ArrayList&lt;&gt;(tipoProductoRepository.findAll().stream()</span>
+<span class="nc" id="L417">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L420">                .toList());</span>
+<span class="nc" id="L421">        descuentos = new ArrayList&lt;&gt;(descuentoRepository.findAllWithTipo().stream()</span>
+<span class="nc" id="L422">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L423" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L425">                .toList());</span>
+<span class="nc" id="L426">        tiposDescuento = new ArrayList&lt;&gt;(tipoDescuentoRepository.findAll().stream()</span>
+<span class="nc" id="L427">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L428" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L429" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L430">                .toList());</span>
+<span class="nc" id="L431">    }</span>
+
+    private void cargarRelaciones(UUID idProducto) {
+<span class="nc" id="L434">        filasCaracteristicas.clear();</span>
+<span class="nc" id="L435">        productoCaracteristicaRepository.findByProducto(idProducto).forEach(relacion -&gt; {</span>
+<span class="nc" id="L436">            CaracteristicaFila fila = new CaracteristicaFila();</span>
+<span class="nc" id="L437">            fila.setCaracteristica(relacion.getIdCaracteristica());</span>
+<span class="nc bnc" id="L438" title="All 2 branches missed.">            fila.setTipo(relacion.getIdCaracteristica() == null</span>
+<span class="nc" id="L439">                    ? null : relacion.getIdCaracteristica().getIdTipoCaracteristica());</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">            fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">            fila.setCaracteristicaNombre(fila.getCaracteristica() == null</span>
+<span class="nc" id="L442">                    ? null : fila.getCaracteristica().getNombre());</span>
+<span class="nc" id="L443">            fila.setValor(relacion.getValor());</span>
+<span class="nc" id="L444">            fila.setPersistida(true);</span>
+<span class="nc" id="L445">            filasCaracteristicas.add(fila);</span>
+<span class="nc" id="L446">        });</span>
+
+<span class="nc" id="L448">        filasTiposProducto.clear();</span>
+<span class="nc" id="L449">        productoTipoProductoRepository.findByProducto(idProducto).forEach(relacion -&gt; {</span>
+<span class="nc" id="L450">            TipoProductoFila fila = new TipoProductoFila();</span>
+<span class="nc" id="L451">            fila.setTipo(relacion.getIdTipoProducto());</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">            fila.setTipoNombre(fila.getTipo() == null ? null : fila.getTipo().getNombre());</span>
+<span class="nc" id="L453">            fila.setPersistida(true);</span>
+<span class="nc" id="L454">            filasTiposProducto.add(fila);</span>
+<span class="nc" id="L455">        });</span>
+
+<span class="nc" id="L457">        filasDescuentos.clear();</span>
+<span class="nc" id="L458">        descuentoProductoRepository.findByProducto(idProducto).forEach(relacion -&gt; {</span>
+<span class="nc" id="L459">            DescuentoFila fila = new DescuentoFila();</span>
+<span class="nc" id="L460">            Descuento descuento = relacion.getIdDescuento();</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">            fila.setTipo(descuento == null ? null : descuento.getIdTipoDescuento());</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">            fila.setDescuentoNombre(descuento == null ? null : descuento.getNombre());</span>
+<span class="nc" id="L463">            fila.setValor(relacion.getValor());</span>
+<span class="nc" id="L464">            fila.setFechaDesde(relacion.getFechaDesde());</span>
+<span class="nc" id="L465">            fila.setFechaHasta(relacion.getFechaHasta());</span>
+<span class="nc" id="L466">            fila.setPersistida(true);</span>
+<span class="nc" id="L467">            filasDescuentos.add(fila);</span>
+<span class="nc" id="L468">        });</span>
+<span class="nc" id="L469">    }</span>
+
+    public List&lt;Descuento&gt; getDescuentosPorTipo(
+            sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento tipo) {
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        UUID idTipo = tipo == null ? null : tipo.getIdTipoDescuento();</span>
+<span class="nc bnc" id="L474" title="All 4 branches missed.">        if (idTipo == null || descuentos == null) {</span>
+<span class="nc" id="L475">            return new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L477">        return descuentos.stream()</span>
+<span class="nc bnc" id="L478" title="All 2 branches missed.">                .filter(d -&gt; d != null</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">                &amp;&amp; d.getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(d.getIdTipoDescuento().getIdTipoDescuento()))</span>
+<span class="nc" id="L481">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L484">                .toList();</span>
+    }
+
+    private boolean validarRelaciones() {
+<span class="nc bnc" id="L488" title="All 4 branches missed.">        if (registro == null || registro.getNombre() == null</span>
+<span class="nc bnc" id="L489" title="All 2 branches missed.">                || registro.getNombre().isBlank()) {</span>
+<span class="nc" id="L490">            mensaje(FacesMessage.SEVERITY_ERROR, &quot;El nombre del producto es obligatorio.&quot;);</span>
+<span class="nc" id="L491">            return false;</span>
+        }
+<span class="nc bnc" id="L493" title="All 2 branches missed.">        for (CaracteristicaFila fila : filasCaracteristicas) {</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">            if (fila.isPersistida()) {</span>
+<span class="nc" id="L495">                continue;</span>
+            }
+<span class="nc bnc" id="L497" title="All 2 branches missed.">            boolean vacia = fila.getTipo() == null</span>
+<span class="nc bnc" id="L498" title="All 4 branches missed.">                    &amp;&amp; (fila.getCaracteristicaNombre() == null || fila.getCaracteristicaNombre().isBlank())</span>
+<span class="nc bnc" id="L499" title="All 4 branches missed.">                    &amp;&amp; (fila.getValor() == null || fila.getValor().isBlank());</span>
+<span class="nc bnc" id="L500" title="All 2 branches missed.">            if (vacia) {</span>
+<span class="nc" id="L501">                continue;</span>
+            }
+<span class="nc bnc" id="L503" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getCaracteristicaNombre() == null</span>
+<span class="nc bnc" id="L504" title="All 2 branches missed.">                    || fila.getCaracteristicaNombre().isBlank()) {</span>
+<span class="nc" id="L505">                mensaje(FacesMessage.SEVERITY_ERROR, &quot;Complete el tipo y la característica.&quot;);</span>
+<span class="nc" id="L506">                return false;</span>
+            }
+<span class="nc bnc" id="L508" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
+<span class="nc" id="L509">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;No se puede asignar un tipo de característica inactivo: &quot;
+<span class="nc" id="L511">                        + fila.getTipo().getNombre());</span>
+<span class="nc" id="L512">                return false;</span>
+            }
+<span class="nc" id="L514">        }</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">        for (DescuentoFila fila : filasDescuentos) {</span>
+<span class="nc bnc" id="L516" title="All 2 branches missed.">            if (fila.isPersistida()) {</span>
+<span class="nc" id="L517">                continue;</span>
+            }
+
+<span class="nc bnc" id="L520" title="All 2 branches missed.">            boolean vacia = fila.getTipo() == null</span>
+<span class="nc bnc" id="L521" title="All 4 branches missed.">                    &amp;&amp; (fila.getDescuentoNombre() == null || fila.getDescuentoNombre().isBlank())</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">                    &amp;&amp; fila.getValor() == null;</span>
+<span class="nc bnc" id="L523" title="All 2 branches missed.">            if (vacia) {</span>
+<span class="nc" id="L524">                continue;</span>
+            }
+
+<span class="nc bnc" id="L527" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getDescuentoNombre() == null</span>
+<span class="nc bnc" id="L528" title="All 4 branches missed.">                    || fila.getDescuentoNombre().isBlank() || fila.getValor() == null) {</span>
+<span class="nc" id="L529">                mensaje(FacesMessage.SEVERITY_ERROR, &quot;Cada descuento debe tener tipo, nombre y valor.&quot;);</span>
+<span class="nc" id="L530">                return false;</span>
+            }
+
+<span class="nc bnc" id="L533" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
+<span class="nc" id="L534">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;No se puede asignar un tipo de descuento inactivo: &quot;
+<span class="nc" id="L536">                        + fila.getTipo().getNombre());</span>
+<span class="nc" id="L537">                return false;</span>
+            }
+
+<span class="nc" id="L540">            Descuento descuento = descuentos.stream()</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">                    .filter(d -&gt; d.getNombre() != null</span>
+<span class="nc bnc" id="L542" title="All 2 branches missed.">                    &amp;&amp; d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim()))</span>
+<span class="nc" id="L543">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L544" title="All 2 branches missed.">            if (descuento == null) {</span>
+<span class="nc" id="L545">                mensaje(FacesMessage.SEVERITY_ERROR, &quot;El descuento seleccionado no existe.&quot;);</span>
+<span class="nc" id="L546">                return false;</span>
+            }
+
+<span class="nc bnc" id="L549" title="All 2 branches missed.">            if (descuento.getIdTipoDescuento() == null</span>
+<span class="nc bnc" id="L550" title="All 2 branches missed.">                    || !fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc" id="L551">                            descuento.getIdTipoDescuento().getIdTipoDescuento())) {</span>
+<span class="nc" id="L552">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;El descuento seleccionado no corresponde al tipo indicado.&quot;);
+<span class="nc" id="L554">                return false;</span>
+            }
+
+<span class="nc bnc" id="L557" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(descuento.getIdTipoDescuento().getActivo())) {</span>
+<span class="nc" id="L558">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;No se puede asignar un descuento cuyo tipo está inactivo: &quot;
+<span class="nc" id="L560">                        + descuento.getNombre());</span>
+<span class="nc" id="L561">                return false;</span>
+            }
+
+<span class="nc" id="L564">            Integer maximo = fila.getTipo().getDescuentoMaximo();</span>
+
+<span class="nc bnc" id="L566" title="All 2 branches missed.">            if (maximo == null) {</span>
+<span class="nc" id="L567">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;El tipo de descuento seleccionado no tiene un máximo definido.&quot;);
+<span class="nc" id="L569">                return false;</span>
+            }
+
+<span class="nc bnc" id="L572" title="All 2 branches missed.">            if (fila.getValor() &gt; maximo) {</span>
+<span class="nc" id="L573">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L574">                        &quot;El valor del descuento \&quot;&quot; + descuento.getNombre()</span>
+                        + &quot;\&quot; no puede ser mayor a &quot; + maximo + &quot;%.&quot;);
+<span class="nc" id="L576">                return false;</span>
+            }
+<span class="nc" id="L578">        }</span>
+
+<span class="nc bnc" id="L580" title="All 2 branches missed.">        for (CaracteristicaFila fila : filasCaracteristicas) {</span>
+<span class="nc bnc" id="L581" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getCaracteristicaNombre() == null</span>
+<span class="nc bnc" id="L582" title="All 2 branches missed.">                    || fila.getCaracteristicaNombre().isBlank()) {</span>
+<span class="nc" id="L583">                continue;</span>
+            }
+
+<span class="nc" id="L586">            Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());</span>
+<span class="nc bnc" id="L587" title="All 2 branches missed.">            if (caracteristica == null) {</span>
+<span class="nc" id="L588">                mensaje(FacesMessage.SEVERITY_ERROR, &quot;La característica seleccionada no existe.&quot;);</span>
+<span class="nc" id="L589">                return false;</span>
+            }
+
+<span class="nc bnc" id="L592" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(caracteristica.getActivo())) {</span>
+<span class="nc" id="L593">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;No se puede asignar una característica inactiva: &quot;
+<span class="nc" id="L595">                        + caracteristica.getNombre());</span>
+<span class="nc" id="L596">                return false;</span>
+            }
+
+<span class="nc bnc" id="L599" title="All 2 branches missed.">            if (caracteristica.getIdTipoCaracteristica() != null</span>
+<span class="nc" id="L600">                    &amp;&amp; !fila.getTipo().getIdTipoCaracteristica()</span>
+<span class="nc bnc" id="L601" title="All 2 branches missed.">                            .equals(caracteristica.getIdTipoCaracteristica().getIdTipoCaracteristica())) {</span>
+<span class="nc" id="L602">                mensaje(FacesMessage.SEVERITY_ERROR, &quot;El tipo no corresponde a la característica seleccionada.&quot;);</span>
+<span class="nc" id="L603">                return false;</span>
+            }
+
+<span class="nc bnc" id="L606" title="All 2 branches missed.">            String valor = fila.getValor() == null ? &quot;&quot; : fila.getValor().trim();</span>
+<span class="nc" id="L607">            String expresionRegular = fila.getTipo().getExpresionRegular();</span>
+
+<span class="nc bnc" id="L609" title="All 4 branches missed.">            if (expresionRegular != null &amp;&amp; !expresionRegular.isBlank()) {</span>
+                try {
+<span class="nc bnc" id="L611" title="All 2 branches missed.">                    if (!Pattern.matches(expresionRegular, valor)) {</span>
+<span class="nc" id="L612">                        mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                                &quot;El valor \&quot;&quot; + valor + &quot;\&quot; de la característica \&quot;&quot;
+<span class="nc" id="L614">                                + caracteristica.getNombre()</span>
+                                + &quot;\&quot; no cumple con la expresión regular del tipo \&quot;&quot;
+<span class="nc" id="L616">                                + fila.getTipo().getNombre() + &quot;\&quot;.&quot;);</span>
+<span class="nc" id="L617">                        return false;</span>
+                    }
+<span class="nc" id="L619">                } catch (PatternSyntaxException ex) {</span>
+<span class="nc" id="L620">                    mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                            &quot;La expresión regular del tipo de característica \&quot;&quot;
+<span class="nc" id="L622">                            + fila.getTipo().getNombre() + &quot;\&quot; no es válida.&quot;);</span>
+<span class="nc" id="L623">                    return false;</span>
+<span class="nc" id="L624">                }</span>
+            }
+<span class="nc" id="L626">        }</span>
+
+<span class="nc bnc" id="L628" title="All 2 branches missed.">        for (TipoProductoFila fila : filasTiposProducto) {</span>
+<span class="nc bnc" id="L629" title="All 2 branches missed.">            if (fila.getTipo() == null) {</span>
+<span class="nc" id="L630">                continue;</span>
+            }
+<span class="nc bnc" id="L632" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
+<span class="nc" id="L633">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                        &quot;No se puede asignar un tipo de producto inactivo: &quot;
+<span class="nc" id="L635">                        + fila.getTipo().getNombre());</span>
+<span class="nc" id="L636">                return false;</span>
+            }
+<span class="nc" id="L638">        }</span>
+<span class="nc" id="L639">        return true;</span>
+    }
+
+    private void resolverRelacionesIngresadas() {
+<span class="nc bnc" id="L643" title="All 2 branches missed.">        for (CaracteristicaFila fila : filasCaracteristicas) {</span>
+<span class="nc bnc" id="L644" title="All 4 branches missed.">            if (fila.getCaracteristicaNombre() == null || fila.getCaracteristicaNombre().isBlank()) {</span>
+<span class="nc" id="L645">                continue;</span>
+            }
+
+<span class="nc" id="L648">            TipoCaracteristica tipo = fila.getTipo();</span>
+<span class="nc" id="L649">            Caracteristica caracteristica = buscarCaracteristica(fila.getCaracteristicaNombre());</span>
+
+<span class="nc bnc" id="L651" title="All 2 branches missed.">            if (caracteristica == null) {</span>
+<span class="nc" id="L652">                caracteristica = new Caracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L653">                caracteristica.setNombre(fila.getCaracteristicaNombre().trim());</span>
+<span class="nc" id="L654">                caracteristica.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L655">                caracteristica.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L656">                caracteristica.setIdTipoCaracteristica(tipo);</span>
+<span class="nc" id="L657">                caracteristicaRepository.crear(caracteristica);</span>
+            }
+
+<span class="nc" id="L660">            fila.setTipo(tipo);</span>
+<span class="nc" id="L661">            fila.setCaracteristica(caracteristica);</span>
+<span class="nc" id="L662">        }</span>
+
+<span class="nc bnc" id="L664" title="All 2 branches missed.">        for (TipoProductoFila fila : filasTiposProducto) {</span>
+<span class="nc bnc" id="L665" title="All 4 branches missed.">            if (fila.getTipoNombre() == null || fila.getTipoNombre().isBlank()) {</span>
+<span class="nc" id="L666">                continue;</span>
+            }
+
+<span class="nc" id="L669">            TipoProducto tipo = tipoProductoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L670" title="All 4 branches missed.">                    .filter(t -&gt; t.getNombre() != null &amp;&amp; t.getNombre().equalsIgnoreCase(fila.getTipoNombre().trim()))</span>
+<span class="nc" id="L671">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L672" title="All 2 branches missed.">            if (tipo == null) {</span>
+<span class="nc" id="L673">                tipo = new TipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L674">                tipo.setNombre(fila.getTipoNombre().trim());</span>
+<span class="nc" id="L675">                tipo.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L676">                tipo.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L677">                tipoProductoRepository.crear(tipo);</span>
+            }
+
+<span class="nc" id="L680">            fila.setTipo(tipo);</span>
+<span class="nc" id="L681">        }</span>
+
+<span class="nc bnc" id="L683" title="All 2 branches missed.">        for (DescuentoFila fila : filasDescuentos) {</span>
+<span class="nc bnc" id="L684" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getDescuentoNombre() == null</span>
+<span class="nc bnc" id="L685" title="All 2 branches missed.">                    || fila.getDescuentoNombre().isBlank()) {</span>
+<span class="nc" id="L686">                continue;</span>
+            }
+
+<span class="nc" id="L689">            Descuento descuento = descuentos.stream()</span>
+<span class="nc bnc" id="L690" title="All 2 branches missed.">                    .filter(d -&gt; d.getNombre() != null</span>
+<span class="nc bnc" id="L691" title="All 2 branches missed.">                    &amp;&amp; d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())</span>
+<span class="nc bnc" id="L692" title="All 2 branches missed.">                    &amp;&amp; d.getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L693" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L694" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc" id="L695">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
+<span class="nc" id="L696">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L697" title="All 2 branches missed.">            if (descuento == null) {</span>
+<span class="nc" id="L698">                descuento = new Descuento(UUID.randomUUID());</span>
+<span class="nc" id="L699">                descuento.setNombre(fila.getDescuentoNombre().trim());</span>
+<span class="nc" id="L700">                descuento.setIdTipoDescuento(fila.getTipo());</span>
+<span class="nc" id="L701">                descuentoRepository.crear(descuento);</span>
+<span class="nc" id="L702">                descuentos.add(descuento);</span>
+            }
+
+<span class="nc bnc" id="L705" title="All 2 branches missed.">            if (fila.getFechaDesde() == null) {</span>
+<span class="nc" id="L706">                fila.setFechaDesde(descuento.getFechaDesde());</span>
+            }
+
+<span class="nc bnc" id="L709" title="All 2 branches missed.">            if (fila.getFechaHasta() == null) {</span>
+<span class="nc" id="L710">                fila.setFechaHasta(descuento.getFechaHasta());</span>
+            }
+
+<span class="nc" id="L713">            fila.setDescuentoNombre(descuento.getNombre());</span>
+<span class="nc" id="L714">        }</span>
+<span class="nc" id="L715">    }</span>
+
+    private Caracteristica buscarCaracteristica(String nombre) {
+<span class="nc bnc" id="L718" title="All 4 branches missed.">        if (nombre == null || nombre.isBlank()) {</span>
+<span class="nc" id="L719">            return null;</span>
+        }
+<span class="nc" id="L721">        return caracteristicaRepository.findAll().stream()</span>
+<span class="nc bnc" id="L722" title="All 2 branches missed.">                .filter(c -&gt; c.getNombre() != null</span>
+<span class="nc bnc" id="L723" title="All 2 branches missed.">                &amp;&amp; c.getNombre().equalsIgnoreCase(nombre.trim()))</span>
+<span class="nc" id="L724">                .findFirst().orElse(null);</span>
+    }
+
+    public List&lt;Caracteristica&gt; getCaracteristicasPorTipo(TipoCaracteristica tipo) {
+<span class="nc bnc" id="L728" title="All 4 branches missed.">        if (tipo == null || tipo.getIdTipoCaracteristica() == null) {</span>
+<span class="nc" id="L729">            return new ArrayList&lt;&gt;();</span>
+        }
+
+<span class="nc" id="L732">        UUID idTipo = tipo.getIdTipoCaracteristica();</span>
+
+<span class="nc" id="L734">        return caracteristicaRepository.findAll().stream()</span>
+<span class="nc bnc" id="L735" title="All 2 branches missed.">                .filter(caracteristica -&gt; caracteristica.getIdTipoCaracteristica() != null</span>
+<span class="nc bnc" id="L736" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(</span>
+<span class="nc" id="L737">                        caracteristica.getIdTipoCaracteristica()</span>
+<span class="nc" id="L738">                                .getIdTipoCaracteristica()))</span>
+<span class="nc" id="L739">                .toList();</span>
+    }
+
+    public List&lt;Caracteristica&gt; getCaracteristicasPorTipoId(String tipoId) {
+<span class="nc bnc" id="L743" title="All 4 branches missed.">        if (tipoId == null || tipoId.isBlank()) {</span>
+<span class="nc" id="L744">            return new ArrayList&lt;&gt;();</span>
+        }
+
+<span class="nc" id="L747">        return caracteristicaRepository.findAll().stream()</span>
+<span class="nc bnc" id="L748" title="All 2 branches missed.">                .filter(caracteristica -&gt; caracteristica != null</span>
+<span class="nc bnc" id="L749" title="All 2 branches missed.">                &amp;&amp; caracteristica.getIdTipoCaracteristica() != null</span>
+<span class="nc" id="L750">                &amp;&amp; caracteristica.getIdTipoCaracteristica()</span>
+<span class="nc bnc" id="L751" title="All 2 branches missed.">                        .getIdTipoCaracteristica() != null</span>
+<span class="nc bnc" id="L752" title="All 2 branches missed.">                &amp;&amp; tipoId.equals(</span>
+<span class="nc" id="L753">                        caracteristica.getIdTipoCaracteristica()</span>
+<span class="nc" id="L754">                                .getIdTipoCaracteristica()</span>
+<span class="nc" id="L755">                                .toString()))</span>
+<span class="nc" id="L756">                .toList();</span>
+    }
+
+    public void onCambioTipoCaracteristica(CaracteristicaFila fila) {
+<span class="nc bnc" id="L760" title="All 4 branches missed.">        if (fila == null || fila.isPersistida()) {</span>
+<span class="nc" id="L761">            return;</span>
+        }
+
+<span class="nc" id="L764">        TipoCaracteristica tipo = null;</span>
+
+<span class="nc bnc" id="L766" title="All 2 branches missed.">        if (fila.getTipoId() != null) {</span>
+<span class="nc" id="L767">            tipo = tiposCaracteristica.stream()</span>
+<span class="nc bnc" id="L768" title="All 2 branches missed.">                    .filter(t -&gt; t != null</span>
+<span class="nc bnc" id="L769" title="All 2 branches missed.">                    &amp;&amp; t.getIdTipoCaracteristica() != null</span>
+<span class="nc bnc" id="L770" title="All 2 branches missed.">                    &amp;&amp; fila.getTipoId().equals(</span>
+<span class="nc" id="L771">                            t.getIdTipoCaracteristica().toString()))</span>
+<span class="nc" id="L772">                    .findFirst()</span>
+<span class="nc" id="L773">                    .orElse(null);</span>
+        }
+
+<span class="nc" id="L776">        fila.setTipo(tipo);</span>
+<span class="nc" id="L777">        fila.setCaracteristica(null);</span>
+<span class="nc" id="L778">        fila.setCaracteristicaNombre(null);</span>
+<span class="nc" id="L779">    }</span>
+
+    private TipoCaracteristica buscarTipoCaracteristicaPorNombre(String nombre) {
+<span class="nc bnc" id="L782" title="All 4 branches missed.">        if (nombre == null || nombre.isBlank()) {</span>
+<span class="nc" id="L783">            return null;</span>
+        }
+
+<span class="nc" id="L786">        return tiposCaracteristica.stream()</span>
+<span class="nc bnc" id="L787" title="All 2 branches missed.">                .filter(tipo -&gt; tipo != null</span>
+<span class="nc bnc" id="L788" title="All 2 branches missed.">                &amp;&amp; tipo.getNombre() != null</span>
+<span class="nc bnc" id="L789" title="All 2 branches missed.">                &amp;&amp; tipo.getNombre().equalsIgnoreCase(nombre.trim()))</span>
+<span class="nc" id="L790">                .findFirst()</span>
+<span class="nc" id="L791">                .orElse(null);</span>
+    }
+
+    private void sincronizarCaracteristicas(Producto producto) {
+<span class="nc bnc" id="L795" title="All 2 branches missed.">        for (CaracteristicaFila fila : filasCaracteristicas) {</span>
+<span class="nc bnc" id="L796" title="All 4 branches missed.">            if (fila.isPersistida() || fila.getCaracteristica() == null) {</span>
+<span class="nc" id="L797">                continue;</span>
+            }
+<span class="nc" id="L799">            ProductoCaracteristica relacion = new ProductoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L800">            relacion.setIdProducto(producto);</span>
+<span class="nc" id="L801">            relacion.setIdCaracteristica(fila.getCaracteristica());</span>
+<span class="nc" id="L802">            relacion.setValor(fila.getValor());</span>
+<span class="nc" id="L803">            productoCaracteristicaRepository.crear(relacion);</span>
+<span class="nc" id="L804">            fila.setPersistida(true);</span>
+<span class="nc" id="L805">        }</span>
+<span class="nc" id="L806">    }</span>
+
+    private void sincronizarTiposProducto(Producto producto) {
+<span class="nc" id="L809">        List&lt;UUID&gt; existentes = productoTipoProductoRepository.findByProducto(producto.getIdProducto()).stream()</span>
+<span class="nc bnc" id="L810" title="All 2 branches missed.">                .filter(relacion -&gt; relacion.getIdTipoProducto() != null)</span>
+<span class="nc" id="L811">                .map(relacion -&gt; relacion.getIdTipoProducto().getIdTipoProducto())</span>
+<span class="nc" id="L812">                .toList();</span>
+<span class="nc bnc" id="L813" title="All 2 branches missed.">        for (TipoProductoFila fila : filasTiposProducto) {</span>
+<span class="nc bnc" id="L814" title="All 4 branches missed.">            if (fila.isPersistida() || fila.getTipo() == null</span>
+<span class="nc bnc" id="L815" title="All 2 branches missed.">                    || existentes.contains(fila.getTipo().getIdTipoProducto())) {</span>
+<span class="nc" id="L816">                continue;</span>
+            }
+<span class="nc" id="L818">            ProductoTipoProducto relacion = new ProductoTipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L819">            relacion.setIdProducto(producto);</span>
+<span class="nc" id="L820">            relacion.setIdTipoProducto(fila.getTipo());</span>
+<span class="nc" id="L821">            productoTipoProductoRepository.crear(relacion);</span>
+<span class="nc" id="L822">            fila.setPersistida(true);</span>
+<span class="nc" id="L823">        }</span>
+<span class="nc" id="L824">    }</span>
+
+    private void sincronizarDescuentos(Producto producto) {
+<span class="nc bnc" id="L827" title="All 2 branches missed.">        for (DescuentoFila fila : filasDescuentos) {</span>
+<span class="nc bnc" id="L828" title="All 2 branches missed.">            if (fila.isPersistida()) {</span>
+<span class="nc" id="L829">                continue;</span>
+            }
+<span class="nc" id="L831">            Descuento descuento = descuentos.stream()</span>
+<span class="nc bnc" id="L832" title="All 4 branches missed.">                    .filter(d -&gt; d.getNombre() != null &amp;&amp; fila.getDescuentoNombre() != null</span>
+<span class="nc bnc" id="L833" title="All 2 branches missed.">                    &amp;&amp; d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())</span>
+<span class="nc bnc" id="L834" title="All 2 branches missed.">                    &amp;&amp; d.getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L835" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo() != null</span>
+<span class="nc bnc" id="L836" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L837" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc" id="L838">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
+<span class="nc" id="L839">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L840" title="All 2 branches missed.">            if (descuento == null) {</span>
+<span class="nc" id="L841">                throw new IllegalStateException(</span>
+                        &quot;No se pudo resolver el descuento &quot;
+<span class="nc" id="L843">                        + fila.getDescuentoNombre() + &quot;para el tipo seleccionado.&quot;);</span>
+            }
+<span class="nc" id="L845">            DescuentoProducto relacion = new DescuentoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L846">            relacion.setIdProducto(producto);</span>
+<span class="nc" id="L847">            relacion.setIdDescuento(descuento);</span>
+<span class="nc" id="L848">            relacion.setValor(fila.getValor());</span>
+<span class="nc" id="L849">            relacion.setFechaDesde(fila.getFechaDesde());</span>
+<span class="nc" id="L850">            relacion.setFechaHasta(fila.getFechaHasta());</span>
+<span class="nc" id="L851">            descuentoProductoRepository.crear(relacion);</span>
+<span class="nc" id="L852">            fila.setPersistida(true);</span>
+<span class="nc" id="L853">        }</span>
+<span class="nc" id="L854">    }</span>
+
+    public void agregarCaracteristica() {
+<span class="nc" id="L857">        filasCaracteristicas.add(new CaracteristicaFila());</span>
+<span class="nc" id="L858">    }</span>
+
+    public void quitarCaracteristica(CaracteristicaFila fila) {
+<span class="nc bnc" id="L861" title="All 4 branches missed.">        if (fila != null &amp;&amp; !fila.isPersistida()) {</span>
+<span class="nc" id="L862">            filasCaracteristicas.remove(fila);</span>
+        }
+<span class="nc" id="L864">    }</span>
+
+    public void agregarTipoProducto() {
+<span class="nc" id="L867">        filasTiposProducto.add(new TipoProductoFila());</span>
+<span class="nc" id="L868">    }</span>
+
+    public void quitarTipoProducto(TipoProductoFila fila) {
+<span class="nc bnc" id="L871" title="All 4 branches missed.">        if (fila != null &amp;&amp; !fila.isPersistida()) {</span>
+<span class="nc" id="L872">            filasTiposProducto.remove(fila);</span>
+        }
+<span class="nc" id="L874">    }</span>
+
+    public void agregarDescuento() {
+<span class="nc" id="L877">        filasDescuentos.add(new DescuentoFila());</span>
+<span class="nc" id="L878">    }</span>
+
+    public void onCambioTipoDescuento(DescuentoFila fila) {
+<span class="nc bnc" id="L881" title="All 4 branches missed.">        if (fila != null &amp;&amp; !fila.isPersistida()) {</span>
+<span class="nc" id="L882">            fila.setDescuentoNombre(null);</span>
+<span class="nc" id="L883">            fila.setFechaDesde(null);</span>
+<span class="nc" id="L884">            fila.setFechaHasta(null);</span>
+        }
+<span class="nc" id="L886">    }</span>
+
+    public void quitarDescuento(DescuentoFila fila) {
+<span class="nc bnc" id="L889" title="All 4 branches missed.">        if (fila != null &amp;&amp; !fila.isPersistida()) {</span>
+<span class="nc" id="L890">            filasDescuentos.remove(fila);</span>
+        }
+<span class="nc" id="L892">    }</span>
+
+    public void prepararNuevoTipoCaracteristica() {
+<span class="nc" id="L895">        nuevoTipoCaracteristica = new TipoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L896">        nuevoTipoCaracteristica.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L897">        nuevoTipoCaracteristica.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L898">    }</span>
+
+    public void guardarTipoCaracteristica() {
+<span class="nc bnc" id="L901" title="All 4 branches missed.">        if (nuevoTipoCaracteristica == null || nuevoTipoCaracteristica.getNombre() == null</span>
+<span class="nc bnc" id="L902" title="All 2 branches missed.">                || nuevoTipoCaracteristica.getNombre().isBlank()) {</span>
+<span class="nc" id="L903">            mensaje(FacesMessage.SEVERITY_ERROR, &quot;El nombre del tipo de característica es obligatorio.&quot;);</span>
+<span class="nc" id="L904">            return;</span>
+        }
+<span class="nc" id="L906">        tipoCaracteristicaRepository.crear(nuevoTipoCaracteristica);</span>
+<span class="nc" id="L907">        cargarListasRelacionadas();</span>
+<span class="nc" id="L908">        mensaje(FacesMessage.SEVERITY_INFO, &quot;Tipo de característica creado.&quot;);</span>
+<span class="nc" id="L909">    }</span>
+
+    public void prepararNuevoTipoDescuento() {
+<span class="nc" id="L912">        nuevoTipoDescuento = new sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento(UUID.randomUUID());</span>
+<span class="nc" id="L913">        nuevoTipoDescuento.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L914">        nuevoTipoDescuento.setDescuentoMaximo(90);</span>
+<span class="nc" id="L915">        nuevoTipoDescuento.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L916">    }</span>
+
+    public void prepararNuevoDescuento() {
+<span class="nc" id="L919">        nuevoDescuento = new Descuento(UUID.randomUUID());</span>
+<span class="nc" id="L920">        nuevoDescuento.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L921">    }</span>
+
+    public void guardarDescuento() {
+<span class="nc bnc" id="L924" title="All 4 branches missed.">        if (nuevoDescuento == null || nuevoDescuento.getNombre() == null</span>
+<span class="nc bnc" id="L925" title="All 2 branches missed.">                || nuevoDescuento.getNombre().isBlank()</span>
+<span class="nc bnc" id="L926" title="All 2 branches missed.">                || nuevoDescuento.getIdTipoDescuento() == null</span>
+<span class="nc bnc" id="L927" title="All 2 branches missed.">                || nuevoDescuento.getFechaDesde() == null) {</span>
+<span class="nc" id="L928">            mensaje(FacesMessage.SEVERITY_ERROR, &quot;Complete tipo, nombre y fecha inicial del descuento.&quot;);</span>
+<span class="nc" id="L929">            return;</span>
+        }
+<span class="nc bnc" id="L931" title="All 2 branches missed.">        if (nuevoDescuento.getFechaHasta() != null</span>
+<span class="nc bnc" id="L932" title="All 2 branches missed.">                &amp;&amp; nuevoDescuento.getFechaHasta().before(nuevoDescuento.getFechaDesde())) {</span>
+<span class="nc" id="L933">            mensaje(FacesMessage.SEVERITY_ERROR, &quot;La fecha final no puede ser anterior a la fecha inicial.&quot;);</span>
+<span class="nc" id="L934">            return;</span>
+        }
+<span class="nc bnc" id="L936" title="All 2 branches missed.">        if (!Boolean.TRUE.equals(nuevoDescuento.getIdTipoDescuento().getActivo())) {</span>
+<span class="nc" id="L937">            mensaje(FacesMessage.SEVERITY_ERROR,</span>
+                    &quot;No se puede crear un descuento con un tipo de descuento inactivo: &quot;
+<span class="nc" id="L939">                    + nuevoDescuento.getIdTipoDescuento().getNombre());</span>
+<span class="nc" id="L940">            return;</span>
+        }
+<span class="nc" id="L942">        descuentoRepository.crear(nuevoDescuento);</span>
+<span class="nc" id="L943">        descuentos.add(nuevoDescuento);</span>
+<span class="nc" id="L944">        DescuentoFila fila = new DescuentoFila();</span>
+<span class="nc" id="L945">        fila.setTipo(nuevoDescuento.getIdTipoDescuento());</span>
+<span class="nc" id="L946">        fila.setDescuentoNombre(nuevoDescuento.getNombre());</span>
+<span class="nc" id="L947">        fila.setFechaDesde(nuevoDescuento.getFechaDesde());</span>
+<span class="nc" id="L948">        fila.setFechaHasta(nuevoDescuento.getFechaHasta());</span>
+<span class="nc" id="L949">        filasDescuentos.add(fila);</span>
+<span class="nc" id="L950">        mensaje(FacesMessage.SEVERITY_INFO, &quot;Descuento creado.&quot;);</span>
+<span class="nc" id="L951">    }</span>
+
+    public void guardarTipoDescuento() {
+<span class="nc bnc" id="L954" title="All 4 branches missed.">        if (nuevoTipoDescuento == null || nuevoTipoDescuento.getNombre() == null</span>
+<span class="nc bnc" id="L955" title="All 2 branches missed.">                || nuevoTipoDescuento.getNombre().isBlank()) {</span>
+<span class="nc" id="L956">            mensaje(FacesMessage.SEVERITY_ERROR, &quot;El nombre del tipo de descuento es obligatorio.&quot;);</span>
+<span class="nc" id="L957">            return;</span>
+        }
+<span class="nc" id="L959">        tipoDescuentoRepository.crear(nuevoTipoDescuento);</span>
+<span class="nc" id="L960">        tiposDescuento.add(nuevoTipoDescuento);</span>
+<span class="nc" id="L961">        mensaje(FacesMessage.SEVERITY_INFO, &quot;Tipo de descuento creado.&quot;);</span>
+<span class="nc" id="L962">    }</span>
+
+    private void mensaje(FacesMessage.Severity severity, String texto) {
+<span class="nc" id="L965">        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, texto, null));</span>
+<span class="nc" id="L966">    }</span>
+
+    public List&lt;Caracteristica&gt; getCaracteristicas() {
+<span class="nc" id="L969">        return caracteristicas;</span>
+    }
+
+    public List&lt;TipoCaracteristica&gt; getTiposCaracteristica() {
+<span class="nc" id="L973">        return tiposCaracteristica;</span>
+    }
+
+    public List&lt;TipoProducto&gt; getTiposProducto() {
+<span class="nc" id="L977">        return tiposProducto;</span>
+    }
+
+    public List&lt;CaracteristicaFila&gt; getFilasCaracteristicas() {
+<span class="nc" id="L981">        return filasCaracteristicas;</span>
+    }
+
+    public List&lt;TipoProductoFila&gt; getFilasTiposProducto() {
+<span class="nc" id="L985">        return filasTiposProducto;</span>
+    }
+
+    public TipoCaracteristica getNuevoTipoCaracteristica() {
+<span class="nc" id="L989">        return nuevoTipoCaracteristica;</span>
+    }
+
+    public void setNuevoTipoCaracteristica(TipoCaracteristica nuevoTipoCaracteristica) {
+<span class="nc" id="L993">        this.nuevoTipoCaracteristica = nuevoTipoCaracteristica;</span>
+<span class="nc" id="L994">    }</span>
+
+    public List&lt;Descuento&gt; getDescuentos() {
+<span class="nc" id="L997">        return descuentos;</span>
+    }
+
+    public List&lt;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento&gt; getTiposDescuento() {
+<span class="nc" id="L1001">        return tiposDescuento;</span>
+    }
+
+    public List&lt;DescuentoFila&gt; getFilasDescuentos() {
+<span class="nc" id="L1005">        return filasDescuentos;</span>
+    }
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L1009">        return soloLectura;</span>
+    }
+
+    public sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento getNuevoTipoDescuento() {
+<span class="nc" id="L1013">        return nuevoTipoDescuento;</span>
+    }
+
+    public Descuento getNuevoDescuento() {
+<span class="nc" id="L1017">        return nuevoDescuento;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L1021" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L1022">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
+                    new ColumnaTabla(&quot;precioSugerido&quot;, &quot;Precio sugerido&quot;, FORMATO_COLUMNA.CURRENCY),
+                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
+                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));
+        }
+<span class="nc" id="L1028">        return columnas;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L1032" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L1033">            return &quot;Detalle del producto&quot;;</span>
+        }
+<span class="nc bnc" id="L1035" title="All 2 branches missed.">        return isEditando() ? &quot;Editar producto&quot; : &quot;Nuevo producto&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

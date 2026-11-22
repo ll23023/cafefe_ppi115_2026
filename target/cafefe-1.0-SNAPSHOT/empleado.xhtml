@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/resources/templates/basic.xhtml"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core">
+
+    <ui:define name="page_title">Cafefe - Empleados</ui:define>
+    <ui:define name="header_title">Empleados</ui:define>
+
+    <ui:define name="main_form">
+        <p:growl id="growl" showDetail="false" />
+
+        <section class="main_form">
+            <h:form id="frmEmpleado" styleClass="form_grid">
+
+                <!-- El título va dentro del form para que se actualice con :frmEmpleado -->
+                <h2 style="grid-column: 1 / -1;">#{empleadoModel.tituloFormulario}</h2>
+
+                <div class="custom_input">
+                    <h:outputLabel for="nombre" value="Nombres:" />
+                    <p:inputText id="nombre"
+                                 value="#{empleadoModel.registro.nombre}"
+                                 required="true"
+                                 maxlength="100"
+                                 disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="nombre" />
+                </div>
+
+                <div class="custom_input">
+                    <h:outputLabel for="apellido" value="Apellidos:" />
+                    <p:inputText id="apellido"
+                                 value="#{empleadoModel.registro.apellido}"
+                                 required="true"
+                                 maxlength="100"
+                                 disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="apellido" />
+                </div>
+
+                <div class="custom_input">
+                    <h:outputLabel for="activo" value="Estado:" />
+                    <p:selectBooleanCheckbox id="activo"
+                                             value="#{empleadoModel.registro.activo}"
+                                             itemLabel="Activo"
+                                             disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="activo" />
+                </div>
+
+                <div class="custom_input input_tarea">
+                    <h:outputLabel for="comentarios" value="Comentarios:" />
+                    <p:inputTextarea id="comentarios"
+                                     value="#{empleadoModel.registro.comentarios}"
+                                     rows="2"
+                                     disabled="#{empleadoModel.soloLectura}" />
+                    <p:message for="comentarios" />
+                </div>
+
+                <div class="form_buttons">
+                    <p:commandButton value="#{empleadoModel.editando ? 'Guardar edición' : 'Guardar'}"
+                                     action="#{empleadoModel.btnGuardarHandler}"
+                                     process="@form"
+                                     update=":frmEmpleado :frmRoles :frmLista :growl"
+                                     styleClass="btn btn-primary"
+                                     rendered="#{!empleadoModel.soloLectura}" />
+                    <p:commandButton value="#{empleadoModel.soloLectura ? 'Nuevo' : (empleadoModel.editando ? 'Cancelar' : 'Nuevo')}"
+                                     action="#{empleadoModel.cancelar}"
+                                     process="@this"
+                                     resetValues="true"
+                                     update=":frmEmpleado :frmRoles :frmLista :growl"
+                                     styleClass="btn btn-secondary" />
+                </div>
+            </h:form>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_data">
+        <section class="item_sublist">
+            <h:form id="frmRoles">
+                <div class="item_sublist_header">
+                    <h2>Roles</h2>
+                    <p:commandButton icon="pi pi-plus"
+                                     title="Agregar rol"
+                                     action="#{empleadoModel.agregarFila}"
+                                     process="@this tblRoles"
+                                     update="tblRoles"
+                                     disabled="#{!empleadoModel.puedeAgregarRoles}" />
+                </div>
+
+                <p:dataTable id="tblRoles"
+                             var="fila"
+                             value="#{empleadoModel.filas}"
+                             emptyMessage="Sin roles asignados">
+                    <p:column headerText="">
+                        <p:selectOneMenu value="#{fila.nombre}"
+                                         editable="true"
+                                         title="Busque un rol o escriba uno nuevo"
+                                          filter="true"
+                                         filterMatchMode="contains"
+                                         filterNormalize="true"
+                                         disabled="#{fila.existente or !empleadoModel.puedeAgregarRoles}">
+                            <p:ajax event="change" process="@this" update="@none" />
+                            <f:selectItems value="#{empleadoModel.roles}" var="r"
+                                           itemValue="#{r.nombre}"
+                                           itemLabel="#{r.nombre}"
+                                           itemDisabled="#{!r.activo}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-minus"
+                                         title="Quitar rol"
+                                         action="#{empleadoModel.quitarFila(fila)}"
+                                         process="@this tblRoles"
+                                         update="tblRoles"
+                                         disabled="#{fila.existente or !empleadoModel.puedeAgregarRoles}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </section>
+    </ui:define>
+
+    <ui:define name="main_list">
+        <h:form id="frmLista">
+            <article class="main_item_list">
+                <h2>Lista de empleados</h2>
+                <p:dataTable id="tblEmpleados"
+                             var="emp"
+                             value="#{empleadoModel.registros}"
+                             rowKey="#{emp.idEmpleado}"
+                             selection="#{empleadoModel.seleccion}"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="10"
+                             emptyMessage="No hay registros"
+                             styleClass="tabla">
+                    <p:ajax event="rowSelect"
+                            listener="#{empleadoModel.onSeleccionar}"
+                            update=":frmEmpleado :frmRoles" />
+
+                    <p:columns value="#{empleadoModel.columnas}" var="column"
+                               headerText="#{column.header}">
+                        #{column.getValue(emp)}
+                    </p:columns>
+
+                    <p:column headerText="Acciones" styleClass="col_acciones">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         action="#{empleadoModel.editar(emp)}"
+                                         process="@this"
+                                         update=":frmEmpleado :frmRoles :frmLista"
+                                         styleClass="btn btn-edit" />
+                        &#160;
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         action="#{empleadoModel.eliminar(emp)}"
+                                         process="@this"
+                                         update=":frmEmpleado :frmRoles :frmLista :growl"
+                                         onclick="return confirm('¿Eliminar este registro?');"
+                                         styleClass="btn btn-danger" />
+                    </p:column>
+                </p:dataTable>
+            </article>
+        </h:form>
+    </ui:define>
+</ui:composition>

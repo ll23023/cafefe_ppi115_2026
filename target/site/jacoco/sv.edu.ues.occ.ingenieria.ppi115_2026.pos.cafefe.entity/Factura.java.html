@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Factura.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">Factura.java</span></div><h1>Factura.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;factura&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Factura.findAll&quot;, query = &quot;SELECT f FROM Factura f&quot;),
+    @NamedQuery(name = &quot;Factura.findByCliente&quot;, query = &quot;SELECT f FROM Factura f WHERE f.cliente = :cliente&quot;),
+    @NamedQuery(name = &quot;Factura.findByFechaFacturacion&quot;, query = &quot;SELECT f FROM Factura f WHERE f.fechaFacturacion = :fechaFacturacion&quot;),
+    @NamedQuery(name = &quot;Factura.findByEstado&quot;, query = &quot;SELECT f FROM Factura f WHERE f.estado = :estado&quot;),
+    @NamedQuery(name = &quot;Factura.findByObservaciones&quot;, query = &quot;SELECT f FROM Factura f WHERE f.observaciones = :observaciones&quot;)})
+public class Factura implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_factura&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idFactura;
+    @Size(max = 155)
+    @Column(name = &quot;cliente&quot;, length = 155)
+    private String cliente;
+    @Column(name = &quot;fecha_facturacion&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaFacturacion;
+    @Size(max = 20)
+    @Column(name = &quot;estado&quot;, length = 20)
+    private String estado;
+    @Size(max = 2147483647)
+    @Column(name = &quot;observaciones&quot;, length = 2147483647)
+    private String observaciones;
+    @OneToMany(mappedBy = &quot;idFactura&quot;)
+    private List&lt;Pago&gt; pagoList;
+    @OneToMany(mappedBy = &quot;idFactura&quot;)
+    private List&lt;FacturaOrdenProducto&gt; facturaOrdenProductoList;
+    @JoinColumn(name = &quot;id_caja&quot;, referencedColumnName = &quot;id_caja&quot;)
+    @ManyToOne
+    private Caja idCaja;
+    @JoinColumn(name = &quot;id_empleado_rol&quot;, referencedColumnName = &quot;id_empleado_rol&quot;)
+    @ManyToOne
+    private EmpleadoRol idEmpleadoRol;
+
+<span class="nc" id="L67">    public Factura() {</span>
+<span class="nc" id="L68">    }</span>
+
+<span class="nc" id="L70">    public Factura(UUID idFactura) {</span>
+<span class="nc" id="L71">        this.idFactura = idFactura;</span>
+<span class="nc" id="L72">    }</span>
+
+    public UUID getIdFactura() {
+<span class="nc" id="L75">        return idFactura;</span>
+    }
+
+    public void setIdFactura(UUID idFactura) {
+<span class="nc" id="L79">        this.idFactura = idFactura;</span>
+<span class="nc" id="L80">    }</span>
+
+    public String getCliente() {
+<span class="nc" id="L83">        return cliente;</span>
+    }
+
+    public void setCliente(String cliente) {
+<span class="nc" id="L87">        this.cliente = cliente;</span>
+<span class="nc" id="L88">    }</span>
+
+    public Date getFechaFacturacion() {
+<span class="nc" id="L91">        return fechaFacturacion;</span>
+    }
+
+    public void setFechaFacturacion(Date fechaFacturacion) {
+<span class="nc" id="L95">        this.fechaFacturacion = fechaFacturacion;</span>
+<span class="nc" id="L96">    }</span>
+
+    public String getEstado() {
+<span class="nc" id="L99">        return estado;</span>
+    }
+
+    public void setEstado(String estado) {
+<span class="nc" id="L103">        this.estado = estado;</span>
+<span class="nc" id="L104">    }</span>
+
+    public String getObservaciones() {
+<span class="nc" id="L107">        return observaciones;</span>
+    }
+
+    public void setObservaciones(String observaciones) {
+<span class="nc" id="L111">        this.observaciones = observaciones;</span>
+<span class="nc" id="L112">    }</span>
+
+    public List&lt;Pago&gt; getPagoList() {
+<span class="nc" id="L115">        return pagoList;</span>
+    }
+
+    public void setPagoList(List&lt;Pago&gt; pagoList) {
+<span class="nc" id="L119">        this.pagoList = pagoList;</span>
+<span class="nc" id="L120">    }</span>
+
+    public List&lt;FacturaOrdenProducto&gt; getFacturaOrdenProductoList() {
+<span class="nc" id="L123">        return facturaOrdenProductoList;</span>
+    }
+
+    public void setFacturaOrdenProductoList(List&lt;FacturaOrdenProducto&gt; facturaOrdenProductoList) {
+<span class="nc" id="L127">        this.facturaOrdenProductoList = facturaOrdenProductoList;</span>
+<span class="nc" id="L128">    }</span>
+
+    public Caja getIdCaja() {
+<span class="nc" id="L131">        return idCaja;</span>
+    }
+
+    public void setIdCaja(Caja idCaja) {
+<span class="nc" id="L135">        this.idCaja = idCaja;</span>
+<span class="nc" id="L136">    }</span>
+
+    public EmpleadoRol getIdEmpleadoRol() {
+<span class="nc" id="L139">        return idEmpleadoRol;</span>
+    }
+
+    public void setIdEmpleadoRol(EmpleadoRol idEmpleadoRol) {
+<span class="nc" id="L143">        this.idEmpleadoRol = idEmpleadoRol;</span>
+<span class="nc" id="L144">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L148">        int hash = 0;</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        hash += (idFactura != null ? idFactura.hashCode() : 0);</span>
+<span class="nc" id="L150">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (!(object instanceof Factura)) {</span>
+<span class="nc" id="L157">            return false;</span>
+        }
+<span class="nc" id="L159">        Factura other = (Factura) object;</span>
+<span class="nc bnc" id="L160" title="All 8 branches missed.">        if ((this.idFactura == null &amp;&amp; other.idFactura != null) || (this.idFactura != null &amp;&amp; !this.idFactura.equals(other.idFactura))) {</span>
+<span class="nc" id="L161">            return false;</span>
+        }
+<span class="nc" id="L163">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L168">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura[ idFactura=&quot; + idFactura + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

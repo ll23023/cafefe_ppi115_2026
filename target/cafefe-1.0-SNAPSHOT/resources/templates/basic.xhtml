@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:p="primefaces" xmlns:ui="jakarta.faces.facelets">
+
+<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8" locale="#{sesionUsuario.locale}">
+    <h:head>
+        <h:outputStylesheet library="css" name="main.css" />
+        <!-- Librería de FontAwesome para íconos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+        <title>
+            <ui:insert name="page_title">
+                Título por defecto
+            </ui:insert>
+        </title>
+    </h:head>
+
+    <h:body class="ui-g">
+        <header class="ui-g-12">
+            <div class="logo">
+                <p:graphicImage name="/assets/images/logo.png" alt="Logo de la cafetería" />
+                &thinsp;
+                &thinsp;
+
+                <b class="app_name">
+                    CAFEFE
+                </b>
+            </div>
+
+            <div class="main_header">
+                <h2>
+                    <ui:insert name="header_title">
+                        Título por defecto
+                    </ui:insert>
+                </h2>
+
+                <!-- Selector de idioma: está en la plantilla, así que sale en TODAS las vistas -->
+                <h:form id="frmIdioma" styleClass="selector_idioma">
+                    <h:selectOneMenu id="cbxIdioma"
+                                     value="#{sesionUsuario.localidad}"
+                                     title="#{msg['crud.idioma']}"
+                                     onchange="this.form.submit()">
+                        <f:selectItems value="#{sesionUsuario.listaIdiomas}" />
+                    </h:selectOneMenu>
+                </h:form>
+            </div>
+        </header>
+
+        <aside class="ui-g-2 side_menu">
+            <nav>
+                <div class="menu_group">
+                    <a href="/Cafefe/producto.jsf" class="menu_item">
+                        &thinsp;
+                        <i class="fa-solid fa-barcode"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Productos
+                    </a>
+
+                    <a href="/Cafefe/tipo_producto.jsf" class="menu_item">
+                        &thinsp;
+                        <i class="fa-solid fa-tags"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Tipos de productos
+                    </a>
+
+                    <a href="/Cafefe/caracteristica.jsf" class="menu_item">
+                        &thinsp;
+                        <i class="fa-solid fa-box"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Características
+                    </a>
+
+                    <a href="/Cafefe/tipo_caracteristica.jsf" class="menu_item">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Tipos de características
+                    </a>
+                </div>
+
+                <div class="menu_group">
+                    <a href="/Cafefe/descuento.jsf" class="menu_item">
+                        &thinsp;
+                        <i class="fa-solid fa-percent"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Descuentos
+                    </a>
+
+                    <a href="/Cafefe/tipo_descuento.jsf" class="menu_item">
+                        <i class="fa-solid fa-list-ul"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Tipos de descuentos
+                    </a>
+
+                    <a href="/Cafefe/orden.jsf" class="menu_item">
+                        &thinsp;
+                        <i class="fa-solid fa-receipt"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Orden
+                    </a>
+                </div>
+
+                <div class="menu_group group_em">
+                    <a href="/Cafefe/empleado.jsf" class="menu_item">
+                        <i class="fa-solid fa-users"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Empleados
+                    </a>
+
+                    <a href="/Cafefe/rol.jsf" class="menu_item">
+                        <i class="fa-solid fa-users-gear"></i>
+                        &thinsp;
+                        &thinsp;
+                        &thinsp;
+                        Roles
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="ui-g-10">
+            <section class="ui-g-10 work_area">
+                <article class="ui-g-5 card card_form">
+                    <!-- Siempre agregar el H2 -->
+                    <ui:insert name="main_form">
+                        <h2>Formulario</h2>
+                    </ui:insert>
+                </article>
+
+                <article class="ui-g-5 card card_data">
+                    <!-- Siempre agregar el H2 -->
+                    <ui:insert name="main_data">
+                        <h2>Información relacionada del elemento</h2>
+                    </ui:insert>
+                </article>
+            </section>
+
+            <aside class="ui-g-7 card card_list">
+                <!-- Siempre agregar el H2 -->
+                <ui:insert name="main_list">
+                    <h2>Lista de elementos</h2>
+                </ui:insert>
+            </aside>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Todos los derechos reservados</p>
+        </footer>
+
+        <!-- Traductor de botones: cambia SOLO el texto de los botones (y su tooltip),
+             sin tocar las vistas. Clave = texto en español, valor = traducción del bundle.
+             Si todas tus vistas usan btnsForm/btnsTabla, podés borrar este bloque. -->
+        <script type="text/javascript">
+        //<![CDATA[
+        (function () {
+            var T = {
+                "Guardar edición": "#{msg['crud.guardarEdicion']}",
+                "Guardar":         "#{msg['crud.guardar']}",
+                "Nuevo":           "#{msg['crud.nuevo']}",
+                "Cancelar":        "#{msg['crud.cancelar']}",
+                "Editar":          "#{msg['crud.editar']}",
+                "Eliminar":        "#{msg['crud.eliminar']}",
+                "Actualizar":      "#{msg['crud.actualizar']}",
+                "Buscar":          "#{msg['crud.buscar']}"
+            };
+
+            function traducir() {
+                observer.disconnect();
+                document.querySelectorAll('button, input[type="submit"], input[type="button"]').forEach(function (b) {
+                    b.querySelectorAll('.ui-button-text').forEach(function (sp) {
+                        var k = sp.textContent.trim();
+                        if (T[k] && T[k] !== k) { sp.textContent = T[k]; }
+                    });
+                    if (b.value && T[b.value] && T[b.value] !== b.value) { b.value = T[b.value]; }
+                    var t = b.getAttribute('title');
+                    if (t && T[t] && T[t] !== t) { b.setAttribute('title', T[t]); }
+                });
+                observer.observe(document.body, {childList: true, subtree: true});
+            }
+
+            var observer = new MutationObserver(traducir);
+            document.addEventListener('DOMContentLoaded', traducir);
+        })();
+        //]]>
+        </script>
+    </h:body>
+</f:view>
+
+</html>

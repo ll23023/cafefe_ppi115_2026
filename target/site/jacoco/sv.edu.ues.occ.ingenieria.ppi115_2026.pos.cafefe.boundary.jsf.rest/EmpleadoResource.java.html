@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpleadoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">EmpleadoResource.java</span></div><h1>EmpleadoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.ResponseHeaders;
+import jakarta.persistence.PersistenceException;
+
+/**
+ * 
+ * @author mil
+ */
+@Path(&quot;empleado&quot;)
+<span class="nc" id="L46">public class EmpleadoResource implements Serializable {</span>
+
+<span class="nc" id="L48">    private static final Logger LOG = Logger.getLogger(EmpleadoResource.class.getName());</span>
+
+    @Inject
+    EmpleadoRepository empleadoRepository;
+
+    @Inject
+    EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    RolRepository rolRepository;
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max) {
+        try {
+<span class="nc bnc" id="L65" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+<span class="nc" id="L66">                List&lt;Empleado&gt; empleados = empleadoRepository.findRange(first, max);</span>
+<span class="nc" id="L67">                Long total = empleadoRepository.count();</span>
+
+<span class="nc" id="L69">                return Response.ok(empleados)</span>
+<span class="nc" id="L70">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L71">                        .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L72">                        .build();</span>
+            } else {
+<span class="nc" id="L74">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L75">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(),</span>
+                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)
+<span class="nc" id="L77">                        .build();</span>
+            }
+<span class="nc" id="L79">        } catch (Exception ex) {</span>
+<span class="nc" id="L80">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L81">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L82">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L83">                    .build();</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L93">                Empleado encontrado = empleadoRepository.findById(id);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L95">                    return Response.ok(encontrado).type(MediaType.APPLICATION_JSON).build();</span>
+                }
+<span class="nc" id="L97">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L98">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;id: &quot; + id)</span>
+<span class="nc" id="L99">                        .build();</span>
+<span class="nc" id="L100">            } catch (Exception ex) {</span>
+<span class="nc" id="L101">                LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L102">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L103">                        .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L104">                        .build();</span>
+            }
+        }
+<span class="nc" id="L107">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L108">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;id: &quot; + id)</span>
+<span class="nc" id="L109">                .build();</span>
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional // Asegura que el empleado y sus roles se guarden juntos o no se guarde nada
+    public Response create(EmpleadoRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if (request == null) {</span>
+<span class="nc" id="L118">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L119">                    .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El cuerpo de la petición no puede ser nulo&quot;)</span>
+<span class="nc" id="L120">                    .build();</span>
+        }
+
+        try {
+            // Validaciones básicas
+<span class="nc bnc" id="L125" title="All 4 branches missed.">            if (request.nombre == null || request.nombre.trim().isEmpty()) {</span>
+<span class="nc" id="L126">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L127">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El nombre es obligatorio&quot;)</span>
+<span class="nc" id="L128">                        .build();</span>
+            }
+
+            // Validaciones con respecto a duplicados
+<span class="nc" id="L132">            String nombreTrim = request.nombre.trim();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            String apellidoTrim = request.apellido != null ? request.apellido.trim() : &quot;&quot;;</span>
+
+<span class="nc" id="L135">            boolean repetido = empleadoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L136" title="All 4 branches missed.">                    .anyMatch(e -&gt; e.getNombre() != null &amp;&amp; e.getApellido() != null</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                    &amp;&amp; e.getNombre().equalsIgnoreCase(nombreTrim)</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                    &amp;&amp; e.getApellido().equalsIgnoreCase(apellidoTrim));</span>
+
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            if (repetido) {</span>
+<span class="nc" id="L141">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L142">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
+                                &quot;Ya existe un empleado con ese nombre y apellido.&quot;)
+<span class="nc" id="L144">                        .build();</span>
+            }
+
+<span class="nc" id="L147">            Empleado nuevo = new Empleado(UUID.randomUUID());</span>
+<span class="nc" id="L148">            nuevo.setNombre(nombreTrim);</span>
+<span class="nc" id="L149">            nuevo.setApellido(apellidoTrim);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            nuevo.setActivo(request.activo != null ? request.activo : Boolean.TRUE);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            nuevo.setComentarios(request.comentarios != null ? request.comentarios : &quot;&quot;);</span>
+
+            // Guarda el empleado
+<span class="nc" id="L154">            empleadoRepository.crear(nuevo);</span>
+<span class="nc" id="L155">            Empleado empGuardado = empleadoRepository.findById(nuevo.getIdEmpleado());</span>
+
+            // Asigna los roles
+<span class="nc bnc" id="L158" title="All 4 branches missed.">            if (request.roles != null &amp;&amp; !request.roles.isEmpty()) {</span>
+<span class="nc" id="L159">                asignarRoles(empGuardado, request.roles, true);</span>
+            }
+
+<span class="nc" id="L162">            URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L163">                    .path(String.valueOf(nuevo.getIdEmpleado()))</span>
+<span class="nc" id="L164">                    .build();</span>
+<span class="nc" id="L165">            return Response.created(location).build(); // 201</span>
+
+<span class="nc" id="L167">        } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L168">            return Response.status(Response.Status.CONFLICT) // 409</span>
+<span class="nc" id="L169">                    .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ex.getMessage())</span>
+<span class="nc" id="L170">                    .build();</span>
+<span class="nc" id="L171">        } catch (Exception ex) {</span>
+<span class="nc" id="L172">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L173">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L174">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L175">                    .build();</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, EmpleadoRequest request) {
+<span class="nc bnc" id="L185" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L186">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L187">                    .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;ID o cuerpo nulo&quot;)</span>
+<span class="nc" id="L188">                    .build();</span>
+        }
+
+        try {
+<span class="nc" id="L192">            Empleado existente = empleadoRepository.findById(id);</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L194">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L195">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;Recurso no encontrado&quot;)</span>
+<span class="nc" id="L196">                        .build();</span>
+            }
+
+<span class="nc bnc" id="L199" title="All 4 branches missed.">            if (request.nombre == null || request.nombre.trim().isEmpty()) {</span>
+<span class="nc" id="L200">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L201">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El nombre es obligatorio&quot;)</span>
+<span class="nc" id="L202">                        .build();</span>
+            }
+
+            //Si al modificar ya tiene un rol, no se permite agregar más
+<span class="nc" id="L206">            List&lt;EmpleadoRol&gt; asignacionesActuales = obtenerAsignaciones(existente);</span>
+<span class="nc bnc" id="L207" title="All 6 branches missed.">            if (!asignacionesActuales.isEmpty() &amp;&amp; request.roles != null &amp;&amp; !request.roles.isEmpty()) {</span>
+<span class="nc" id="L208">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L209">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
+                                &quot;El empleado ya tiene un rol asignado; no se pueden agregar más.&quot;)
+<span class="nc" id="L211">                        .build();</span>
+            }
+
+<span class="nc" id="L214">            existente.setNombre(request.nombre.trim());</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            existente.setApellido(request.apellido != null ? request.apellido.trim() : &quot;&quot;);</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            existente.setActivo(request.activo != null ? request.activo : existente.getActivo());</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            existente.setComentarios(request.comentarios != null ? request.comentarios : &quot;&quot;);</span>
+
+<span class="nc" id="L219">            empleadoRepository.modificar(existente);</span>
+
+            // Si se enviaron roles nuevos y no tenía, asignarlos
+<span class="nc bnc" id="L222" title="All 4 branches missed.">            if (request.roles != null &amp;&amp; !request.roles.isEmpty()) {</span>
+<span class="nc" id="L223">                asignarRoles(existente, request.roles, true);</span>
+            }
+
+<span class="nc" id="L226">            return Response.ok(existente).build();</span>
+
+<span class="nc" id="L228">        } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L229">            return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L230">                    .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ex.getMessage())</span>
+<span class="nc" id="L231">                    .build();</span>
+<span class="nc" id="L232">        } catch (Exception ex) {</span>
+<span class="nc" id="L233">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L234">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L235">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L236">                    .build();</span>
+        }
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L245">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L246">                    .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El ID no puede ser nulo&quot;)</span>
+<span class="nc" id="L247">                    .build();</span>
+        }
+
+        try {
+<span class="nc" id="L251">            Empleado encontrado = empleadoRepository.findById(id);</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (encontrado == null) {</span>
+<span class="nc" id="L253">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L254">                        .header(ResponseHeaders.NOT_FOUND.toString(), &quot;Recurso no encontrado&quot;)</span>
+<span class="nc" id="L255">                        .build();</span>
+            }
+
+            // Eliminar roles
+<span class="nc bnc" id="L259" title="All 2 branches missed.">            for (EmpleadoRol er : obtenerAsignaciones(encontrado)) {</span>
+<span class="nc" id="L260">                empleadoRolRepository.eliminar(er);</span>
+<span class="nc" id="L261">            }</span>
+
+            // Eliminar al empleado
+<span class="nc" id="L264">            empleadoRepository.eliminar(encontrado);</span>
+
+<span class="nc" id="L266">            return Response.noContent().build(); // 204</span>
+
+<span class="nc" id="L268">        } catch (Exception ex) {</span>
+<span class="nc" id="L269">            LOG.log(Level.SEVERE, &quot;Error al eliminar empleado&quot;, ex);</span>
+
+            // Buscamos si el error es porque tiene facturas/órdenes asociadas
+<span class="nc" id="L272">            boolean esErrorDeIntegridad = false;</span>
+<span class="nc" id="L273">            Throwable causa = ex;</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">            while (causa != null) {</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">                if (causa instanceof jakarta.persistence.PersistenceException) {</span>
+<span class="nc" id="L276">                    esErrorDeIntegridad = true;</span>
+<span class="nc" id="L277">                    break;</span>
+                }
+<span class="nc" id="L279">                causa = causa.getCause();</span>
+            }
+
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (esErrorDeIntegridad) {</span>
+<span class="nc" id="L283">                return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
+<span class="nc" id="L284">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
+                                &quot;No se puede eliminar el empleado porque tiene registros asociados (facturas, órdenes, etc.).&quot;)
+<span class="nc" id="L286">                        .build();</span>
+            }
+
+<span class="nc" id="L289">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L290">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage())</span>
+<span class="nc" id="L291">                    .build();</span>
+        }
+    }
+
+    private List&lt;EmpleadoRol&gt; obtenerAsignaciones(Empleado e) {
+<span class="nc bnc" id="L296" title="All 4 branches missed.">        if (e == null || e.getIdEmpleado() == null) {</span>
+<span class="nc" id="L297">            return new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L299">        return empleadoRolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">                .filter(er -&gt; er.getIdEmpleado() != null</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">                &amp;&amp; e.getIdEmpleado().equals(er.getIdEmpleado().getIdEmpleado()))</span>
+<span class="nc" id="L302">                .toList();</span>
+    }
+
+    private void asignarRoles(Empleado emp, List&lt;String&gt; nombresRoles, boolean crearSiNoExisten) {
+<span class="nc" id="L306">        Map&lt;String, Rol&gt; rolesPorNombre = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">        for (Rol r : rolRepository.findAll()) {</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">            if (r.getNombre() != null) {</span>
+<span class="nc" id="L309">                rolesPorNombre.putIfAbsent(r.getNombre().trim().toLowerCase(Locale.ROOT), r);</span>
+            }
+<span class="nc" id="L311">        }</span>
+
+<span class="nc" id="L313">        Set&lt;String&gt; yaAsignados = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        for (EmpleadoRol er : obtenerAsignaciones(emp)) {</span>
+<span class="nc bnc" id="L315" title="All 4 branches missed.">            if (er.getIdRol() != null &amp;&amp; er.getIdRol().getNombre() != null) {</span>
+<span class="nc" id="L316">                yaAsignados.add(er.getIdRol().getNombre().trim().toLowerCase(Locale.ROOT));</span>
+            }
+<span class="nc" id="L318">        }</span>
+
+<span class="nc bnc" id="L320" title="All 2 branches missed.">        for (String nombreRol : nombresRoles) {</span>
+<span class="nc" id="L321">            String clave = nombreRol.trim().toLowerCase(Locale.ROOT);</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">            if (clave.isEmpty()) {</span>
+<span class="nc" id="L323">                continue;</span>
+            }
+
+<span class="nc bnc" id="L326" title="All 2 branches missed.">            if (yaAsignados.contains(clave)) {</span>
+<span class="nc" id="L327">                throw new IllegalArgumentException(&quot;El empleado ya tiene asignado el rol: &quot; + nombreRol);</span>
+            }
+
+<span class="nc" id="L330">            Rol rol = rolesPorNombre.get(clave);</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">            if (rol == null) {</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">                if (!crearSiNoExisten) {</span>
+<span class="nc" id="L333">                    throw new IllegalArgumentException(&quot;El rol no existe: &quot; + nombreRol);</span>
+                }
+<span class="nc" id="L335">                rol = new Rol(UUID.randomUUID());</span>
+<span class="nc" id="L336">                rol.setNombre(nombreRol.trim());</span>
+<span class="nc" id="L337">                rol.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L338">                rol.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L339">                rolRepository.crear(rol);</span>
+<span class="nc" id="L340">                rolesPorNombre.put(clave, rol);</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">            } else if (!Boolean.TRUE.equals(rol.getActivo())) {</span>
+<span class="nc" id="L342">                throw new IllegalArgumentException(&quot;No se puede asignar un rol inactivo: &quot; + rol.getNombre());</span>
+            }
+
+<span class="nc" id="L345">            EmpleadoRol er = new EmpleadoRol(UUID.randomUUID());</span>
+<span class="nc" id="L346">            er.setIdEmpleado(emp);</span>
+<span class="nc" id="L347">            er.setIdRol(rol);</span>
+<span class="nc" id="L348">            er.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L349">            er.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L350">            empleadoRolRepository.crear(er);</span>
+<span class="nc" id="L351">        }</span>
+<span class="nc" id="L352">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">ProductoResource.java</span></div><h1>ProductoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.*;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.*;
+
+/**
+ *
+ * @author mil
+ */
+@Path(&quot;producto&quot;)
+<span class="nc" id="L27">public class ProductoResource implements Serializable {</span>
+
+<span class="nc" id="L29">    private static final Logger LOG = Logger.getLogger(ProductoResource.class.getName());</span>
+
+    @Inject
+    jakarta.persistence.EntityManager em;
+    @Inject
+    ProductoRepository productoRepository;
+    @Inject
+    ProductoCaracteristicaRepository productoCaracteristicaRepository;
+    @Inject
+    ProductoTipoProductoRepository productoTipoProductoRepository;
+    @Inject
+    DescuentoProductoRepository descuentoProductoRepository;
+
+    @Inject
+    CaracteristicaRepository caracteristicaRepository;
+    @Inject
+    TipoCaracteristicaRepository tipoCaracteristicaRepository;
+    @Inject
+    TipoProductoRepository tipoProductoRepository;
+    @Inject
+    DescuentoRepository descuentoRepository;
+    @Inject
+    TipoDescuentoRepository tipoDescuentoRepository;
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findRange(@QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first, @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max) {
+        try {
+<span class="nc bnc" id="L57" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+<span class="nc" id="L58">                List&lt;Producto&gt; productos = productoRepository.findRange(first, max);</span>
+<span class="nc" id="L59">                Long total = productoRepository.count();</span>
+<span class="nc" id="L60">                return Response.ok(productos).header(ResponseHeaders.TOTAL_REGISTROS.toString(), total).build();</span>
+            }
+<span class="nc" id="L62">            return Response.status(Response.Status.BAD_REQUEST).header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;Parámetros inválidos&quot;).build();</span>
+<span class="nc" id="L63">        } catch (Exception ex) {</span>
+<span class="nc" id="L64">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L65">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage()).build();</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L75">                Producto encontrado = productoRepository.findById(id);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L77">                    return Response.ok(encontrado).build();</span>
+                }
+<span class="nc" id="L79">                return Response.status(Response.Status.NOT_FOUND).header(ResponseHeaders.NOT_FOUND.toString(), &quot;id: &quot; + id).build();</span>
+<span class="nc" id="L80">            } catch (Exception ex) {</span>
+<span class="nc" id="L81">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage()).build();</span>
+            }
+        }
+<span class="nc" id="L84">        return Response.status(Response.Status.BAD_REQUEST).header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;id nulo&quot;).build();</span>
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response create(ProductoRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L92" title="All 6 branches missed.">        if (request == null || request.nombre == null || request.nombre.trim().isEmpty()) {</span>
+<span class="nc" id="L93">            return Response.status(Response.Status.BAD_REQUEST).header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El nombre es obligatorio&quot;).build();</span>
+        }
+        try {
+<span class="nc bnc" id="L96" title="All 6 branches missed.">            if (request.precioSugerido == null || request.precioSugerido.doubleValue() &lt; 0 || request.precioSugerido.doubleValue() &gt; 50) {</span>
+<span class="nc" id="L97">                return Response.status(Response.Status.BAD_REQUEST).header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;El precio debe estar entre 0 y 50&quot;).build();</span>
+            }
+
+<span class="nc" id="L100">            Producto nuevo = new Producto(UUID.randomUUID());</span>
+<span class="nc" id="L101">            nuevo.setNombre(request.nombre.trim());</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            nuevo.setActivo(request.activo != null ? request.activo : true);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            nuevo.setComentarios(request.comentarios != null ? request.comentarios : &quot;&quot;);</span>
+<span class="nc" id="L104">            nuevo.setPrecioSugerido(request.precioSugerido);</span>
+
+<span class="nc" id="L106">            productoRepository.crear(nuevo);</span>
+
+            // Sincronizar Relaciones
+<span class="nc" id="L109">            procesarCaracteristicas(nuevo, request.caracteristicas);</span>
+<span class="nc" id="L110">            procesarTiposProducto(nuevo, request.tiposProducto);</span>
+<span class="nc" id="L111">            procesarDescuentos(nuevo, request.descuentos);</span>
+
+<span class="nc" id="L113">            URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(nuevo.getIdProducto())).build();</span>
+<span class="nc" id="L114">            return Response.created(location).build();</span>
+
+<span class="nc" id="L116">        } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L117">            return Response.status(Response.Status.CONFLICT).header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ex.getMessage()).build();</span>
+<span class="nc" id="L118">        } catch (Exception ex) {</span>
+<span class="nc" id="L119">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L120">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage()).build();</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, ProductoRequest request) {
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L131">            return Response.status(Response.Status.BAD_REQUEST).header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;Datos inválidos&quot;).build();</span>
+        }
+        try {
+<span class="nc" id="L134">            Producto existente = productoRepository.findById(id);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L136">                return Response.status(Response.Status.NOT_FOUND).build();</span>
+            }
+
+<span class="nc" id="L139">            existente.setNombre(request.nombre.trim());</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            existente.setActivo(request.activo != null ? request.activo : existente.getActivo());</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            existente.setComentarios(request.comentarios != null ? request.comentarios : &quot;&quot;);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (request.precioSugerido != null) {</span>
+<span class="nc" id="L143">                existente.setPrecioSugerido(request.precioSugerido);</span>
+            }
+
+<span class="nc" id="L146">            productoRepository.modificar(existente);</span>
+
+            // limpiar las relaciones antiguas y volver a insertar
+            // o hacer una lógica de comparación. Para simplificar, si se envia nuevas, se añaden.
+<span class="nc" id="L150">            procesarCaracteristicas(existente, request.caracteristicas);</span>
+<span class="nc" id="L151">            procesarTiposProducto(existente, request.tiposProducto);</span>
+<span class="nc" id="L152">            procesarDescuentos(existente, request.descuentos);</span>
+
+<span class="nc" id="L154">            return Response.ok(existente).build();</span>
+<span class="nc" id="L155">        } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L156">            return Response.status(Response.Status.CONFLICT).header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ex.getMessage()).build();</span>
+<span class="nc" id="L157">        } catch (Exception ex) {</span>
+<span class="nc" id="L158">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L159">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(ResponseHeaders.PROCESS_ERROR.toString(), ex.getMessage()).build();</span>
+        }
+    }
+
+    //no permite eliminar productos que tenga relacionado ya con alguna orden
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L169">            return Response.status(Response.Status.BAD_REQUEST).build();</span>
+        }
+        try {
+<span class="nc" id="L172">            Producto encontrado = productoRepository.findById(id);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if (encontrado == null) {</span>
+<span class="nc" id="L174">                return Response.status(Response.Status.NOT_FOUND).build();</span>
+            }
+
+            //Revisar asociaciones que impiden borrar ANTES de borrar nada
+<span class="nc" id="L178">            Long totalOrdenes = em.createQuery(</span>
+                    &quot;SELECT COUNT(op) FROM OrdenProducto op WHERE op.idProducto = :p&quot;, Long.class)
+<span class="nc" id="L180">                    .setParameter(&quot;p&quot;, encontrado)</span>
+<span class="nc" id="L181">                    .getSingleResult();</span>
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if (totalOrdenes &gt; 0) {</span>
+<span class="nc" id="L184">                String motivo = &quot;No se pudo eliminar el producto '&quot; + encontrado.getNombre()</span>
+                        + &quot;' porque está asociado a &quot; + totalOrdenes + &quot; orden(es).&quot;;
+<span class="nc" id="L186">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L187">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), motivo)</span>
+<span class="nc" id="L188">                        .entity(&quot;{\&quot;error\&quot;:\&quot;&quot; + motivo + &quot;\&quot;}&quot;)</span>
+<span class="nc" id="L189">                        .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L190">                        .build();</span>
+            }
+
+            //borrar dependencias y el producto
+<span class="nc" id="L194">            productoCaracteristicaRepository.findByProducto(id).forEach(productoCaracteristicaRepository::eliminar);</span>
+<span class="nc" id="L195">            productoTipoProductoRepository.findByProducto(id).forEach(productoTipoProductoRepository::eliminar);</span>
+<span class="nc" id="L196">            descuentoProductoRepository.findByProducto(id).forEach(descuentoProductoRepository::eliminar);</span>
+<span class="nc" id="L197">            productoRepository.eliminar(encontrado);</span>
+
+<span class="nc" id="L199">            return Response.noContent().build();</span>
+<span class="nc" id="L200">        } catch (Exception ex) {</span>
+<span class="nc" id="L201">            LOG.log(Level.SEVERE, &quot;Error al eliminar producto: &quot; + id, ex);</span>
+<span class="nc" id="L202">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L203">                    .header(ResponseHeaders.PROCESS_ERROR.toString(), &quot;Error interno: &quot; + ex.getMessage()).build();</span>
+        }
+    }
+
+    private void procesarCaracteristicas(Producto producto, List&lt;ProductoRequest.CaracteristicaDto&gt; dtos) {
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (dtos == null) {</span>
+<span class="nc" id="L209">            return;</span>
+        }
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        for (ProductoRequest.CaracteristicaDto dto : dtos) {</span>
+            // Buscar o crear característica
+<span class="nc" id="L213">            Caracteristica carac = caracteristicaRepository.findAll().stream()</span>
+<span class="nc bnc" id="L214" title="All 4 branches missed.">                    .filter(c -&gt; c.getNombre() != null &amp;&amp; c.getNombre().equalsIgnoreCase(dto.nombre))</span>
+<span class="nc" id="L215">                    .findFirst().orElse(null);</span>
+
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (carac == null) {</span>
+<span class="nc" id="L218">                carac = new Caracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L219">                carac.setNombre(dto.nombre);</span>
+<span class="nc" id="L220">                carac.setActivo(true);</span>
+<span class="nc" id="L221">                carac.setObservaciones(&quot;&quot;);</span>
+
+                // Buscar el tipo
+<span class="nc" id="L224">                TipoCaracteristica tipo = tipoCaracteristicaRepository.findAll().stream()</span>
+<span class="nc bnc" id="L225" title="All 4 branches missed.">                        .filter(t -&gt; t.getNombre() != null &amp;&amp; t.getNombre().equalsIgnoreCase(dto.tipo))</span>
+<span class="nc" id="L226">                        .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">                if (tipo == null) {</span>
+<span class="nc" id="L228">                    throw new IllegalArgumentException(&quot;El tipo de característica no existe: &quot; + dto.tipo);</span>
+                }
+<span class="nc" id="L230">                carac.setIdTipoCaracteristica(tipo);</span>
+
+<span class="nc" id="L232">                caracteristicaRepository.crear(carac);</span>
+            }
+
+<span class="nc bnc" id="L235" title="All 4 branches missed.">            if (carac.getIdTipoCaracteristica() != null &amp;&amp; carac.getIdTipoCaracteristica().getExpresionRegular() != null) {</span>
+<span class="nc" id="L236">                String regex = carac.getIdTipoCaracteristica().getExpresionRegular();</span>
+<span class="nc bnc" id="L237" title="All 6 branches missed.">                if (!regex.isBlank() &amp;&amp; !Pattern.matches(regex, dto.valor == null ? &quot;&quot; : dto.valor)) {</span>
+<span class="nc" id="L238">                    throw new IllegalArgumentException(&quot;El valor '&quot; + dto.valor + &quot;' no cumple con la expresión regular del tipo &quot; + dto.tipo);</span>
+                }
+            }
+
+<span class="nc" id="L242">            ProductoCaracteristica pc = new ProductoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L243">            pc.setIdProducto(producto);</span>
+<span class="nc" id="L244">            pc.setIdCaracteristica(carac);</span>
+<span class="nc" id="L245">            pc.setValor(dto.valor);</span>
+<span class="nc" id="L246">            productoCaracteristicaRepository.crear(pc);</span>
+<span class="nc" id="L247">        }</span>
+<span class="nc" id="L248">    }</span>
+
+    private void procesarTiposProducto(Producto producto, List&lt;String&gt; tiposNombres) {
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (tiposNombres == null) {</span>
+<span class="nc" id="L252">            return;</span>
+        }
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        for (String nombreTipo : tiposNombres) {</span>
+<span class="nc" id="L255">            TipoProducto tipo = tipoProductoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L256" title="All 4 branches missed.">                    .filter(t -&gt; t.getNombre() != null &amp;&amp; t.getNombre().equalsIgnoreCase(nombreTipo))</span>
+<span class="nc" id="L257">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            if (tipo == null) {</span>
+<span class="nc" id="L259">                tipo = new TipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L260">                tipo.setNombre(nombreTipo);</span>
+<span class="nc" id="L261">                tipo.setActivo(true);</span>
+<span class="nc" id="L262">                tipoProductoRepository.crear(tipo);</span>
+            }
+
+<span class="nc" id="L265">            ProductoTipoProducto ptp = new ProductoTipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L266">            ptp.setIdProducto(producto);</span>
+<span class="nc" id="L267">            ptp.setIdTipoProducto(tipo);</span>
+<span class="nc" id="L268">            productoTipoProductoRepository.crear(ptp);</span>
+<span class="nc" id="L269">        }</span>
+<span class="nc" id="L270">    }</span>
+
+    private void procesarDescuentos(Producto producto, List&lt;ProductoRequest.DescuentoDto&gt; dtos) {
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        if (dtos == null) {</span>
+<span class="nc" id="L274">            return;</span>
+        }
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        for (ProductoRequest.DescuentoDto dto : dtos) {</span>
+<span class="nc bnc" id="L277" title="All 4 branches missed.">            if (dto.nombre == null || dto.valor == null) {</span>
+<span class="nc" id="L278">                continue;</span>
+            }
+
+<span class="nc" id="L281">            Descuento desc = descuentoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L282" title="All 4 branches missed.">                    .filter(d -&gt; d.getNombre() != null &amp;&amp; d.getNombre().equalsIgnoreCase(dto.nombre))</span>
+<span class="nc" id="L283">                    .findFirst().orElse(null);</span>
+
+<span class="nc bnc" id="L285" title="All 2 branches missed.">            if (desc == null) {</span>
+<span class="nc" id="L286">                desc = new Descuento(UUID.randomUUID());</span>
+<span class="nc" id="L287">                desc.setNombre(dto.nombre);</span>
+<span class="nc" id="L288">                desc.setFechaDesde(dto.fechaDesde);</span>
+<span class="nc" id="L289">                desc.setFechaHasta(dto.fechaHasta);</span>
+
+<span class="nc" id="L291">                TipoDescuento tipo = tipoDescuentoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L292" title="All 4 branches missed.">                        .filter(t -&gt; t.getNombre() != null &amp;&amp; t.getNombre().equalsIgnoreCase(dto.tipoDescuento))</span>
+<span class="nc" id="L293">                        .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">                if (tipo == null) {</span>
+<span class="nc" id="L295">                    throw new IllegalArgumentException(&quot;El tipo de descuento no existe: &quot; + dto.tipoDescuento);</span>
+                }
+
+<span class="nc bnc" id="L298" title="All 2 branches missed.">                if (dto.valor &gt; tipo.getDescuentoMaximo()) {</span>
+<span class="nc" id="L299">                    throw new IllegalArgumentException(&quot;El valor del descuento supera el máximo de &quot; + tipo.getDescuentoMaximo() + &quot;%&quot;);</span>
+                }
+<span class="nc" id="L301">                desc.setIdTipoDescuento(tipo);</span>
+<span class="nc" id="L302">                descuentoRepository.crear(desc);</span>
+            }
+
+<span class="nc" id="L305">            DescuentoProducto dp = new DescuentoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L306">            dp.setIdProducto(producto);</span>
+<span class="nc" id="L307">            dp.setIdDescuento(desc);</span>
+<span class="nc" id="L308">            dp.setValor(dto.valor);</span>
+<span class="nc" id="L309">            dp.setFechaDesde(dto.fechaDesde);</span>
+<span class="nc" id="L310">            dp.setFechaHasta(dto.fechaHasta);</span>
+<span class="nc" id="L311">            descuentoProductoRepository.crear(dp);</span>
+<span class="nc" id="L312">        }</span>
+<span class="nc" id="L313">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

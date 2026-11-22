@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoCaracteristicaModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">TipoCaracteristicaModel.java</span></div><h1>TipoCaracteristicaModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caracteristica;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L30">public class TipoCaracteristicaModel extends DefaultModel&lt;TipoCaracteristica, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L34">    private static final Logger LOG =</span>
+<span class="nc" id="L35">            Logger.getLogger(TipoCaracteristicaModel.class.getName());</span>
+
+    @Inject
+    private TipoCaracteristicaRepository tipoCaracteristicaRepository;
+
+    @Inject
+    private CaracteristicaRepository caracteristicaRepository;
+
+<span class="nc" id="L43">    private boolean soloLectura = false;</span>
+
+<span class="nc" id="L45">    private List&lt;Caracteristica&gt; caracteristicasDelTipo =</span>
+            new ArrayList&lt;&gt;();
+
+<span class="nc" id="L48">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
+            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
+            new ColumnaTabla(&quot;expresionRegular&quot;, &quot;Expresión regular&quot;),
+            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
+            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+    );
+
+    @Override
+    public TipoCaracteristicaRepository getRepository() {
+<span class="nc" id="L57">        return tipoCaracteristicaRepository;</span>
+    }
+
+    @Override
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L63">        super.init();</span>
+<span class="nc" id="L64">    }</span>
+
+    @Override
+    public TipoCaracteristica instanciarRegistro() {
+<span class="nc" id="L68">        TipoCaracteristica t = new TipoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L69">        t.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L70">        t.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L71">        return t;</span>
+    }
+
+    @Override
+    public TipoCaracteristica getRegistroById(Object id) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        return id == null</span>
+<span class="nc" id="L77">                ? null</span>
+<span class="nc" id="L78">                : tipoCaracteristicaRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(TipoCaracteristica dato) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        return dato != null</span>
+<span class="nc" id="L84">                ? dato.getIdTipoCaracteristica()</span>
+<span class="nc" id="L85">                : null;</span>
+    }
+
+    @Override
+    public void cargarRegistros() {
+<span class="nc" id="L90">        super.cargarRegistros();</span>
+<span class="nc" id="L91">        refrescarCaracteristicas();</span>
+<span class="nc" id="L92">    }</span>
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L96">        super.limpiar();</span>
+<span class="nc" id="L97">        this.soloLectura = false;</span>
+<span class="nc" id="L98">        this.caracteristicasDelTipo = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L99">    }</span>
+
+    public void onSeleccionar() {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L103">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L105">    }</span>
+
+    public void editar(TipoCaracteristica t) {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (t == null) {</span>
+<span class="nc" id="L109">            return;</span>
+        }
+
+<span class="nc" id="L112">        this.seleccion = t;</span>
+<span class="nc" id="L113">        mostrar(t);</span>
+<span class="nc" id="L114">        this.soloLectura = false;</span>
+<span class="nc" id="L115">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L116">    }</span>
+
+    public void cancelar() {
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
+<span class="nc" id="L120">            mostrar(seleccion);</span>
+        } else {
+<span class="nc" id="L122">            limpiar();</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * No permite eliminar un tipo de característica
+     * que tenga características asociadas.
+     */
+    public void eliminar(TipoCaracteristica t) {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (t == null) {</span>
+<span class="nc" id="L132">            return;</span>
+        }
+
+        try {
+<span class="nc" id="L136">            int cantidad = caracteristicasConTipo(t).size();</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (cantidad &gt; 0) {</span>
+<span class="nc" id="L139">                error(&quot;No se puede eliminar \&quot;&quot; + t.getNombre()</span>
+                        + &quot;\&quot;: tiene &quot; + cantidad
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                        + (cantidad == 1</span>
+<span class="nc" id="L142">                        ? &quot; característica asociada.&quot;</span>
+<span class="nc" id="L143">                        : &quot; características asociadas.&quot;)</span>
+                        + &quot; Puede marcarlo como inactivo en su lugar.&quot;);
+<span class="nc" id="L145">                return;</span>
+            }
+
+<span class="nc" id="L148">            tipoCaracteristicaRepository.eliminar(t);</span>
+<span class="nc" id="L149">            cargarRegistros();</span>
+<span class="nc" id="L150">            limpiar();</span>
+
+<span class="nc" id="L152">            info(&quot;Tipo de característica eliminado.&quot;);</span>
+
+<span class="nc" id="L154">        } catch (Exception ex) {</span>
+<span class="nc" id="L155">            LOG.log(Level.SEVERE,</span>
+                    &quot;Error al eliminar tipo de característica&quot;, ex);
+
+<span class="nc" id="L158">            error(&quot;No se pudo eliminar el tipo de característica: &quot;</span>
+<span class="nc" id="L159">                    + ex.getMessage());</span>
+<span class="nc" id="L160">        }</span>
+<span class="nc" id="L161">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L165" title="All 4 branches missed.">        if (soloLectura || registro == null) {</span>
+<span class="nc" id="L166">            return;</span>
+        }
+
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        final String nombre = registro.getNombre() == null</span>
+<span class="nc" id="L170">                ? &quot;&quot;</span>
+<span class="nc" id="L171">                : registro.getNombre().trim();</span>
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (nombre.isEmpty()) {</span>
+<span class="nc" id="L174">            error(&quot;Indique el nombre del tipo de característica.&quot;);</span>
+<span class="nc" id="L175">            return;</span>
+        }
+
+<span class="nc" id="L178">        registro.setNombre(nombre);</span>
+
+<span class="nc" id="L180">        String expresionRegular = registro.getExpresionRegular();</span>
+
+<span class="nc bnc" id="L182" title="All 4 branches missed.">        if (expresionRegular != null &amp;&amp; !expresionRegular.isBlank()) {</span>
+            try {
+<span class="nc" id="L184">                Pattern.compile(expresionRegular);</span>
+<span class="nc" id="L185">            } catch (PatternSyntaxException ex) {</span>
+<span class="nc" id="L186">                error(&quot;La expresión regular indicada no es válida.&quot;);</span>
+<span class="nc" id="L187">                return;</span>
+<span class="nc" id="L188">            }</span>
+        }
+
+<span class="nc" id="L191">        registro.setNombre(nombre);</span>
+
+<span class="nc" id="L193">        boolean repetido = tipoCaracteristicaRepository.findAll()</span>
+<span class="nc" id="L194">                .stream()</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                .anyMatch(t -&gt; t.getNombre() != null</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                &amp;&amp; t.getNombre().trim().equalsIgnoreCase(nombre)</span>
+<span class="nc" id="L197">                &amp;&amp; !t.getIdTipoCaracteristica()</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">                        .equals(registro.getIdTipoCaracteristica()));</span>
+
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (repetido) {</span>
+<span class="nc" id="L201">            error(&quot;Ya existe un tipo de característica llamado \&quot;&quot;</span>
+                    + nombre + &quot;\&quot;.&quot;);
+<span class="nc" id="L203">            return;</span>
+        }
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (registro.getObservaciones() == null) {</span>
+<span class="nc" id="L207">            registro.setObservaciones(&quot;&quot;);</span>
+        }
+
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (registro.getActivo() == null) {</span>
+<span class="nc" id="L211">            registro.setActivo(Boolean.TRUE);</span>
+        }
+
+<span class="nc" id="L214">        boolean esNuevo = isCreando();</span>
+
+        try {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (esNuevo) {</span>
+<span class="nc" id="L218">                tipoCaracteristicaRepository.crear(registro);</span>
+            } else {
+<span class="nc" id="L220">                tipoCaracteristicaRepository.modificar(registro);</span>
+            }
+
+<span class="nc" id="L223">            UUID id = registro.getIdTipoCaracteristica();</span>
+
+<span class="nc" id="L225">            cargarRegistros();</span>
+
+<span class="nc" id="L227">            TipoCaracteristica guardado = registros.stream()</span>
+<span class="nc" id="L228">                    .filter(t -&gt; id.equals(t.getIdTipoCaracteristica()))</span>
+<span class="nc" id="L229">                    .findFirst()</span>
+<span class="nc" id="L230">                    .orElse(null);</span>
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">            if (guardado != null) {</span>
+<span class="nc" id="L233">                this.seleccion = guardado;</span>
+<span class="nc" id="L234">                mostrar(guardado);</span>
+            } else {
+<span class="nc" id="L236">                limpiar();</span>
+            }
+
+<span class="nc bnc" id="L239" title="All 2 branches missed.">            info(esNuevo</span>
+<span class="nc" id="L240">                    ? &quot;Tipo de característica creado.&quot;</span>
+<span class="nc" id="L241">                    : &quot;Tipo de característica modificado.&quot;);</span>
+
+<span class="nc" id="L243">        } catch (Exception ex) {</span>
+<span class="nc" id="L244">            LOG.log(Level.SEVERE,</span>
+                    &quot;Error al guardar tipo de característica&quot;, ex);
+
+<span class="nc" id="L247">            error(&quot;No se pudo guardar el tipo de característica: &quot;</span>
+<span class="nc" id="L248">                    + ex.getMessage());</span>
+<span class="nc" id="L249">        }</span>
+<span class="nc" id="L250">    }</span>
+
+    /**
+     * Carga nuevamente el registro desde la BD
+     * y prepara el detalle.
+     */
+    private void mostrar(TipoCaracteristica t) {
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        TipoCaracteristica fresco = t.getIdTipoCaracteristica() == null</span>
+<span class="nc" id="L258">                ? null</span>
+                : tipoCaracteristicaRepository
+<span class="nc" id="L260">                        .findById(t.getIdTipoCaracteristica());</span>
+
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        this.registro = fresco != null ? fresco : t;</span>
+<span class="nc" id="L263">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L264">        this.soloLectura = true;</span>
+
+<span class="nc" id="L266">        refrescarCaracteristicas();</span>
+<span class="nc" id="L267">    }</span>
+
+    /**
+     * Busca todas las características que pertenecen
+     * al tipo seleccionado.
+     */
+    private List&lt;Caracteristica&gt; caracteristicasConTipo(
+            TipoCaracteristica tipo) {
+
+<span class="nc" id="L276">        List&lt;Caracteristica&gt; lista = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (tipo == null</span>
+<span class="nc bnc" id="L279" title="All 4 branches missed.">                || tipo.getIdTipoCaracteristica() == null</span>
+                || caracteristicaRepository == null) {
+<span class="nc" id="L281">            return lista;</span>
+        }
+
+<span class="nc" id="L284">        UUID idTipo = tipo.getIdTipoCaracteristica();</span>
+
+<span class="nc" id="L286">        caracteristicaRepository.findAll()</span>
+<span class="nc" id="L287">                .stream()</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                .filter(c -&gt; c != null</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                &amp;&amp; c.getIdTipoCaracteristica() != null</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(</span>
+<span class="nc" id="L291">                        c.getIdTipoCaracteristica()</span>
+<span class="nc" id="L292">                                .getIdTipoCaracteristica()))</span>
+<span class="nc" id="L293">                .sorted((a, b) -&gt;</span>
+<span class="nc" id="L294">                        String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">                                a.getNombre() == null</span>
+<span class="nc" id="L296">                                        ? &quot;&quot;</span>
+<span class="nc" id="L297">                                        : a.getNombre(),</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">                                b.getNombre() == null</span>
+<span class="nc" id="L299">                                        ? &quot;&quot;</span>
+<span class="nc" id="L300">                                        : b.getNombre()))</span>
+<span class="nc" id="L301">                .forEach(lista::add);</span>
+
+<span class="nc" id="L303">        return lista;</span>
+    }
+
+    /**
+     * Refresca el detalle de características
+     * correspondiente al tipo seleccionado.
+     */
+    private void refrescarCaracteristicas() {
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L312">            this.caracteristicasDelTipo =</span>
+<span class="nc" id="L313">                    caracteristicasConTipo(seleccion);</span>
+        } else {
+<span class="nc" id="L315">            this.caracteristicasDelTipo =</span>
+                    new ArrayList&lt;&gt;();
+        }
+<span class="nc" id="L318">    }</span>
+
+    public int cantidadCaracteristicas(TipoCaracteristica tipo) {
+<span class="nc bnc" id="L321" title="All 2 branches missed.">        return tipo == null</span>
+<span class="nc" id="L322">                ? 0</span>
+<span class="nc" id="L323">                : caracteristicasConTipo(tipo).size();</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L327">        FacesContext.getCurrentInstance().addMessage(</span>
+                null,
+                new FacesMessage(
+                        FacesMessage.SEVERITY_INFO,
+                        msg,
+                        null));
+<span class="nc" id="L333">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L336">        FacesContext.getCurrentInstance().addMessage(</span>
+                null,
+                new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR,
+                        msg,
+                        null));
+<span class="nc" id="L342">    }</span>
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L345">        return soloLectura;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L349" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L350">            return &quot;Detalle del tipo de característica&quot;;</span>
+        }
+
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        return isEditando()</span>
+<span class="nc" id="L354">                ? &quot;Editar tipo de característica&quot;</span>
+<span class="nc" id="L355">                : &quot;Nuevo tipo de característica&quot;;</span>
+    }
+
+    public List&lt;Caracteristica&gt; getCaracteristicasDelTipo() {
+<span class="nc" id="L359">        return caracteristicasDelTipo;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc" id="L363">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

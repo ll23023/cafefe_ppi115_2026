@@ -32,7 +32,9 @@ public class PagoRepository extends DefaultRepository<Pago, UUID> {
      * Pagos de una factura, paginados.
      */
     public List<Pago> findByFactura(UUID idFactura, int first, int max) {
-        return getEntityManager()
+        requireArgument(idFactura, "idFactura");
+        requirePage(first, max);
+        return requireEntityManager()
                 .createQuery("SELECT p FROM Pago p WHERE p.idFactura.idFactura = :id", Pago.class)
                 .setParameter("id", idFactura)
                 .setFirstResult(first)
@@ -44,7 +46,8 @@ public class PagoRepository extends DefaultRepository<Pago, UUID> {
      * Cantidad de pagos de una factura.
      */
     public Long countByFactura(UUID idFactura) {
-        return getEntityManager()
+        requireArgument(idFactura, "idFactura");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(p) FROM Pago p WHERE p.idFactura.idFactura = :id", Long.class)
                 .setParameter("id", idFactura)
                 .getSingleResult();
@@ -54,7 +57,8 @@ public class PagoRepository extends DefaultRepository<Pago, UUID> {
      * Cantidad de detalles de pago que referencian este pago.
      */
     public long countDetalles(UUID idPago) {
-        return getEntityManager()
+        requireArgument(idPago, "idPago");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(d) FROM PagoDetalle d WHERE d.idPago.idPago = :id", Long.class)
                 .setParameter("id", idPago)
                 .getSingleResult();

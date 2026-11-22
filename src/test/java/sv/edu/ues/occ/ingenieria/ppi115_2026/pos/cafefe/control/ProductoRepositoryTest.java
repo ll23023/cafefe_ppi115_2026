@@ -55,4 +55,10 @@ class ProductoRepositoryTest {
 
         assertTrue(repositorio.findByNombre("Inexistente").isEmpty());
     }
+
+    @Test
+    void findByNombre_conNombreNulo_lanzaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.findByNombre(null));
+        verifyNoInteractions(em);
+    }
 }

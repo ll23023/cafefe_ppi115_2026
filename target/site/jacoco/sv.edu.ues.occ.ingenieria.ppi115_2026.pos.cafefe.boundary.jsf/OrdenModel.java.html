@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrdenModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">OrdenModel.java</span></div><h1>OrdenModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.DescuentoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L46">public class OrdenModel extends DefaultModel&lt;Orden, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L50">    private static final Logger LOG = Logger.getLogger(OrdenModel.class.getName());</span>
+
+    public static class ProductoFila implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        private UUID idOrdenProducto;
+        private String nombreProducto;
+        private BigDecimal precio;
+        private String observaciones;
+        private String idDescuentoSel;
+<span class="nc" id="L60">        private final List&lt;String&gt; aplicados = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L62">        public ProductoFila() {</span>
+<span class="nc" id="L63">        }</span>
+
+<span class="nc" id="L65">        public ProductoFila(UUID idOrdenProducto, String nombreProducto, BigDecimal precio, String observaciones) {</span>
+<span class="nc" id="L66">            this.idOrdenProducto = idOrdenProducto;</span>
+<span class="nc" id="L67">            this.nombreProducto = nombreProducto;</span>
+<span class="nc" id="L68">            this.precio = precio;</span>
+<span class="nc" id="L69">            this.observaciones = observaciones;</span>
+<span class="nc" id="L70">        }</span>
+
+        public UUID getIdOrdenProducto() {
+<span class="nc" id="L73">            return idOrdenProducto;</span>
+        }
+
+        public void setIdOrdenProducto(UUID idOrdenProducto) {
+<span class="nc" id="L77">            this.idOrdenProducto = idOrdenProducto;</span>
+<span class="nc" id="L78">        }</span>
+
+        public String getNombreProducto() {
+<span class="nc" id="L81">            return nombreProducto;</span>
+        }
+
+        public void setNombreProducto(String nombreProducto) {
+<span class="nc" id="L85">            this.nombreProducto = nombreProducto;</span>
+<span class="nc" id="L86">        }</span>
+
+        public BigDecimal getPrecio() {
+<span class="nc" id="L89">            return precio;</span>
+        }
+
+        public void setPrecio(BigDecimal precio) {
+<span class="nc" id="L93">            this.precio = precio;</span>
+<span class="nc" id="L94">        }</span>
+
+        public String getObservaciones() {
+<span class="nc" id="L97">            return observaciones;</span>
+        }
+
+        public void setObservaciones(String observaciones) {
+<span class="nc" id="L101">            this.observaciones = observaciones;</span>
+<span class="nc" id="L102">        }</span>
+
+        public String getIdDescuentoSel() {
+<span class="nc" id="L105">            return idDescuentoSel;</span>
+        }
+
+        public void setIdDescuentoSel(String idDescuentoSel) {
+<span class="nc" id="L109">            this.idDescuentoSel = idDescuentoSel;</span>
+<span class="nc" id="L110">        }</span>
+
+        public List&lt;String&gt; getAplicados() {
+<span class="nc" id="L113">            return aplicados;</span>
+        }
+
+        public boolean isConDescuento() {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            return !aplicados.isEmpty();</span>
+        }
+
+        public void limpiarDescuentos() {
+<span class="nc" id="L121">            this.idDescuentoSel = null;</span>
+<span class="nc" id="L122">            this.aplicados.clear();</span>
+<span class="nc" id="L123">            this.observaciones = &quot;&quot;;</span>
+<span class="nc" id="L124">        }</span>
+    }
+
+    public static class OpcionDescuento implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        private final String id;
+        private final String etiqueta;
+        private final boolean aplicable;
+
+<span class="nc" id="L134">        public OpcionDescuento(String id, String etiqueta, boolean aplicable) {</span>
+<span class="nc" id="L135">            this.id = id;</span>
+<span class="nc" id="L136">            this.etiqueta = etiqueta;</span>
+<span class="nc" id="L137">            this.aplicable = aplicable;</span>
+<span class="nc" id="L138">        }</span>
+
+        public String getId() {
+<span class="nc" id="L141">            return id;</span>
+        }
+
+        public String getEtiqueta() {
+<span class="nc" id="L145">            return etiqueta;</span>
+        }
+
+        public boolean isAplicable() {
+<span class="nc" id="L149">            return aplicable;</span>
+        }
+    }
+
+    private static final String PREFIJO_DESCUENTO = &quot;-Aplicado &quot;;
+    private static final boolean COMENTARIO_CON_NOMBRE_DEL_TIPO = false;
+<span class="nc" id="L155">    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</span>
+
+    @Inject
+    private OrdenRepository ordenRepository;
+
+    @Inject
+    private OrdenProductoRepository ordenProductoRepository;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    private ProductoRepository productoRepository;
+
+    @Inject
+    private DescuentoProductoRepository descuentoProductoRepository;
+
+<span class="nc" id="L172">    private boolean soloLectura = false;</span>
+    private Date fechaSeleccionada;
+    private Date horaSeleccionada;
+<span class="nc" id="L175">    private final List&lt;ProductoFila&gt; filas = new ArrayList&lt;&gt;();</span>
+    private List&lt;EmpleadoRol&gt; empleadoRoles;
+<span class="nc" id="L177">    private List&lt;Producto&gt; productos = new ArrayList&lt;&gt;();</span>
+    private List&lt;DescuentoProducto&gt; descuentosProducto; // caché; se recarga al limpiar y al agregar fila
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public OrdenRepository getRepository() {
+<span class="nc" id="L183">        return ordenRepository;</span>
+    }
+
+    @Override
+    public Orden instanciarRegistro() {
+<span class="nc" id="L188">        Orden r = new Orden(UUID.randomUUID());</span>
+<span class="nc" id="L189">        r.setFechaCreacion(new Date());</span>
+<span class="nc" id="L190">        return r;</span>
+    }
+
+    @Override
+    public Orden getRegistroById(Object id) {
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        return id == null ? null : ordenRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Orden dato) {
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        return dato != null ? dato.getIdOrden() : null;</span>
+    }
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L205">        super.limpiar();</span>
+<span class="nc" id="L206">        Date ahora = new Date();</span>
+<span class="nc" id="L207">        this.fechaSeleccionada = ahora;</span>
+<span class="nc" id="L208">        this.horaSeleccionada = ahora;</span>
+<span class="nc" id="L209">        this.soloLectura = false;</span>
+<span class="nc" id="L210">        this.filas.clear();</span>
+<span class="nc" id="L211">        this.empleadoRoles = null;  </span>
+<span class="nc" id="L212">        this.descuentosProducto = null;</span>
+<span class="nc" id="L213">        this.cargarProductos();</span>
+<span class="nc" id="L214">    }</span>
+
+    public void onSeleccionar() {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L218">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L220">    }</span>
+
+    public void editar(Orden o) {
+<span class="nc" id="L223">        this.seleccion = o;</span>
+<span class="nc" id="L224">        mostrar(o);</span>
+<span class="nc" id="L225">        this.soloLectura = false;</span>
+<span class="nc" id="L226">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L227">    }</span>
+
+    public void cancelar() {
+<span class="nc bnc" id="L230" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
+<span class="nc" id="L231">            mostrar(seleccion);</span>
+        } else {
+<span class="nc" id="L233">            limpiar();</span>
+        }
+<span class="nc" id="L235">    }</span>
+
+    public void eliminar(Orden o) {
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        if (o == null) {</span>
+<span class="nc" id="L239">            return;</span>
+        }
+        try {
+<span class="nc bnc" id="L242" title="All 2 branches missed.">            for (OrdenProducto op : asignacionesDe(o)) {</span>
+<span class="nc" id="L243">                ordenProductoRepository.eliminar(op);</span>
+<span class="nc" id="L244">            }</span>
+<span class="nc" id="L245">            ordenRepository.eliminar(o);</span>
+<span class="nc" id="L246">            cargarRegistros();</span>
+<span class="nc" id="L247">            limpiar();</span>
+<span class="nc" id="L248">            info(&quot;Orden eliminada.&quot;);</span>
+<span class="nc" id="L249">        } catch (Exception ex) {</span>
+<span class="nc" id="L250">            LOG.log(Level.SEVERE, &quot;Error al eliminar orden&quot;, ex);</span>
+<span class="nc" id="L251">            error(&quot;No se pudo eliminar la orden: &quot; + ex.getMessage());</span>
+<span class="nc" id="L252">        }</span>
+<span class="nc" id="L253">    }</span>
+
+    public void agregarFila() {
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        if (!isCreando()) {</span>
+<span class="nc" id="L257">            return;</span>
+        }
+<span class="nc" id="L259">        cargarProductos();</span>
+<span class="nc" id="L260">        this.descuentosProducto = null;</span>
+<span class="nc" id="L261">        filas.add(new ProductoFila(null, &quot;&quot;, null, &quot;&quot;));</span>
+<span class="nc" id="L262">    }</span>
+
+    public void quitarFila(ProductoFila fila) {
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (!isCreando()) {</span>
+<span class="nc" id="L266">            return;</span>
+        }
+<span class="nc" id="L268">        filas.remove(fila);</span>
+<span class="nc" id="L269">    }</span>
+
+    public void onCambioProducto(ProductoFila fila) {
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        if (fila == null) {</span>
+<span class="nc" id="L273">            return;</span>
+        }
+<span class="nc" id="L275">        fila.limpiarDescuentos();</span>
+<span class="nc bnc" id="L276" title="All 4 branches missed.">        if (fila.getNombreProducto() == null || fila.getNombreProducto().isBlank()) {</span>
+<span class="nc" id="L277">            return;</span>
+        }
+<span class="nc" id="L279">        Producto p = productoDeFila(fila);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        if (p != null) {</span>
+<span class="nc" id="L281">            fila.setPrecio(p.getPrecioSugerido());</span>
+        }
+<span class="nc" id="L283">    }</span>
+
+    public boolean rolPermitidoParaOrden(EmpleadoRol er) {
+<span class="nc bnc" id="L286" title="All 6 branches missed.">        if (er == null || er.getIdRol() == null || er.getIdEmpleado() == null</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                || er.getIdRol().getNombre() == null) {</span>
+<span class="nc" id="L288">            return false;</span>
+        }
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (!Boolean.TRUE.equals(er.getActivo())</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">                || !Boolean.TRUE.equals(er.getIdRol().getActivo())</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">                || !Boolean.TRUE.equals(er.getIdEmpleado().getActivo())) {</span>
+<span class="nc" id="L293">            return false;</span>
+        }
+<span class="nc" id="L295">        String nombre = er.getIdRol().getNombre().trim();</span>
+<span class="nc" id="L296">        return RolesOrden.getNombresRolesOrden().stream()</span>
+<span class="nc" id="L297">                .anyMatch(permitido -&gt; permitido.equalsIgnoreCase(nombre));</span>
+    }
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L302" title="All 4 branches missed.">        if (soloLectura || registro == null) {</span>
+<span class="nc" id="L303">            return;</span>
+        }
+<span class="nc" id="L305">        boolean esNuevo = isCreando();</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (esNuevo) {</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">            if (!rolPermitidoParaOrden(registro.getIdEmpleadoRol())) {</span>
+<span class="nc" id="L308">                error(&quot;Solo puede tomar la orden un empleado activo con rol: &quot;</span>
+<span class="nc" id="L309">                        + String.join(&quot;, &quot;, RolesOrden.getNombresRolesOrden()));</span>
+<span class="nc" id="L310">                return;</span>
+            }
+<span class="nc bnc" id="L312" title="All 2 branches missed.">            if (!productosValidos()) {</span>
+<span class="nc" id="L313">                return;</span>
+            }
+        } else {
+<span class="nc" id="L316">            Orden original = ordenRepository.findById(registro.getIdOrden());</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">            if (original != null) {</span>
+<span class="nc" id="L318">                registro.setIdEmpleadoRol(original.getIdEmpleadoRol());</span>
+            }
+        }
+<span class="nc" id="L321">        combinarFechaHora();</span>
+        try {
+<span class="nc bnc" id="L323" title="All 2 branches missed.">            if (esNuevo) {</span>
+<span class="nc" id="L324">                crearConProductos();</span>
+            } else {
+<span class="nc" id="L326">                ordenRepository.modificar(registro);</span>
+            }
+
+<span class="nc" id="L329">            UUID id = registro.getIdOrden();</span>
+<span class="nc" id="L330">            cargarRegistros();</span>
+<span class="nc" id="L331">            Orden guardada = registros.stream()</span>
+<span class="nc" id="L332">                    .filter(o -&gt; id.equals(o.getIdOrden()))</span>
+<span class="nc" id="L333">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">            if (guardada != null) {</span>
+<span class="nc" id="L335">                this.seleccion = guardada;</span>
+<span class="nc" id="L336">                mostrar(guardada);</span>
+            } else {
+<span class="nc" id="L338">                limpiar();</span>
+            }
+<span class="nc" id="L340">            info(&quot;Orden guardada.&quot;);</span>
+<span class="nc" id="L341">        } catch (Exception ex) {</span>
+<span class="nc" id="L342">            LOG.log(Level.SEVERE, &quot;Error al guardar orden&quot;, ex);</span>
+<span class="nc" id="L343">            error(&quot;No se pudo guardar la orden: &quot; + ex.getMessage());</span>
+<span class="nc" id="L344">        }</span>
+<span class="nc" id="L345">    }</span>
+
+    private void crearConProductos() {
+<span class="nc" id="L348">        ordenRepository.crear(registro);</span>
+<span class="nc" id="L349">        Orden ord = ordenRepository.findById(registro.getIdOrden());</span>
+        try {
+<span class="nc" id="L351">            guardarProductos(ord);</span>
+<span class="nc" id="L352">        } catch (RuntimeException ex) {</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">            for (OrdenProducto op : asignacionesDe(ord)) {</span>
+<span class="nc" id="L354">                ordenProductoRepository.eliminar(op);</span>
+<span class="nc" id="L355">            }</span>
+<span class="nc" id="L356">            ordenRepository.eliminar(ord);</span>
+<span class="nc" id="L357">            throw ex;</span>
+<span class="nc" id="L358">        }</span>
+<span class="nc" id="L359">    }</span>
+
+    private void combinarFechaHora() {
+<span class="nc bnc" id="L362" title="All 2 branches missed.">        if (this.registro != null) {</span>
+<span class="nc" id="L363">            Calendar calFecha = Calendar.getInstance();</span>
+<span class="nc" id="L364">            Calendar calHora = Calendar.getInstance();</span>
+
+<span class="nc bnc" id="L366" title="All 2 branches missed.">            if (this.fechaSeleccionada != null) {</span>
+<span class="nc" id="L367">                calFecha.setTime(this.fechaSeleccionada);</span>
+            }
+<span class="nc bnc" id="L369" title="All 2 branches missed.">            if (this.horaSeleccionada != null) {</span>
+<span class="nc" id="L370">                calHora.setTime(this.horaSeleccionada);</span>
+            }
+
+<span class="nc" id="L373">            Calendar combinado = Calendar.getInstance();</span>
+<span class="nc" id="L374">            combinado.set(Calendar.YEAR, calFecha.get(Calendar.YEAR));</span>
+<span class="nc" id="L375">            combinado.set(Calendar.MONTH, calFecha.get(Calendar.MONTH));</span>
+<span class="nc" id="L376">            combinado.set(Calendar.DAY_OF_MONTH, calFecha.get(Calendar.DAY_OF_MONTH));</span>
+<span class="nc" id="L377">            combinado.set(Calendar.HOUR_OF_DAY, calHora.get(Calendar.HOUR_OF_DAY));</span>
+<span class="nc" id="L378">            combinado.set(Calendar.MINUTE, calHora.get(Calendar.MINUTE));</span>
+<span class="nc" id="L379">            combinado.set(Calendar.SECOND, 0);</span>
+<span class="nc" id="L380">            combinado.set(Calendar.MILLISECOND, 0);</span>
+<span class="nc" id="L381">            this.registro.setFechaCreacion(combinado.getTime());</span>
+        }
+<span class="nc" id="L383">    }</span>
+
+    private Map&lt;String, Producto&gt; productosPorNombre() {
+<span class="nc" id="L386">        Map&lt;String, Producto&gt; porNombre = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">        for (Producto p : productos) {</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">            if (p.getNombre() != null) {</span>
+<span class="nc" id="L389">                porNombre.putIfAbsent(clave(p.getNombre()), p);</span>
+            }
+<span class="nc" id="L391">        }</span>
+<span class="nc" id="L392">        return porNombre;</span>
+    }
+
+    private boolean productosValidos() {
+<span class="nc" id="L396">        Map&lt;String, Producto&gt; porNombre = productosPorNombre();</span>
+<span class="nc bnc" id="L397" title="All 2 branches missed.">        for (ProductoFila f : filas) {</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">            String nombre = f.getNombreProducto() == null ? &quot;&quot; : f.getNombreProducto().trim();</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">            if (nombre.isEmpty()) {</span>
+<span class="nc" id="L400">                continue;</span>
+            }
+<span class="nc" id="L402">            Producto existente = porNombre.get(clave(nombre));</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L404">                error(&quot;El producto no existe: &quot; + nombre);</span>
+<span class="nc" id="L405">                return false;</span>
+            }
+<span class="nc bnc" id="L407" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(existente.getActivo())) {</span>
+<span class="nc" id="L408">                error(&quot;No se puede agregar un producto inactivo: &quot; + existente.getNombre());</span>
+<span class="nc" id="L409">                return false;</span>
+            }
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            if (f.getPrecio() == null) {</span>
+<span class="nc" id="L412">                error(&quot;Indique el precio para: &quot; + nombre);</span>
+<span class="nc" id="L413">                return false;</span>
+            }
+<span class="nc" id="L415">            LocalDate fechaOrden = fechaDeLaOrden();</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">            for (String idDp : f.getAplicados()) {</span>
+<span class="nc" id="L417">                DescuentoProducto dp = descuentoPorId(idDp);</span>
+<span class="nc bnc" id="L418" title="All 4 branches missed.">                if (dp == null || !aplicaEnFecha(dp, fechaOrden)) {</span>
+<span class="nc" id="L419">                    error(&quot;Un descuento aplicado a \&quot;&quot; + nombre + &quot;\&quot; no aplica para la fecha de la orden (&quot;</span>
+<span class="nc" id="L420">                            + fechaOrden.format(FORMATO_FECHA)</span>
+                            + &quot;). Quite ese producto de la orden y vuelva a agregarlo, o cambie la fecha.&quot;);
+<span class="nc" id="L422">                    return false;</span>
+                }
+<span class="nc" id="L424">            }</span>
+<span class="nc" id="L425">        }</span>
+<span class="nc" id="L426">        return true;</span>
+    }
+
+    public List&lt;OpcionDescuento&gt; opcionesDescuento(ProductoFila fila) {
+<span class="nc" id="L430">        List&lt;OpcionDescuento&gt; opciones = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L431">        Producto producto = productoDeFila(fila);</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L433">            return opciones;</span>
+        }
+<span class="nc" id="L435">        LocalDate fechaOrden = fechaDeLaOrden();</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">        for (DescuentoProducto dp : descuentosCargados()) {</span>
+<span class="nc bnc" id="L437" title="All 4 branches missed.">            if (dp.getIdDescuentoProducto() == null || !esDelProducto(dp, producto)) {</span>
+<span class="nc" id="L438">                continue;</span>
+            }
+<span class="nc" id="L440">            boolean aplica = aplicaEnFecha(dp, fechaOrden);</span>
+<span class="nc" id="L441">            Integer valor = aEntero(dp.getValor());</span>
+<span class="nc" id="L442">            String tipo = nombreTipo(dp);</span>
+<span class="nc" id="L443">            String etiqueta = nombreDescuento(dp)</span>
+<span class="nc bnc" id="L444" title="All 2 branches missed.">                    + (tipo != null ? &quot; [&quot; + tipo + &quot;]&quot; : &quot;&quot;)</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">                    + &quot; - &quot; + (valor != null ? valor + &quot;%&quot; : &quot;?&quot;)</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">                    + (dp.getIdProducto() == null ? &quot; (todos los productos)&quot; : &quot;&quot;)</span>
+<span class="nc bnc" id="L447" title="All 2 branches missed.">                    + (aplica ? &quot;&quot; : &quot; - no aplica en la fecha de la orden&quot;);</span>
+<span class="nc" id="L448">            opciones.add(new OpcionDescuento(dp.getIdDescuentoProducto().toString(), etiqueta, aplica));</span>
+<span class="nc" id="L449">        }</span>
+<span class="nc" id="L450">        opciones.sort((a, b) -&gt; {</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">            if (a.isAplicable() != b.isAplicable()) {</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">                return a.isAplicable() ? -1 : 1;</span>
+            }
+<span class="nc" id="L454">            return String.CASE_INSENSITIVE_ORDER.compare(a.getEtiqueta(), b.getEtiqueta());</span>
+        });
+<span class="nc" id="L456">        return opciones;</span>
+    }
+
+    public void aplicarDescuento(ProductoFila fila) {
+<span class="nc bnc" id="L460" title="All 4 branches missed.">        if (!isCreando() || fila == null) {</span>
+<span class="nc" id="L461">            return;</span>
+        }
+<span class="nc" id="L463">        Producto producto = productoDeFila(fila);</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L465">            error(&quot;Seleccione primero un producto.&quot;);</span>
+<span class="nc" id="L466">            return;</span>
+        }
+<span class="nc" id="L468">        DescuentoProducto dp = descuentoPorId(fila.getIdDescuentoSel());</span>
+<span class="nc bnc" id="L469" title="All 2 branches missed.">        if (dp == null) {</span>
+<span class="nc" id="L470">            error(&quot;Seleccione un descuento para aplicar.&quot;);</span>
+<span class="nc" id="L471">            return;</span>
+        }
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        if (!esDelProducto(dp, producto)) {</span>
+<span class="nc" id="L474">            error(&quot;Ese descuento no corresponde al producto seleccionado.&quot;);</span>
+<span class="nc" id="L475">            return;</span>
+        }
+<span class="nc" id="L477">        String nombre = nombreDescuento(dp);</span>
+<span class="nc" id="L478">        LocalDate fechaOrden = fechaDeLaOrden();</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">        if (!aplicaEnFecha(dp, fechaOrden)) {</span>
+<span class="nc" id="L480">            error(&quot;El descuento \&quot;&quot; + nombre + &quot;\&quot; no aplica para la fecha de la orden (&quot;</span>
+<span class="nc" id="L481">                    + fechaOrden.format(FORMATO_FECHA) + &quot;).&quot;);</span>
+<span class="nc" id="L482">            return;</span>
+        }
+<span class="nc" id="L484">        Integer valor = aEntero(dp.getValor());</span>
+<span class="nc bnc" id="L485" title="All 6 branches missed.">        if (valor == null || valor &lt;= 0 || valor &gt; 100) {</span>
+<span class="nc" id="L486">            error(&quot;El descuento \&quot;&quot; + nombre + &quot;\&quot; tiene un valor inválido.&quot;);</span>
+<span class="nc" id="L487">            return;</span>
+        }
+<span class="nc bnc" id="L489" title="All 2 branches missed.">        if (fila.getPrecio() == null) {</span>
+<span class="nc" id="L490">            error(&quot;El producto no tiene precio.&quot;);</span>
+<span class="nc" id="L491">            return;</span>
+        }
+
+<span class="nc" id="L494">        BigDecimal factor = BigDecimal.valueOf(100L - valor).divide(BigDecimal.valueOf(100));</span>
+<span class="nc" id="L495">        fila.setPrecio(fila.getPrecio().multiply(factor).setScale(2, RoundingMode.HALF_UP));</span>
+
+<span class="nc" id="L497">        String nota = PREFIJO_DESCUENTO + nombreParaComentario(dp) + &quot; (&quot; + valor + &quot;%)&quot;;</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">        String actual = fila.getObservaciones() == null ? &quot;&quot; : fila.getObservaciones().trim();</span>
+<span class="nc bnc" id="L499" title="All 2 branches missed.">        fila.setObservaciones(actual.isEmpty() ? nota : actual + &quot; &quot; + nota);</span>
+<span class="nc" id="L500">        fila.getAplicados().add(dp.getIdDescuentoProducto().toString());</span>
+<span class="nc" id="L501">        info(&quot;Descuento aplicado: &quot; + nota.substring(PREFIJO_DESCUENTO.length()) + &quot;.&quot;);</span>
+<span class="nc" id="L502">    }</span>
+
+    private List&lt;DescuentoProducto&gt; descuentosCargados() {
+<span class="nc bnc" id="L505" title="All 2 branches missed.">        if (this.descuentosProducto == null) {</span>
+<span class="nc bnc" id="L506" title="All 2 branches missed.">            if (descuentoProductoRepository != null) {</span>
+<span class="nc" id="L507">                this.descuentosProducto = descuentoProductoRepository.findAll();</span>
+            } else {
+<span class="nc" id="L509">                this.descuentosProducto = new ArrayList&lt;&gt;();</span>
+            }
+        }
+<span class="nc" id="L512">        return this.descuentosProducto;</span>
+    }
+
+    private DescuentoProducto descuentoPorId(String id) {
+<span class="nc bnc" id="L516" title="All 4 branches missed.">        if (id == null || id.isBlank()) {</span>
+<span class="nc" id="L517">            return null;</span>
+        }
+<span class="nc bnc" id="L519" title="All 2 branches missed.">        for (DescuentoProducto dp : descuentosCargados()) {</span>
+<span class="nc bnc" id="L520" title="All 4 branches missed.">            if (dp.getIdDescuentoProducto() != null &amp;&amp; id.equals(dp.getIdDescuentoProducto().toString())) {</span>
+<span class="nc" id="L521">                return dp;</span>
+            }
+<span class="nc" id="L523">        }</span>
+<span class="nc" id="L524">        return null;</span>
+    }
+
+    private Producto productoDeFila(ProductoFila fila) {
+<span class="nc bnc" id="L528" title="All 6 branches missed.">        if (fila == null || fila.getNombreProducto() == null || fila.getNombreProducto().isBlank()) {</span>
+<span class="nc" id="L529">            return null;</span>
+        }
+<span class="nc" id="L531">        return productosPorNombre().get(clave(fila.getNombreProducto()));</span>
+    }
+
+    private boolean esDelProducto(DescuentoProducto dp, Producto p) {
+<span class="nc bnc" id="L535" title="All 2 branches missed.">        if (dp.getIdProducto() == null) {</span>
+<span class="nc" id="L536">            return true;</span>
+        }
+<span class="nc bnc" id="L538" title="All 4 branches missed.">        return p.getIdProducto() != null &amp;&amp; p.getIdProducto().equals(dp.getIdProducto().getIdProducto());</span>
+    }
+
+    private static String nombreDescuento(DescuentoProducto dp) {
+<span class="nc" id="L542">        var d = dp.getIdDescuento();</span>
+<span class="nc bnc" id="L543" title="All 2 branches missed.">        String n = d != null ? d.getNombre() : null;</span>
+<span class="nc bnc" id="L544" title="All 4 branches missed.">        return n == null || n.isBlank() ? &quot;Descuento&quot; : n.trim();</span>
+    }
+
+    private static String nombreTipo(DescuentoProducto dp) {
+<span class="nc" id="L548">        var d = dp.getIdDescuento();</span>
+<span class="nc bnc" id="L549" title="All 2 branches missed.">        var t = d != null ? d.getIdTipoDescuento() : null;</span>
+<span class="nc bnc" id="L550" title="All 2 branches missed.">        String n = t != null ? t.getNombre() : null;</span>
+<span class="nc bnc" id="L551" title="All 4 branches missed.">        return n == null || n.isBlank() ? null : n.trim();</span>
+    }
+
+    private static String nombreParaComentario(DescuentoProducto dp) {
+        if (COMENTARIO_CON_NOMBRE_DEL_TIPO) {
+            String tipo = nombreTipo(dp);
+            if (tipo != null) {
+                return tipo;
+            }
+        }
+<span class="nc" id="L561">        return nombreDescuento(dp);</span>
+    }
+
+    private LocalDate fechaDeLaOrden() {
+<span class="nc" id="L565">        LocalDate f = aLocalDate(fechaSeleccionada);</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">        return f != null ? f : LocalDate.now();</span>
+    }
+
+    private boolean aplicaEnFecha(DescuentoProducto dp, LocalDate fecha) {
+<span class="nc bnc" id="L570" title="All 2 branches missed.">        if (fecha == null) {</span>
+<span class="nc" id="L571">            return false;</span>
+        }
+<span class="nc" id="L573">        var d = dp.getIdDescuento();</span>
+<span class="nc bnc" id="L574" title="All 2 branches missed.">        boolean enDescuento = d == null</span>
+<span class="nc bnc" id="L575" title="All 2 branches missed.">                || dentro(fecha, aLocalDate(d.getFechaDesde()), aLocalDate(d.getFechaHasta()));</span>
+<span class="nc" id="L576">        boolean enProducto = dentro(fecha, aLocalDate(dp.getFechaDesde()), aLocalDate(dp.getFechaHasta()));</span>
+<span class="nc bnc" id="L577" title="All 4 branches missed.">        return enDescuento &amp;&amp; enProducto;</span>
+    }
+
+    private static boolean dentro(LocalDate fecha, LocalDate desde, LocalDate hasta) {
+<span class="nc bnc" id="L581" title="All 8 branches missed.">        return (desde == null || !fecha.isBefore(desde)) &amp;&amp; (hasta == null || !fecha.isAfter(hasta));</span>
+    }
+
+    private static LocalDate aLocalDate(Object o) {
+<span class="nc bnc" id="L585" title="All 2 branches missed.">        if (o == null) {</span>
+<span class="nc" id="L586">            return null;</span>
+        }
+<span class="nc" id="L588">        ZoneId zona = ZoneId.systemDefault();</span>
+<span class="nc bnc" id="L589" title="All 2 branches missed.">        if (o instanceof LocalDate ld) {</span>
+<span class="nc" id="L590">            return ld;</span>
+        }
+<span class="nc bnc" id="L592" title="All 2 branches missed.">        if (o instanceof LocalDateTime ldt) {</span>
+<span class="nc" id="L593">            return ldt.toLocalDate();</span>
+        }
+<span class="nc bnc" id="L595" title="All 2 branches missed.">        if (o instanceof OffsetDateTime odt) {</span>
+<span class="nc" id="L596">            return odt.atZoneSameInstant(zona).toLocalDate();</span>
+        }
+<span class="nc bnc" id="L598" title="All 2 branches missed.">        if (o instanceof ZonedDateTime zdt) {</span>
+<span class="nc" id="L599">            return zdt.withZoneSameInstant(zona).toLocalDate();</span>
+        }
+<span class="nc bnc" id="L601" title="All 2 branches missed.">        if (o instanceof Instant i) {</span>
+<span class="nc" id="L602">            return i.atZone(zona).toLocalDate();</span>
+        }
+<span class="nc bnc" id="L604" title="All 2 branches missed.">        if (o instanceof java.sql.Date sd) {</span>
+<span class="nc" id="L605">            return sd.toLocalDate();</span>
+        }
+<span class="nc bnc" id="L607" title="All 2 branches missed.">        if (o instanceof Date d) {</span>
+<span class="nc" id="L608">            return d.toInstant().atZone(zona).toLocalDate();</span>
+        }
+<span class="nc" id="L610">        return null;</span>
+    }
+
+    private static Integer aEntero(Object o) {
+<span class="nc bnc" id="L614" title="All 2 branches missed.">        return o instanceof Number n ? n.intValue() : null;</span>
+    }
+
+    private void guardarProductos(Orden orden) {
+<span class="nc" id="L618">        Map&lt;String, Producto&gt; porNombre = productosPorNombre();</span>
+<span class="nc bnc" id="L619" title="All 2 branches missed.">        for (ProductoFila f : filas) {</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">            String nombre = f.getNombreProducto() == null ? &quot;&quot; : f.getNombreProducto().trim();</span>
+<span class="nc bnc" id="L621" title="All 2 branches missed.">            if (nombre.isEmpty()) {</span>
+<span class="nc" id="L622">                continue;</span>
+            }
+<span class="nc" id="L624">            Producto producto = porNombre.get(clave(nombre));</span>
+<span class="nc bnc" id="L625" title="All 2 branches missed.">            if (producto == null) {</span>
+<span class="nc" id="L626">                continue;</span>
+            }
+<span class="nc" id="L628">            OrdenProducto op = new OrdenProducto(UUID.randomUUID());</span>
+<span class="nc" id="L629">            op.setIdOrden(orden);</span>
+<span class="nc" id="L630">            op.setIdProducto(producto);</span>
+<span class="nc" id="L631">            op.setPrecio(f.getPrecio());</span>
+<span class="nc bnc" id="L632" title="All 2 branches missed.">            op.setObservaciones(f.getObservaciones() != null ? f.getObservaciones() : &quot;&quot;);</span>
+<span class="nc" id="L633">            ordenProductoRepository.crear(op);</span>
+<span class="nc" id="L634">        }</span>
+<span class="nc" id="L635">        cargarProductos();</span>
+<span class="nc" id="L636">    }</span>
+
+    private void mostrar(Orden o) {
+<span class="nc" id="L639">        Orden fresca = ordenRepository.findById(o.getIdOrden());</span>
+<span class="nc bnc" id="L640" title="All 2 branches missed.">        this.registro = fresca != null ? fresca : o;</span>
+<span class="nc" id="L641">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L642">        this.soloLectura = true;</span>
+<span class="nc bnc" id="L643" title="All 2 branches missed.">        if (this.registro.getFechaCreacion() != null) {</span>
+<span class="nc" id="L644">            this.fechaSeleccionada = this.registro.getFechaCreacion();</span>
+<span class="nc" id="L645">            this.horaSeleccionada = this.registro.getFechaCreacion();</span>
+        }
+<span class="nc" id="L647">        this.filas.clear();</span>
+<span class="nc bnc" id="L648" title="All 2 branches missed.">        for (OrdenProducto op : asignacionesDe(this.registro)) {</span>
+<span class="nc bnc" id="L649" title="All 2 branches missed.">            String nombre = op.getIdProducto() != null ? op.getIdProducto().getNombre() : &quot;&quot;;</span>
+<span class="nc" id="L650">            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(), op.getObservaciones()));</span>
+<span class="nc" id="L651">        }</span>
+<span class="nc" id="L652">    }</span>
+
+    private List&lt;OrdenProducto&gt; asignacionesDe(Orden o) {
+<span class="nc bnc" id="L655" title="All 4 branches missed.">        if (o == null || o.getIdOrden() == null) {</span>
+<span class="nc" id="L656">            return new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L658">        return ordenProductoRepository.findAll().stream()</span>
+<span class="nc bnc" id="L659" title="All 2 branches missed.">                .filter(op -&gt; op.getIdOrden() != null</span>
+<span class="nc bnc" id="L660" title="All 2 branches missed.">                &amp;&amp; o.getIdOrden().equals(op.getIdOrden().getIdOrden()))</span>
+<span class="nc" id="L661">                .toList();</span>
+    }
+
+    private void cargarProductos() {
+<span class="nc" id="L665">        this.productos = productoRepository.findAll().stream()</span>
+<span class="nc" id="L666">                .sorted((p1, p2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L667" title="All 2 branches missed.">                        p1.getNombre() == null ? &quot;&quot; : p1.getNombre(),</span>
+<span class="nc bnc" id="L668" title="All 2 branches missed.">                        p2.getNombre() == null ? &quot;&quot; : p2.getNombre()))</span>
+<span class="nc" id="L669">                .toList();</span>
+<span class="nc" id="L670">    }</span>
+
+    private static String clave(String nombre) {
+<span class="nc bnc" id="L673" title="All 2 branches missed.">        return nombre == null ? &quot;&quot; : nombre.trim().toLowerCase(Locale.ROOT);</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L677">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L679">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L682">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L684">    }</span>
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L687">        return soloLectura;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L691" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L692">            return &quot;Detalle de la orden&quot;;</span>
+        }
+<span class="nc bnc" id="L694" title="All 2 branches missed.">        return isEditando() ? &quot;Editar orden&quot; : &quot;Nueva orden&quot;;</span>
+    }
+
+    public List&lt;ProductoFila&gt; getFilas() {
+<span class="nc" id="L698">        return filas;</span>
+    }
+
+    public List&lt;Producto&gt; getProductos() {
+<span class="nc" id="L702">        return productos;</span>
+    }
+
+    public List&lt;EmpleadoRol&gt; getEmpleadoRoles() {
+<span class="nc bnc" id="L706" title="All 2 branches missed.">        if (this.empleadoRoles == null) {</span>
+<span class="nc bnc" id="L707" title="All 2 branches missed.">            this.empleadoRoles = empleadoRolRepository == null ? new ArrayList&lt;&gt;()</span>
+<span class="nc" id="L708">                    : empleadoRolRepository.findAll().stream()</span>
+<span class="nc" id="L709">                            .filter(this::rolPermitidoParaOrden)</span>
+<span class="nc" id="L710">                            .toList();</span>
+        }
+<span class="nc bnc" id="L712" title="All 2 branches missed.">        EmpleadoRol actual = registro != null ? registro.getIdEmpleadoRol() : null;</span>
+<span class="nc bnc" id="L713" title="All 4 branches missed.">        if (!isCreando() &amp;&amp; actual != null</span>
+<span class="nc bnc" id="L714" title="All 2 branches missed.">                &amp;&amp; empleadoRoles.stream().noneMatch(x -&gt; x.getIdEmpleadoRol().equals(actual.getIdEmpleadoRol()))) {</span>
+<span class="nc" id="L715">            List&lt;EmpleadoRol&gt; conActual = new ArrayList&lt;&gt;(empleadoRoles);</span>
+<span class="nc" id="L716">            conActual.add(actual);</span>
+<span class="nc" id="L717">            return conActual;</span>
+        }
+<span class="nc" id="L719">        return empleadoRoles;</span>
+    }
+
+    public void setEmpleadoRoles(List&lt;EmpleadoRol&gt; empleadoRoles) {
+<span class="nc" id="L723">        this.empleadoRoles = empleadoRoles;</span>
+<span class="nc" id="L724">    }</span>
+
+    public Date getFechaSeleccionada() {
+<span class="nc" id="L727">        return fechaSeleccionada;</span>
+    }
+
+    public void setFechaSeleccionada(Date fechaSeleccionada) {
+<span class="nc" id="L731">        this.fechaSeleccionada = fechaSeleccionada;</span>
+<span class="nc" id="L732">    }</span>
+
+    public Date getHoraSeleccionada() {
+<span class="nc" id="L735">        return horaSeleccionada;</span>
+    }
+
+    public void setHoraSeleccionada(Date horaSeleccionada) {
+<span class="nc" id="L739">        this.horaSeleccionada = horaSeleccionada;</span>
+<span class="nc" id="L740">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L743" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L744">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.nombre&quot;, &quot;Empleado&quot;),
+                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.apellido&quot;, &quot;Apellido&quot;),
+                    new ColumnaTabla(&quot;idEmpleadoRol.idRol.nombre&quot;, &quot;Rol&quot;),
+                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE)
+            );
+        }
+<span class="nc" id="L751">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

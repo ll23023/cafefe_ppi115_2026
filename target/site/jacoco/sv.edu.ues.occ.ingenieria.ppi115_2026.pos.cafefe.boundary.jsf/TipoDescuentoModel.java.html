@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoDescuentoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">TipoDescuentoModel.java</span></div><h1>TipoDescuentoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
+
+/**
+ *
+ * @author mil
+ */
+@Named(&quot;tipoDescuentoModel&quot;)
+@ViewScoped
+<span class="nc" id="L33">public class TipoDescuentoModel extends DefaultModel&lt;TipoDescuento, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L37">    private static final Logger LOG = Logger.getLogger(TipoDescuentoModel.class.getName());</span>
+<span class="nc" id="L38">    private static final DateTimeFormatter FORMATO_FECHA_HORA = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy HH:mm&quot;);</span>
+
+    private static final int DESCUENTO_MAXIMO_MIN = 5;
+    private static final int DESCUENTO_MAXIMO_MAX = 90;
+
+    @Inject
+    private TipoDescuentoRepository tipoDescuentoRepository;
+
+    @Inject
+    private DescuentoRepository descuentoRepository;
+
+<span class="nc" id="L49">    private boolean soloLectura = false;</span>
+<span class="nc" id="L50">    private List&lt;Descuento&gt; descuentos = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L51">    private List&lt;Descuento&gt; descuentosDelTipo = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L53">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
+            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
+            new ColumnaTabla(&quot;descuentoMaximo&quot;, &quot;Máximo (%)&quot;),
+            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN)
+    );
+
+    @Override
+    public TipoDescuento instanciarRegistro() {
+<span class="nc" id="L61">        TipoDescuento r = new TipoDescuento(UUID.randomUUID());</span>
+<span class="nc" id="L62">        r.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L63">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L64">        r.setDescuentoMaximo(DESCUENTO_MAXIMO_MIN);</span>
+<span class="nc" id="L65">        return r;</span>
+    }
+
+    @Override
+    public TipoDescuento getRegistroById(Object id) {
+<span class="nc bnc" id="L70" title="All 6 branches missed.">        if (id != null &amp;&amp; this.registros != null &amp;&amp; !this.registros.isEmpty()) {</span>
+<span class="nc" id="L71">            UUID busca = (UUID) id;</span>
+<span class="nc" id="L72">            return this.registros.stream()</span>
+<span class="nc" id="L73">                    .filter(r -&gt; r.getIdTipoDescuento().equals(busca))</span>
+<span class="nc" id="L74">                    .findFirst()</span>
+<span class="nc" id="L75">                    .orElse(null);</span>
+        }
+<span class="nc" id="L77">        return null;</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(TipoDescuento dato) {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (dato != null) {</span>
+<span class="nc" id="L83">            return dato.getIdTipoDescuento();</span>
+        }
+<span class="nc" id="L85">        return null;</span>
+    }
+
+    @Override
+    public TipoDescuentoRepository getRepository() {
+<span class="nc" id="L90">        return tipoDescuentoRepository;</span>
+    }
+
+    @Override
+    public void cargarRegistros() {
+<span class="nc" id="L95">        super.cargarRegistros();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        this.descuentos = descuentoRepository != null ? descuentoRepository.findAll() : new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L97">        refrescarDetalle();</span>
+<span class="nc" id="L98">    }</span>
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L102">        super.limpiar();</span>
+<span class="nc" id="L103">        this.soloLectura = false;</span>
+<span class="nc" id="L104">        refrescarDetalle();  </span>
+<span class="nc" id="L105">    }</span>
+
+    public void onSeleccionar() {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L109">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L111">    }</span>
+
+    public void editar(TipoDescuento t) {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (t == null) {</span>
+<span class="nc" id="L115">            return;</span>
+        }
+<span class="nc" id="L117">        this.seleccion = t;</span>
+<span class="nc" id="L118">        mostrar(t);</span>
+<span class="nc" id="L119">        this.soloLectura = false;</span>
+<span class="nc" id="L120">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L121">    }</span>
+
+    public void cancelar() {
+<span class="nc bnc" id="L124" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
+<span class="nc" id="L125">            mostrar(seleccion);</span>
+        } else {
+<span class="nc" id="L127">            limpiar();</span>
+        }
+<span class="nc" id="L129">    }</span>
+
+    // Solo se elimina un tipo que no tiene descuentos (hijos). 
+    public void eliminar(TipoDescuento t) {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (t == null) {</span>
+<span class="nc" id="L134">            return;</span>
+        }
+        try {
+<span class="nc" id="L137">            int hijos = contar(t.getIdTipoDescuento(), todosLosDescuentos());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (hijos &gt; 0) {</span>
+<span class="nc" id="L139">                error(&quot;No se puede eliminar el tipo \&quot;&quot; + t.getNombre() + &quot;\&quot;: tiene &quot; + hijos</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                        + (hijos == 1 ? &quot; descuento asociado.&quot; : &quot; descuentos asociados.&quot;));</span>
+<span class="nc" id="L141">                return;</span>
+            }
+<span class="nc" id="L143">            tipoDescuentoRepository.eliminar(t);</span>
+<span class="nc" id="L144">            cargarRegistros();</span>
+<span class="nc" id="L145">            limpiar();</span>
+<span class="nc" id="L146">            info(&quot;Tipo de descuento eliminado.&quot;);</span>
+<span class="nc" id="L147">        } catch (Exception ex) {</span>
+<span class="nc" id="L148">            LOG.log(Level.SEVERE, &quot;Error al eliminar tipo de descuento&quot;, ex);</span>
+<span class="nc" id="L149">            error(&quot;No se pudo eliminar el tipo de descuento: &quot; + ex.getMessage());</span>
+<span class="nc" id="L150">        }</span>
+<span class="nc" id="L151">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L155" title="All 4 branches missed.">        if (soloLectura || registro == null) {</span>
+<span class="nc" id="L156">            return;</span>
+        }
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        String nombre = registro.getNombre() == null ? &quot;&quot; : registro.getNombre().trim();</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (nombre.isEmpty()) {</span>
+<span class="nc" id="L160">            error(&quot;Indique el nombre del tipo de descuento.&quot;);</span>
+<span class="nc" id="L161">            return;</span>
+        }
+<span class="nc" id="L163">        registro.setNombre(nombre);</span>
+
+<span class="nc" id="L165">        Integer maximo = aEntero(registro.getDescuentoMaximo());</span>
+<span class="nc bnc" id="L166" title="All 6 branches missed.">        if (maximo == null || maximo &lt; DESCUENTO_MAXIMO_MIN || maximo &gt; DESCUENTO_MAXIMO_MAX) {</span>
+<span class="nc" id="L167">            error(&quot;El descuento máximo debe estar entre &quot; + DESCUENTO_MAXIMO_MIN</span>
+                    + &quot;% y &quot; + DESCUENTO_MAXIMO_MAX + &quot;%.&quot;);
+<span class="nc" id="L169">            return;</span>
+        }
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (registro.getObservaciones() == null) {</span>
+<span class="nc" id="L172">            registro.setObservaciones(&quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (registro.getActivo() == null) {</span>
+<span class="nc" id="L175">            registro.setActivo(Boolean.TRUE);</span>
+        }
+
+<span class="nc" id="L178">        boolean esNuevo = isCreando();</span>
+        try {
+<span class="nc bnc" id="L180" title="All 2 branches missed.">            if (esNuevo) {</span>
+<span class="nc" id="L181">                tipoDescuentoRepository.crear(registro);</span>
+            } else {
+<span class="nc" id="L183">                tipoDescuentoRepository.modificar(registro);</span>
+            }
+<span class="nc" id="L185">            UUID id = registro.getIdTipoDescuento();</span>
+<span class="nc" id="L186">            cargarRegistros();</span>
+<span class="nc" id="L187">            TipoDescuento guardado = registros.stream()</span>
+<span class="nc" id="L188">                    .filter(t -&gt; id.equals(t.getIdTipoDescuento()))</span>
+<span class="nc" id="L189">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (guardado != null) {</span>
+<span class="nc" id="L191">                this.seleccion = guardado;</span>
+<span class="nc" id="L192">                mostrar(guardado);</span>
+            } else {
+<span class="nc" id="L194">                limpiar();</span>
+            }
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            info(esNuevo ? &quot;Tipo de descuento creado.&quot; : &quot;Tipo de descuento modificado.&quot;);</span>
+<span class="nc" id="L197">        } catch (Exception ex) {</span>
+<span class="nc" id="L198">            LOG.log(Level.SEVERE, &quot;Error al guardar tipo de descuento&quot;, ex);</span>
+<span class="nc" id="L199">            error(&quot;No se pudo guardar el tipo de descuento: &quot; + ex.getMessage());</span>
+<span class="nc" id="L200">        }</span>
+<span class="nc" id="L201">    }</span>
+
+    private void mostrar(TipoDescuento t) {
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        TipoDescuento fresco = t.getIdTipoDescuento() == null</span>
+<span class="nc" id="L205">                ? null : tipoDescuentoRepository.findById(t.getIdTipoDescuento());</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        this.registro = fresco != null ? fresco : t;</span>
+<span class="nc" id="L207">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L208">        this.soloLectura = true;</span>
+<span class="nc" id="L209">        refrescarDetalle();</span>
+<span class="nc" id="L210">    }</span>
+
+    private void refrescarDetalle() {
+<span class="nc" id="L213">        List&lt;Descuento&gt; lista = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L214" title="All 6 branches missed.">        if (registro != null &amp;&amp; registro.getIdTipoDescuento() != null &amp;&amp; descuentos != null) {</span>
+<span class="nc" id="L215">            UUID idTipo = registro.getIdTipoDescuento();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            for (Descuento d : descuentos) {</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                if (perteneceAlTipo(d, idTipo)) {</span>
+<span class="nc" id="L218">                    lista.add(d);</span>
+                }
+<span class="nc" id="L220">            }</span>
+<span class="nc" id="L221">            lista.sort((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                    a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">                    b.getNombre() == null ? &quot;&quot; : b.getNombre()));</span>
+        }
+<span class="nc" id="L225">        this.descuentosDelTipo = lista;</span>
+<span class="nc" id="L226">    }</span>
+
+    public int cantidadDescuentos(TipoDescuento t) {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        return t == null ? 0 : contar(t.getIdTipoDescuento(), descuentos);</span>
+    }
+
+    private List&lt;Descuento&gt; todosLosDescuentos() {
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        return descuentoRepository != null ? descuentoRepository.findAll() : new ArrayList&lt;&gt;();</span>
+    }
+
+    private static int contar(UUID idTipo, List&lt;Descuento&gt; fuente) {
+<span class="nc bnc" id="L237" title="All 4 branches missed.">        if (idTipo == null || fuente == null) {</span>
+<span class="nc" id="L238">            return 0;</span>
+        }
+<span class="nc" id="L240">        int n = 0;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        for (Descuento d : fuente) {</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">            if (perteneceAlTipo(d, idTipo)) {</span>
+<span class="nc" id="L243">                n++;</span>
+            }
+<span class="nc" id="L245">        }</span>
+<span class="nc" id="L246">        return n;</span>
+    }
+
+    private static boolean perteneceAlTipo(Descuento d, UUID idTipo) {
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        return d != null</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">                &amp;&amp; d.getIdTipoDescuento() != null</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(d.getIdTipoDescuento().getIdTipoDescuento());</span>
+    }
+
+    private static Integer aEntero(Object o) {
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        return o instanceof Number n ? n.intValue() : null;</span>
+    }
+
+    public String fechaTexto(Object fecha) {
+<span class="nc" id="L260">        LocalDateTime f = aLocalDateTime(fecha);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        return f == null ? &quot;&quot; : f.format(FORMATO_FECHA_HORA);</span>
+    }
+
+    public String fechaHastaTexto(Object fecha) {
+<span class="nc" id="L265">        LocalDateTime f = aLocalDateTime(fecha);</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">        return f == null ? &quot;Sin fecha de finalización&quot; : f.format(FORMATO_FECHA_HORA);</span>
+    }
+
+    private static LocalDateTime aLocalDateTime(Object o) {
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if (o == null) {</span>
+<span class="nc" id="L271">            return null;</span>
+        }
+<span class="nc" id="L273">        ZoneId zona = ZoneId.systemDefault();</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        if (o instanceof LocalDateTime ldt) {</span>
+<span class="nc" id="L275">            return ldt;</span>
+        }
+<span class="nc bnc" id="L277" title="All 2 branches missed.">        if (o instanceof LocalDate ld) {</span>
+<span class="nc" id="L278">            return ld.atStartOfDay();</span>
+        }
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        if (o instanceof OffsetDateTime odt) {</span>
+<span class="nc" id="L281">            return odt.atZoneSameInstant(zona).toLocalDateTime();</span>
+        }
+<span class="nc bnc" id="L283" title="All 2 branches missed.">        if (o instanceof ZonedDateTime zdt) {</span>
+<span class="nc" id="L284">            return zdt.withZoneSameInstant(zona).toLocalDateTime();</span>
+        }
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        if (o instanceof Instant i) {</span>
+<span class="nc" id="L287">            return LocalDateTime.ofInstant(i, zona);</span>
+        }
+<span class="nc bnc" id="L289" title="All 2 branches missed.">        if (o instanceof java.sql.Date sd) {</span>
+<span class="nc" id="L290">            return sd.toLocalDate().atStartOfDay();</span>
+        }
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        if (o instanceof Date d) {</span>
+<span class="nc" id="L293">            return LocalDateTime.ofInstant(d.toInstant(), zona);</span>
+        }
+<span class="nc" id="L295">        return null;</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L299">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L301">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L304">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L306">    }</span>
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L309">        return soloLectura;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L314">            return &quot;Detalle del tipo de descuento&quot;;</span>
+        }
+<span class="nc bnc" id="L316" title="All 2 branches missed.">        return isEditando() ? &quot;Editar tipo de descuento&quot; : &quot;Nuevo tipo de descuento&quot;;</span>
+    }
+
+    public List&lt;Descuento&gt; getDescuentosDelTipo() {
+<span class="nc" id="L320">        return descuentosDelTipo;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc" id="L324">        return columnas;</span>
+    }
+
+    public List&lt;Integer&gt; getOpcionesDescuento() {
+<span class="nc" id="L328">        List&lt;Integer&gt; opciones = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">        for (int i = DESCUENTO_MAXIMO_MIN; i &lt;= DESCUENTO_MAXIMO_MAX; i += 5) {</span>
+<span class="nc" id="L330">            opciones.add(i);</span>
+        }
+<span class="nc" id="L332">        return opciones;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Descuento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">Descuento.java</span></div><h1>Descuento.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;descuento&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Descuento.findAll&quot;, query = &quot;SELECT d FROM Descuento d&quot;),
+    @NamedQuery(name = &quot;Descuento.findAllWithTipo&quot;, query = &quot;SELECT d FROM Descuento d LEFT JOIN FETCH d.idTipoDescuento&quot;),
+    @NamedQuery(name = &quot;Descuento.findByNombre&quot;, query = &quot;SELECT d FROM Descuento d WHERE d.nombre = :nombre&quot;),
+    @NamedQuery(name = &quot;Descuento.findByTipoDescuento&quot;, query = &quot;SELECT d FROM Descuento d WHERE d.idTipoDescuento.idTipoDescuento = :idTipoDescuento&quot;),
+    @NamedQuery(name = &quot;Descuento.findByFechaDesde&quot;, query = &quot;SELECT d FROM Descuento d WHERE d.fechaDesde = :fechaDesde&quot;),
+    @NamedQuery(name = &quot;Descuento.findByFechaHasta&quot;, query = &quot;SELECT d FROM Descuento d WHERE d.fechaHasta = :fechaHasta&quot;),
+    @NamedQuery(name = &quot;Descuento.findByObservaciones&quot;, query = &quot;SELECT d FROM Descuento d WHERE d.observaciones = :observaciones&quot;)})
+public class Descuento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_descuento&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idDescuento;
+    @Size(max = 155)
+    @Column(name = &quot;nombre&quot;, length = 155)
+    private String nombre;
+    @Column(name = &quot;fecha_desde&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaDesde;
+    @Column(name = &quot;fecha_hasta&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHasta;
+    @Size(max = 2147483647)
+    @Column(name = &quot;observaciones&quot;, length = 2147483647)
+    private String observaciones;
+    @JoinColumn(name = &quot;id_tipo_descuento&quot;, referencedColumnName = &quot;id_tipo_descuento&quot;)
+    @ManyToOne
+    private TipoDescuento idTipoDescuento;
+    @OneToMany(mappedBy = &quot;idDescuento&quot;)
+    private List&lt;DescuentoProducto&gt; descuentoProductoList;
+
+<span class="nc" id="L64">    public Descuento() {</span>
+<span class="nc" id="L65">    }</span>
+
+<span class="nc" id="L67">    public Descuento(UUID idDescuento) {</span>
+<span class="nc" id="L68">        this.idDescuento = idDescuento;</span>
+<span class="nc" id="L69">    }</span>
+
+    public UUID getIdDescuento() {
+<span class="nc" id="L72">        return idDescuento;</span>
+    }
+
+    public void setIdDescuento(UUID idDescuento) {
+<span class="nc" id="L76">        this.idDescuento = idDescuento;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L80">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L84">        this.nombre = nombre;</span>
+<span class="nc" id="L85">    }</span>
+
+    public Date getFechaDesde() {
+<span class="nc" id="L88">        return fechaDesde;</span>
+    }
+
+    public void setFechaDesde(Date fechaDesde) {
+<span class="nc" id="L92">        this.fechaDesde = fechaDesde;</span>
+<span class="nc" id="L93">    }</span>
+
+    public Date getFechaHasta() {
+<span class="nc" id="L96">        return fechaHasta;</span>
+    }
+
+    public void setFechaHasta(Date fechaHasta) {
+<span class="nc" id="L100">        this.fechaHasta = fechaHasta;</span>
+<span class="nc" id="L101">    }</span>
+
+    public String getObservaciones() {
+<span class="nc" id="L104">        return observaciones;</span>
+    }
+
+    public void setObservaciones(String observaciones) {
+<span class="nc" id="L108">        this.observaciones = observaciones;</span>
+<span class="nc" id="L109">    }</span>
+
+    public TipoDescuento getIdTipoDescuento() {
+<span class="nc" id="L112">        return idTipoDescuento;</span>
+    }
+
+    public void setIdTipoDescuento(TipoDescuento idTipoDescuento) {
+<span class="nc" id="L116">        this.idTipoDescuento = idTipoDescuento;</span>
+<span class="nc" id="L117">    }</span>
+
+    public List&lt;DescuentoProducto&gt; getDescuentoProductoList() {
+<span class="nc" id="L120">        return descuentoProductoList;</span>
+    }
+
+    public void setDescuentoProductoList(List&lt;DescuentoProducto&gt; descuentoProductoList) {
+<span class="nc" id="L124">        this.descuentoProductoList = descuentoProductoList;</span>
+<span class="nc" id="L125">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L129">        int hash = 0;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        hash += (idDescuento != null ? idDescuento.hashCode() : 0);</span>
+<span class="nc" id="L131">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (!(object instanceof Descuento)) {</span>
+<span class="nc" id="L138">            return false;</span>
+        }
+<span class="nc" id="L140">        Descuento other = (Descuento) object;</span>
+<span class="nc bnc" id="L141" title="All 8 branches missed.">        if ((this.idDescuento == null &amp;&amp; other.idDescuento != null) || (this.idDescuento != null &amp;&amp; !this.idDescuento.equals(other.idDescuento))) {</span>
+<span class="nc" id="L142">            return false;</span>
+        }
+<span class="nc" id="L144">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L149">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Descuento[ idDescuento=&quot; + idDescuento + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

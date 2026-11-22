@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Producto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">Producto.java</span></div><h1>Producto.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;producto&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Producto.findAll&quot;, query = &quot;SELECT p FROM Producto p&quot;),
+    @NamedQuery(name = &quot;Producto.findByNombre&quot;, query = &quot;SELECT p FROM Producto p WHERE p.nombre = :nombre&quot;),
+    @NamedQuery(name = &quot;Producto.findByActivo&quot;, query = &quot;SELECT p FROM Producto p WHERE p.activo = :activo&quot;),
+    @NamedQuery(name = &quot;Producto.findByComentarios&quot;, query = &quot;SELECT p FROM Producto p WHERE p.comentarios = :comentarios&quot;),
+    @NamedQuery(name = &quot;Producto.findByPrecioSugerido&quot;, query = &quot;SELECT p FROM Producto p WHERE p.precioSugerido = :precioSugerido&quot;),
+    @NamedQuery(name = &quot;Producto.findActivos&quot;, query = &quot;SELECT p FROM Producto p WHERE p.activo = true&quot;),
+    @NamedQuery(name = &quot;Producto.findByNombreLike&quot;, query = &quot;SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(:nombre)&quot;),
+    @NamedQuery(name = &quot;Producto.findByPrecioRange&quot;, query = &quot;SELECT p FROM Producto p WHERE p.precioSugerido BETWEEN :min AND :max&quot;)
+
+})
+public class Producto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_producto&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idProducto;
+    @Size(max = 155)
+    @Column(name = &quot;nombre&quot;, length = 155)
+    private String nombre;
+    @Column(name = &quot;activo&quot;)
+    private Boolean activo;
+    @Size(max = 2147483647)
+    @Column(name = &quot;comentarios&quot;, length = 2147483647)
+    private String comentarios;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @DecimalMin(value = &quot;0.00&quot;, message = &quot;El precio no puede ser negativo&quot;)
+    @DecimalMax(value = &quot;50.00&quot;, message = &quot;El precio máximo permitido es 50.00&quot;)
+    @Column(name = &quot;precio_sugerido&quot;, nullable = false, precision = 8, scale = 2)
+    private BigDecimal precioSugerido;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idProducto&quot;)
+    private List&lt;ProductoCaracteristica&gt; productoCaracteristicaList;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idProducto&quot;)
+    private List&lt;OrdenProducto&gt; ordenProductoList;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idProducto&quot;)
+    private List&lt;DescuentoProducto&gt; descuentoProductoList;
+    @JsonbTransient
+    @OneToMany(mappedBy = &quot;idProducto&quot;)
+    private List&lt;ProductoTipoProducto&gt; productoTipoProductoList;
+
+<span class="nc" id="L76">    public Producto() {</span>
+<span class="nc" id="L77">    }</span>
+
+<span class="nc" id="L79">    public Producto(UUID idProducto) {</span>
+<span class="nc" id="L80">        this.idProducto = idProducto;</span>
+<span class="nc" id="L81">    }</span>
+
+<span class="nc" id="L83">    public Producto(UUID idProducto, BigDecimal precioSugerido) {</span>
+<span class="nc" id="L84">        this.idProducto = idProducto;</span>
+<span class="nc" id="L85">        this.precioSugerido = precioSugerido;</span>
+<span class="nc" id="L86">    }</span>
+
+    public UUID getIdProducto() {
+<span class="nc" id="L89">        return idProducto;</span>
+    }
+
+    public void setIdProducto(UUID idProducto) {
+<span class="nc" id="L93">        this.idProducto = idProducto;</span>
+<span class="nc" id="L94">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L97">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L101">        this.nombre = nombre;</span>
+<span class="nc" id="L102">    }</span>
+
+    public Boolean getActivo() {
+<span class="nc" id="L105">        return activo;</span>
+    }
+
+    public void setActivo(Boolean activo) {
+<span class="nc" id="L109">        this.activo = activo;</span>
+<span class="nc" id="L110">    }</span>
+
+    public String getComentarios() {
+<span class="nc" id="L113">        return comentarios;</span>
+    }
+
+    public void setComentarios(String comentarios) {
+<span class="nc" id="L117">        this.comentarios = comentarios;</span>
+<span class="nc" id="L118">    }</span>
+
+    public BigDecimal getPrecioSugerido() {
+<span class="nc" id="L121">        return precioSugerido;</span>
+    }
+
+    public void setPrecioSugerido(BigDecimal precioSugerido) {
+<span class="nc" id="L125">        this.precioSugerido = precioSugerido;</span>
+<span class="nc" id="L126">    }</span>
+
+    public List&lt;ProductoCaracteristica&gt; getProductoCaracteristicaList() {
+<span class="nc" id="L129">        return productoCaracteristicaList;</span>
+    }
+
+    public void setProductoCaracteristicaList(List&lt;ProductoCaracteristica&gt; productoCaracteristicaList) {
+<span class="nc" id="L133">        this.productoCaracteristicaList = productoCaracteristicaList;</span>
+<span class="nc" id="L134">    }</span>
+
+    public List&lt;OrdenProducto&gt; getOrdenProductoList() {
+<span class="nc" id="L137">        return ordenProductoList;</span>
+    }
+
+    public void setOrdenProductoList(List&lt;OrdenProducto&gt; ordenProductoList) {
+<span class="nc" id="L141">        this.ordenProductoList = ordenProductoList;</span>
+<span class="nc" id="L142">    }</span>
+
+    public List&lt;DescuentoProducto&gt; getDescuentoProductoList() {
+<span class="nc" id="L145">        return descuentoProductoList;</span>
+    }
+
+    public void setDescuentoProductoList(List&lt;DescuentoProducto&gt; descuentoProductoList) {
+<span class="nc" id="L149">        this.descuentoProductoList = descuentoProductoList;</span>
+<span class="nc" id="L150">    }</span>
+
+    public List&lt;ProductoTipoProducto&gt; getProductoTipoProductoList() {
+<span class="nc" id="L153">        return productoTipoProductoList;</span>
+    }
+
+    public void setProductoTipoProductoList(List&lt;ProductoTipoProducto&gt; productoTipoProductoList) {
+<span class="nc" id="L157">        this.productoTipoProductoList = productoTipoProductoList;</span>
+<span class="nc" id="L158">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L162">        int hash = 0;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        hash += (idProducto != null ? idProducto.hashCode() : 0);</span>
+<span class="nc" id="L164">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (!(object instanceof Producto)) {</span>
+<span class="nc" id="L171">            return false;</span>
+        }
+<span class="nc" id="L173">        Producto other = (Producto) object;</span>
+<span class="nc bnc" id="L174" title="All 8 branches missed.">        if ((this.idProducto == null &amp;&amp; other.idProducto != null) || (this.idProducto != null &amp;&amp; !this.idProducto.equals(other.idProducto))) {</span>
+<span class="nc" id="L175">            return false;</span>
+        }
+<span class="nc" id="L177">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L182">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto[ idProducto=&quot; + idProducto + &quot; ]&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

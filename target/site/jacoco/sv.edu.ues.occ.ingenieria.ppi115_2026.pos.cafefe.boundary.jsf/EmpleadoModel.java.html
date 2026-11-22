@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpleadoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">EmpleadoModel.java</span></div><h1>EmpleadoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+
+/**
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L32">public class EmpleadoModel extends DefaultModel&lt;Empleado, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L36">    private static final Logger LOG = Logger.getLogger(EmpleadoModel.class.getName());</span>
+
+    private static final boolean CREAR_ROLES_AL_MODIFICAR = true;
+
+    public static class RolFila implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        private String nombre;
+        private boolean existente;
+
+<span class="nc" id="L46">        public RolFila() {</span>
+<span class="nc" id="L47">        }</span>
+
+<span class="nc" id="L49">        public RolFila(String nombre) {</span>
+<span class="nc" id="L50">            this.nombre = nombre;</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        public RolFila(String nombre, boolean existente) {</span>
+<span class="nc" id="L54">            this.nombre = nombre;</span>
+<span class="nc" id="L55">            this.existente = existente;</span>
+<span class="nc" id="L56">        }</span>
+
+        public String getNombre() {
+<span class="nc" id="L59">            return nombre;</span>
+        }
+
+        public void setNombre(String nombre) {
+<span class="nc" id="L63">            this.nombre = nombre;</span>
+<span class="nc" id="L64">        }</span>
+
+        public boolean isExistente() {
+<span class="nc" id="L67">            return existente;</span>
+        }
+
+        public void setExistente(boolean existente) {
+<span class="nc" id="L71">            this.existente = existente;</span>
+<span class="nc" id="L72">        }</span>
+    }
+
+    @Inject
+    private EmpleadoRepository empleadoRepository;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    private RolRepository rolRepository;
+
+<span class="nc" id="L84">    private boolean soloLectura = false;</span>
+<span class="nc" id="L85">    private final List&lt;RolFila&gt; filas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L86">    private List&lt;Rol&gt; roles = new ArrayList&lt;&gt;();</span>
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public EmpleadoRepository getRepository() {
+<span class="nc" id="L91">        return empleadoRepository;</span>
+    }
+
+    @Override
+    public Empleado instanciarRegistro() {
+<span class="nc" id="L96">        Empleado r = new Empleado(UUID.randomUUID());</span>
+<span class="nc" id="L97">        r.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L98">        r.setComentarios(&quot;&quot;);</span>
+<span class="nc" id="L99">        return r;</span>
+    }
+
+    @Override
+    public Empleado getRegistroById(Object id) {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        return id == null ? null : empleadoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Empleado dato) {
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        return dato != null ? dato.getIdEmpleado() : null;</span>
+    }
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L114">        super.limpiar();</span>
+<span class="nc" id="L115">        this.soloLectura = false;</span>
+<span class="nc" id="L116">        this.filas.clear();</span>
+<span class="nc" id="L117">        this.cargarRoles();</span>
+<span class="nc" id="L118">    }</span>
+
+    public void onSeleccionar() {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L122">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+    public void editar(Empleado e) {
+<span class="nc" id="L127">        this.seleccion = e;</span>
+<span class="nc" id="L128">        mostrar(e);</span>
+<span class="nc" id="L129">        this.soloLectura = false;</span>
+<span class="nc" id="L130">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L131">    }</span>
+
+    public void cancelar() {
+<span class="nc" id="L134">        limpiar();</span>
+<span class="nc" id="L135">    }</span>
+
+    public void eliminar(Empleado e) {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (e == null) {</span>
+<span class="nc" id="L139">            return;</span>
+        }
+        try {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            for (EmpleadoRol er : asignacionesDe(e)) {</span>
+<span class="nc" id="L143">                empleadoRolRepository.eliminar(er);</span>
+<span class="nc" id="L144">            }</span>
+<span class="nc" id="L145">            empleadoRepository.eliminar(e);</span>
+<span class="nc" id="L146">            cargarRegistros();</span>
+<span class="nc" id="L147">            limpiar();</span>
+<span class="nc" id="L148">            info(&quot;Empleado eliminado.&quot;);</span>
+<span class="nc" id="L149">        } catch (Exception ex) {</span>
+<span class="nc" id="L150">            LOG.log(Level.SEVERE, &quot;Error al eliminar empleado&quot;, ex);</span>
+<span class="nc" id="L151">            error(&quot;No se pudo eliminar el empleado: &quot; + ex.getMessage());</span>
+<span class="nc" id="L152">        }</span>
+<span class="nc" id="L153">    }</span>
+
+    public boolean isPuedeAgregarRoles() {
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (isCreando()) {</span>
+<span class="nc" id="L157">            return true;</span>
+        }
+        // Al editar, solo si todavía no tiene ningún rol asignado
+<span class="nc bnc" id="L160" title="All 4 branches missed.">        return isEditando() &amp;&amp; !tieneRolAsignado();</span>
+    }
+
+    private boolean tieneRolAsignado() {
+<span class="nc" id="L164">        return filas.stream().anyMatch(RolFila::isExistente);</span>
+    }
+
+    public void agregarFila() {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (!isPuedeAgregarRoles()) {</span>
+<span class="nc" id="L169">            return;</span>
+        }
+<span class="nc" id="L171">        cargarRoles();</span>
+<span class="nc" id="L172">        filas.add(new RolFila(&quot;&quot;));</span>
+<span class="nc" id="L173">    }</span>
+
+    public void quitarFila(RolFila fila) {
+<span class="nc bnc" id="L176" title="All 6 branches missed.">        if (!isPuedeAgregarRoles() || fila == null || fila.isExistente()) {</span>
+<span class="nc" id="L177">            return;</span>
+        }
+<span class="nc" id="L179">        filas.remove(fila);</span>
+<span class="nc" id="L180">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (soloLectura || registro == null) {</span>
+<span class="nc" id="L185">            return;</span>
+        }
+<span class="nc" id="L187">        boolean esNuevo = isCreando();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (!rolesValidos(esNuevo)) {</span>
+<span class="nc" id="L189">            return;</span>
+        }
+        try {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">            if (esNuevo) {</span>
+<span class="nc" id="L193">                crearConRoles();</span>
+            } else {
+<span class="nc" id="L195">                modificarConRoles();</span>
+            }
+
+<span class="nc" id="L198">            UUID id = registro.getIdEmpleado();</span>
+<span class="nc" id="L199">            cargarRegistros();</span>
+<span class="nc" id="L200">            Empleado guardado = registros.stream()</span>
+<span class="nc" id="L201">                    .filter(e -&gt; id.equals(e.getIdEmpleado()))</span>
+<span class="nc" id="L202">                    .findFirst().orElse(null);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (guardado != null) {</span>
+<span class="nc" id="L204">                this.seleccion = guardado;</span>
+<span class="nc" id="L205">                mostrar(guardado);</span>
+            } else {
+<span class="nc" id="L207">                limpiar();</span>
+            }
+<span class="nc" id="L209">            cargarRoles();</span>
+<span class="nc" id="L210">            info(&quot;Empleado guardado.&quot;);</span>
+<span class="nc" id="L211">        } catch (Exception ex) {</span>
+<span class="nc" id="L212">            LOG.log(Level.SEVERE, &quot;Error al guardar empleado&quot;, ex);</span>
+<span class="nc" id="L213">            error(&quot;No se pudo guardar el empleado: &quot; + ex.getMessage());</span>
+<span class="nc" id="L214">        }</span>
+<span class="nc" id="L215">    }</span>
+
+    private void crearConRoles() {
+<span class="nc" id="L218">        empleadoRepository.crear(registro);</span>
+<span class="nc" id="L219">        Empleado emp = empleadoRepository.findById(registro.getIdEmpleado());</span>
+<span class="nc" id="L220">        List&lt;Rol&gt; rolesCreados = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L221">        List&lt;EmpleadoRol&gt; asignacionesCreadas = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L223">            asignarRolesNuevos(emp, rolesCreados, asignacionesCreadas);</span>
+<span class="nc" id="L224">        } catch (RuntimeException ex) {</span>
+<span class="nc" id="L225">            deshacer(asignacionesCreadas, rolesCreados);</span>
+<span class="nc" id="L226">            empleadoRepository.eliminar(emp);</span>
+<span class="nc" id="L227">            throw ex;</span>
+<span class="nc" id="L228">        }</span>
+<span class="nc" id="L229">    }</span>
+
+    private void modificarConRoles() {
+<span class="nc" id="L232">        empleadoRepository.modificar(registro);</span>
+<span class="nc" id="L233">        Empleado emp = empleadoRepository.findById(registro.getIdEmpleado());</span>
+<span class="nc" id="L234">        List&lt;Rol&gt; rolesCreados = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L235">        List&lt;EmpleadoRol&gt; asignacionesCreadas = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L237">            asignarRolesNuevos(emp, rolesCreados, asignacionesCreadas);</span>
+<span class="nc" id="L238">        } catch (RuntimeException ex) {</span>
+<span class="nc" id="L239">            deshacer(asignacionesCreadas, rolesCreados);</span>
+<span class="nc" id="L240">            throw ex;</span>
+<span class="nc" id="L241">        }</span>
+<span class="nc" id="L242">    }</span>
+
+    private void deshacer(List&lt;EmpleadoRol&gt; asignaciones, List&lt;Rol&gt; rolesCreados) {
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (EmpleadoRol er : asignaciones) {</span>
+<span class="nc" id="L246">            empleadoRolRepository.eliminar(er);</span>
+<span class="nc" id="L247">        }</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        for (Rol r : rolesCreados) {</span>
+<span class="nc" id="L249">            rolRepository.eliminar(r);</span>
+<span class="nc" id="L250">        }</span>
+<span class="nc" id="L251">    }</span>
+
+    private Map&lt;String, String&gt; rolesDeseados() {
+<span class="nc" id="L254">        Map&lt;String, String&gt; deseados = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        for (RolFila f : filas) {</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">            if (f.isExistente()) {</span>
+<span class="nc" id="L257">                continue;</span>
+            }
+<span class="nc bnc" id="L259" title="All 2 branches missed.">            String n = f.getNombre() == null ? &quot;&quot; : f.getNombre().trim();</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            if (!n.isEmpty()) {</span>
+<span class="nc" id="L261">                deseados.putIfAbsent(clave(n), n);</span>
+            }
+<span class="nc" id="L263">        }</span>
+<span class="nc" id="L264">        return deseados;</span>
+    }
+
+    private Map&lt;String, Rol&gt; rolesPorNombre() {
+<span class="nc" id="L268">        Map&lt;String, Rol&gt; porNombre = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        for (Rol r : rolRepository.findAll()) {</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            if (r.getNombre() != null) {</span>
+<span class="nc" id="L271">                porNombre.putIfAbsent(clave(r.getNombre()), r);</span>
+            }
+<span class="nc" id="L273">        }</span>
+<span class="nc" id="L274">        return porNombre;</span>
+    }
+
+    private Set&lt;String&gt; rolesYaAsignados(Empleado emp) {
+<span class="nc" id="L278">        Set&lt;String&gt; asignados = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">        for (EmpleadoRol er : asignacionesDe(emp)) {</span>
+<span class="nc bnc" id="L280" title="All 4 branches missed.">            if (er.getIdRol() != null &amp;&amp; er.getIdRol().getNombre() != null) {</span>
+<span class="nc" id="L281">                asignados.add(clave(er.getIdRol().getNombre()));</span>
+            }
+<span class="nc" id="L283">        }</span>
+<span class="nc" id="L284">        return asignados;</span>
+    }
+
+    private boolean rolesValidos(boolean esNuevo) {
+<span class="nc" id="L288">        Map&lt;String, Rol&gt; porNombre = rolesPorNombre();</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">        Set&lt;String&gt; yaAsignados = esNuevo ? new HashSet&lt;String&gt;() : rolesYaAsignados(registro);</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        boolean puedeCrearRoles = esNuevo || CREAR_ROLES_AL_MODIFICAR;</span>
+
+        // NUEVO: si ya tiene rol, no se permite agregar otro
+<span class="nc bnc" id="L293" title="All 6 branches missed.">        if (!esNuevo &amp;&amp; !yaAsignados.isEmpty() &amp;&amp; !rolesDeseados().isEmpty()) {</span>
+<span class="nc" id="L294">            error(&quot;El empleado ya tiene un rol asignado; no se pueden agregar más.&quot;);</span>
+<span class="nc" id="L295">            return false;</span>
+        }
+<span class="nc bnc" id="L297" title="All 2 branches missed.">        for (Map.Entry&lt;String, String&gt; d : rolesDeseados().entrySet()) {</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">            if (yaAsignados.contains(d.getKey())) {</span>
+<span class="nc" id="L299">                error(&quot;El empleado ya tiene asignado el rol: &quot; + d.getValue());</span>
+<span class="nc" id="L300">                return false;</span>
+            }
+<span class="nc" id="L302">            Rol r = porNombre.get(d.getKey());</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">            if (r == null) {</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">                if (!puedeCrearRoles) {</span>
+<span class="nc" id="L305">                    error(&quot;El rol no existe: &quot; + d.getValue()</span>
+                            + &quot;. Al modificar solo puede elegir roles existentes.&quot;);
+<span class="nc" id="L307">                    return false;</span>
+                }
+<span class="nc bnc" id="L309" title="All 2 branches missed.">                if (d.getValue().length() &gt; 155) {</span>
+<span class="nc" id="L310">                    error(&quot;El nombre del rol es demasiado largo (máximo 155 caracteres).&quot;);</span>
+<span class="nc" id="L311">                    return false;</span>
+                }
+<span class="nc bnc" id="L313" title="All 2 branches missed.">            } else if (!Boolean.TRUE.equals(r.getActivo())) {</span>
+<span class="nc" id="L314">                error(&quot;No se puede asignar un rol inactivo: &quot; + r.getNombre());</span>
+<span class="nc" id="L315">                return false;</span>
+            }
+<span class="nc" id="L317">        }</span>
+<span class="nc" id="L318">        return true;</span>
+    }
+
+    private void asignarRolesNuevos(Empleado emp, List&lt;Rol&gt; rolesCreados,
+            List&lt;EmpleadoRol&gt; asignacionesCreadas) {
+<span class="nc" id="L323">        Map&lt;String, Rol&gt; porNombre = rolesPorNombre();</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">        for (Map.Entry&lt;String, String&gt; d : rolesDeseados().entrySet()) {</span>
+<span class="nc" id="L325">            Rol rol = porNombre.get(d.getKey());</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">            if (rol == null) {</span>
+<span class="nc" id="L327">                rol = new Rol(UUID.randomUUID());</span>
+<span class="nc" id="L328">                rol.setNombre(d.getValue());</span>
+<span class="nc" id="L329">                rol.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L330">                rol.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L331">                rolRepository.crear(rol);</span>
+<span class="nc" id="L332">                rolesCreados.add(rol);</span>
+            }
+<span class="nc" id="L334">            EmpleadoRol er = new EmpleadoRol(UUID.randomUUID());</span>
+<span class="nc" id="L335">            er.setIdEmpleado(emp);</span>
+<span class="nc" id="L336">            er.setIdRol(rol);</span>
+<span class="nc" id="L337">            er.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L338">            er.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L339">            empleadoRolRepository.crear(er);</span>
+<span class="nc" id="L340">            asignacionesCreadas.add(er);</span>
+<span class="nc" id="L341">        }</span>
+<span class="nc" id="L342">    }</span>
+
+    private void mostrar(Empleado e) {
+<span class="nc" id="L345">        Empleado fresco = empleadoRepository.findById(e.getIdEmpleado());</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">        this.registro = fresco != null ? fresco : e;</span>
+<span class="nc" id="L347">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L348">        this.soloLectura = true;</span>
+<span class="nc" id="L349">        this.filas.clear();</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">        for (EmpleadoRol er : asignacionesDe(this.registro)) {</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">            if (er.getIdRol() != null) {</span>
+<span class="nc" id="L352">                filas.add(new RolFila(er.getIdRol().getNombre(), true));</span>
+            }
+<span class="nc" id="L354">        }</span>
+<span class="nc" id="L355">    }</span>
+
+    private List&lt;EmpleadoRol&gt; asignacionesDe(Empleado e) {
+<span class="nc bnc" id="L358" title="All 4 branches missed.">        if (e == null || e.getIdEmpleado() == null) {</span>
+<span class="nc" id="L359">            return new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L361">        return empleadoRolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                .filter(er -&gt; er.getIdEmpleado() != null</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">                &amp;&amp; e.getIdEmpleado().equals(er.getIdEmpleado().getIdEmpleado()))</span>
+<span class="nc" id="L364">                .toList();</span>
+    }
+
+    private void cargarRoles() {
+<span class="nc" id="L368">        this.roles = rolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L369" title="All 4 branches missed.">                .filter(r -&gt; r.getNombre() != null &amp;&amp; !r.getNombre().isBlank())</span>
+<span class="nc" id="L370">                .sorted((r1, r2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(r1.getNombre(), r2.getNombre()))</span>
+<span class="nc" id="L371">                .toList();</span>
+<span class="nc" id="L372">    }</span>
+
+    private static String clave(String nombre) {
+<span class="nc bnc" id="L375" title="All 2 branches missed.">        return nombre == null ? null : nombre.trim().toLowerCase(Locale.ROOT);</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L379">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L381">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L384">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L386">    }</span>
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L389">        return soloLectura;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L393" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L394">            return &quot;Detalle del empleado&quot;;</span>
+        }
+<span class="nc bnc" id="L396" title="All 2 branches missed.">        return isEditando() ? &quot;Editar empleado&quot; : &quot;Nuevo empleado&quot;;</span>
+    }
+
+    public List&lt;RolFila&gt; getFilas() {
+<span class="nc" id="L400">        return filas;</span>
+    }
+
+    public List&lt;Rol&gt; getRoles() {
+<span class="nc" id="L404">        return roles;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L409">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombres&quot;),
+                    new ColumnaTabla(&quot;apellido&quot;, &quot;Apellidos&quot;),
+                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
+                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));
+        }
+<span class="nc" id="L415">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

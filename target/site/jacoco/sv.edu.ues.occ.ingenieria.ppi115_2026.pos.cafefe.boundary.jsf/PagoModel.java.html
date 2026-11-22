@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PagoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">PagoModel.java</span></div><h1>PagoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.PagoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Pago;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L21">public class PagoModel extends DefaultModel&lt;Pago, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private PagoRepository pagoRepository;
+
+    @Inject
+    private FacturaRepository facturaRepository;
+
+    private List&lt;Factura&gt; facturas;
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public PagoRepository getRepository() {
+<span class="nc" id="L36">        return pagoRepository;</span>
+    }
+
+    @Override
+    public Pago instanciarRegistro() {
+<span class="nc" id="L41">        Pago p = new Pago(UUID.randomUUID());</span>
+<span class="nc" id="L42">        p.setEstado(&quot;PENDIENTE&quot;);</span>
+<span class="nc" id="L43">        p.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L44">        return p;</span>
+    }
+
+    @Override
+    public Pago getRegistroById(Object id) {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        return id == null ? null : pagoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Pago dato) {
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        return dato != null ? dato.getIdPago() : null;</span>
+    }
+
+    /**
+     * Ajustá estos valores si tu negocio maneja otros estados de pago.
+     */
+    public List&lt;String&gt; getEstadosDisponibles() {
+<span class="nc" id="L61">        return Arrays.asList(&quot;PENDIENTE&quot;, &quot;COMPLETADO&quot;, &quot;CANCELADO&quot;);</span>
+    }
+
+    // Carga perezosa para el combo de Factura.
+    public List&lt;Factura&gt; getFacturas() {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (this.facturas == null) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            this.facturas = facturaRepository != null ? facturaRepository.findAll() : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L69">        return facturas;</span>
+    }
+
+    public void setFacturas(List&lt;Factura&gt; facturas) {
+<span class="nc" id="L73">        this.facturas = facturas;</span>
+<span class="nc" id="L74">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L78">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;idFactura.cliente&quot;, &quot;Factura de&quot;),
+                    new ColumnaTabla(&quot;estado&quot;, &quot;Estado&quot;),
+                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+            );
+        }
+<span class="nc" id="L84">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

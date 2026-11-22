@@ -31,7 +31,8 @@ public class OrdenRepository extends DefaultRepository<Orden, UUID> {
      * Cantidad de productos (orden_producto) que tiene la orden.
      */
     public long countOrdenProductos(UUID idOrden) {
-        return getEntityManager()
+        requireArgument(idOrden, "idOrden");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(op) FROM OrdenProducto op WHERE op.idOrden.idOrden = :id", Long.class)
                 .setParameter("id", idOrden)
                 .getSingleResult();
@@ -41,7 +42,8 @@ public class OrdenRepository extends DefaultRepository<Orden, UUID> {
      * Cantidad de líneas de factura que facturan productos de esta orden.
      */
     public long countLineasFacturadas(UUID idOrden) {
-        return getEntityManager()
+        requireArgument(idOrden, "idOrden");
+        return requireEntityManager()
                 .createQuery("SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idOrdenProducto.idOrden.idOrden = :id", Long.class)
                 .setParameter("id", idOrden)
                 .getSingleResult();

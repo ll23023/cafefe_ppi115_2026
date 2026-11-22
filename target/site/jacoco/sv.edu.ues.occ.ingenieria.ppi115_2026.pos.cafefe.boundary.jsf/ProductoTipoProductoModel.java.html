@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoTipoProductoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">ProductoTipoProductoModel.java</span></div><h1>ProductoTipoProductoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoTipoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L25">public class ProductoTipoProductoModel extends DefaultModel&lt;ProductoTipoProducto, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private ProductoTipoProductoRepository productoTipoProductoRepository;
+
+    @Inject
+    private ProductoRepository productoRepository;
+
+    @Inject
+    private TipoProductoRepository tipoProductoRepository;
+
+    private List&lt;Producto&gt; productos;
+    private List&lt;TipoProducto&gt; tiposProducto;
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public ProductoTipoProductoRepository getRepository() {
+<span class="nc" id="L44">        return productoTipoProductoRepository;</span>
+    }
+
+    @Override
+    public ProductoTipoProducto instanciarRegistro() {
+<span class="nc" id="L49">        ProductoTipoProducto r = new ProductoTipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L50">        r.setFechaCreacion(new Date());</span>
+<span class="nc" id="L51">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L52">        return r;</span>
+    }
+
+    @Override
+    public ProductoTipoProducto getRegistroById(Object id) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        return id == null ? null : productoTipoProductoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(ProductoTipoProducto dato) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        return dato != null ? dato.getIdProductoTipoProducto() : null;</span>
+    }
+
+     //Solo trae productos activos.
+    
+    public List&lt;Producto&gt; getProductos() {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (this.productos == null) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            this.productos = productoRepository != null</span>
+<span class="nc" id="L70">                    ? productoRepository.findAll().stream()</span>
+<span class="nc" id="L71">                            .filter(p -&gt; Boolean.TRUE.equals(p.getActivo()))</span>
+<span class="nc" id="L72">                            .toList()</span>
+<span class="nc" id="L73">                    : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L75">        return productos;</span>
+    }
+
+    public void setProductos(List&lt;Producto&gt; productos) {
+<span class="nc" id="L79">        this.productos = productos;</span>
+<span class="nc" id="L80">    }</span>
+
+     //Solo trae tipos de producto activos.
+    
+    public List&lt;TipoProducto&gt; getTiposProducto() {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (this.tiposProducto == null) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            this.tiposProducto = tipoProductoRepository != null</span>
+<span class="nc" id="L87">                    ? tipoProductoRepository.findAll().stream()</span>
+<span class="nc" id="L88">                            .filter(t -&gt; Boolean.TRUE.equals(t.getActivo()))</span>
+<span class="nc" id="L89">                            .toList()</span>
+<span class="nc" id="L90">                    : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L92">        return tiposProducto;</span>
+    }
+
+    public void setTiposProducto(List&lt;TipoProducto&gt; tiposProducto) {
+<span class="nc" id="L96">        this.tiposProducto = tiposProducto;</span>
+<span class="nc" id="L97">    }</span>
+
+    /**
+     * Validación defensiva: aunque el combo ya solo muestra tipos activos,
+     * esto evita guardar si de alguna forma llega un tipo inactivo.
+     */
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (this.registro != null</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdProducto() != null</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {</span>
+<span class="nc" id="L108">            FacesContext.getCurrentInstance().addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            &quot;No se puede configurar un producto inactivo.&quot;, null));
+<span class="nc" id="L111">            return;</span>
+        }
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (this.registro != null</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdTipoProducto() != null</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdTipoProducto().getActivo())) {</span>
+<span class="nc" id="L116">            FacesContext.getCurrentInstance().addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            &quot;No se puede asignar un tipo de producto inactivo.&quot;, null));
+<span class="nc" id="L119">            return;</span>
+        }
+<span class="nc" id="L121">        super.btnGuardarHandler();</span>
+<span class="nc" id="L122">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L126">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),
+                    new ColumnaTabla(&quot;idTipoProducto.nombre&quot;, &quot;Tipo&quot;),
+                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE),
+                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+            );
+        }
+<span class="nc" id="L133">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

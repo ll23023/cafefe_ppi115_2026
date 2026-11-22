@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpleadoRolModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">EmpleadoRolModel.java</span></div><h1>EmpleadoRolModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L26">public class EmpleadoRolModel extends DefaultModel&lt;EmpleadoRol, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    private EmpleadoRepository empleadoRepository;
+
+    @Inject
+    private RolRepository rolRepository;
+
+    private List&lt;Empleado&gt; empleados;
+    private List&lt;Rol&gt; roles;
+
+<span class="nc" id="L42">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
+            new ColumnaTabla(&quot;idEmpleadoRol&quot;, &quot;ID&quot;),
+            new ColumnaTabla(&quot;idEmpleado.nombre&quot;, &quot;Empleado&quot;),
+            new ColumnaTabla(&quot;idEmpleado.apellido&quot;, &quot;Apellido&quot;),
+            new ColumnaTabla(&quot;idRol.nombre&quot;, &quot;Rol&quot;),
+            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
+            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+    );
+
+    @Override
+    public EmpleadoRolRepository getRepository() {
+<span class="nc" id="L53">        return empleadoRolRepository;</span>
+    }
+
+    @Override
+    @PostConstruct
+    public void init() {
+<span class="nc" id="L59">        super.init();</span>
+<span class="nc" id="L60">        this.cargarEmpleados();</span>
+<span class="nc" id="L61">        this.cargarRoles();</span>
+<span class="nc" id="L62">    }</span>
+
+    public void cargarEmpleados() {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (empleadoRepository != null) {</span>
+<span class="nc" id="L66">            this.empleados = empleadoRepository.findAll();</span>
+        } else {
+<span class="nc" id="L68">            this.empleados = new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L70">    }</span>
+
+    public void cargarRoles() {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (rolRepository != null) {</span>
+            // Todos los roles: la vista deshabilita los inactivos (itemDisabled)
+<span class="nc" id="L75">            this.roles = rolRepository.findAll();</span>
+        } else {
+<span class="nc" id="L77">            this.roles = new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L79">    }</span>
+
+    @Override
+    public EmpleadoRol instanciarRegistro() {
+<span class="nc" id="L83">        EmpleadoRol r = new EmpleadoRol(UUID.randomUUID());</span>
+<span class="nc" id="L84">        r.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L85">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L86">        return r;</span>
+    }
+
+    @Override
+    public EmpleadoRol getRegistroById(Object id) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        return id == null ? null : empleadoRolRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(EmpleadoRol dato) {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        return dato != null ? dato.getIdEmpleadoRol() : null;</span>
+    }
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (this.registro == null) {</span>
+<span class="nc" id="L102">            return;</span>
+        }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (isEditando()) {</span>
+            // Empleado y rol no cambian al modificar: se restauran desde la BD
+<span class="nc" id="L106">            EmpleadoRol original = empleadoRolRepository.findById(registro.getIdEmpleadoRol());</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (original != null) {</span>
+<span class="nc" id="L108">                registro.setIdEmpleado(original.getIdEmpleado());</span>
+<span class="nc" id="L109">                registro.setIdRol(original.getIdRol());</span>
+            }
+<span class="nc" id="L111">        } else {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (registro.getIdRol() != null</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                    &amp;&amp; !Boolean.TRUE.equals(registro.getIdRol().getActivo())) {</span>
+<span class="nc" id="L114">                error(&quot;No se puede asignar un rol inactivo.&quot;);</span>
+<span class="nc" id="L115">                return;</span>
+            }
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (existeAsignacion(registro)) {</span>
+<span class="nc" id="L118">                error(&quot;Ese empleado ya tiene asignado ese rol.&quot;);</span>
+<span class="nc" id="L119">                return;</span>
+            }
+        }
+<span class="nc" id="L122">        super.btnGuardarHandler();</span>
+<span class="nc" id="L123">    }</span>
+
+    private boolean existeAsignacion(EmpleadoRol nuevo) {
+<span class="nc bnc" id="L126" title="All 4 branches missed.">        if (nuevo.getIdEmpleado() == null || nuevo.getIdRol() == null) {</span>
+<span class="nc" id="L127">            return false;</span>
+        }
+<span class="nc" id="L129">        return empleadoRolRepository.findAll().stream().anyMatch(er</span>
+<span class="nc bnc" id="L130" title="All 4 branches missed.">                -&gt; er.getIdEmpleado() != null &amp;&amp; er.getIdRol() != null</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                &amp;&amp; er.getIdEmpleado().getIdEmpleado().equals(nuevo.getIdEmpleado().getIdEmpleado())</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                &amp;&amp; er.getIdRol().getIdRol().equals(nuevo.getIdRol().getIdRol()));</span>
+    }
+
+    private void error(String msg) {
+<span class="nc" id="L136">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L138">    }</span>
+
+    public List&lt;Empleado&gt; getEmpleados() {
+<span class="nc" id="L141">        return empleados;</span>
+    }
+
+    public void setEmpleados(List&lt;Empleado&gt; empleados) {
+<span class="nc" id="L145">        this.empleados = empleados;</span>
+<span class="nc" id="L146">    }</span>
+
+    public List&lt;Rol&gt; getRoles() {
+<span class="nc" id="L149">        return roles;</span>
+    }
+
+    public void setRoles(List&lt;Rol&gt; roles) {
+<span class="nc" id="L153">        this.roles = roles;</span>
+<span class="nc" id="L154">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc" id="L157">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,2260 @@
+-------------------------------------------------------------------------------
+Test set: sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest
+-------------------------------------------------------------------------------
+Tests run: 24, Failures: 0, Errors: 24, Skipped: 0, Time elapsed: 1.321 s <<< FAILURE! -- in sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getColumnas_creaLaListaUnaSolaVez -- Time elapsed: 0.065 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_conNombreNulo_loNormalizaAVacio -- Time elapsed: 0.047 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.eliminar_conEmpleadosAsignados_noEliminaYAvisa -- Time elapsed: 0.052 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getRegistroById_conId_buscaEnElRepositorio -- Time elapsed: 0.050 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_sinRegistro_noHaceNada -- Time elapsed: 0.046 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_enSoloLectura_noHaceNada -- Time elapsed: 0.046 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_nuevo_creaYLimpia -- Time elapsed: 0.051 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getRegistroById_conNulo_devuelveNulo -- Time elapsed: 0.047 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_nombreRepetido_avisaYNoGuarda -- Time elapsed: 0.051 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.onSeleccionar_sinSeleccion_noHaceNada -- Time elapsed: 0.092 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.eliminar_cuandoFalla_avisaDelError -- Time elapsed: 0.082 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.editar_dejaElFormularioEditable -- Time elapsed: 0.084 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.onSeleccionar_conSeleccion_muestraElRolYSusEmpleadosOrdenados -- Time elapsed: 0.044 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_cuandoFalla_avisaDelError -- Time elapsed: 0.041 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.limpiar_reiniciaElFormulario -- Time elapsed: 0.046 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getIdByRegistro_devuelveElIdOnuloSiNoHayRegistro -- Time elapsed: 0.043 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.onSeleccionar_siElRolYaNoExiste_usaElDeLaSeleccion -- Time elapsed: 0.043 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.eliminar_conNulo_noHaceNada -- Time elapsed: 0.046 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.cancelar_limpiaElFormulario -- Time elapsed: 0.053 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getTituloFormulario_segunElEstado -- Time elapsed: 0.047 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.btnGuardarHandler_enModificar_modificaSinChocarConSiMismo -- Time elapsed: 0.050 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.instanciarRegistro_creaUnRolActivoConId -- Time elapsed: 0.046 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.getRepository_devuelveElInyectado -- Time elapsed: 0.053 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+
+sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.eliminar_sinEmpleados_eliminaYAvisa -- Time elapsed: 0.052 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Mockito cannot mock this class: class jakarta.faces.context.FacesContext.
+
+If you're not sure why you're getting this error, please open an issue on GitHub.
+
+
+Java               : 21
+JVM vendor name    : Oracle Corporation
+JVM vendor version : 21.0.11+9-LTS-211
+JVM name           : Java HotSpot(TM) 64-Bit Server VM
+JVM version        : 21.0.11+9-LTS-211
+JVM info           : mixed mode, sharing
+OS name            : Linux
+OS version         : 6.12.117+deb13-amd64
+
+
+You are seeing this disclaimer because Mockito is configured to create inlined mocks.
+You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.
+
+Underlying exception : org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.setUp(RolModelTest.java:45)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "org.mockito.MockedStatic.close()" because "this.estatico" is null
+		at sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.RolModelTest.tearDown(RolModelTest.java:52)
+		... 3 more
+Caused by: org.mockito.exceptions.base.MockitoException: Could not modify all classes [class jakarta.faces.context.FacesContext]
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	... 4 more
+Caused by: java.lang.IllegalStateException: 
+Byte Buddy could not instrument all classes within the mock's type hierarchy
+
+This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:
+ - Compiled by older versions of scalac
+ - Classes that are part of the Android distribution
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:285)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.mockClass(InlineBytecodeGenerator.java:218)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.lambda$mockClass$0(TypeCachingBytecodeGenerator.java:78)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:168)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:399)
+	at net.bytebuddy.TypeCache.findOrInsert(TypeCache.java:190)
+	at net.bytebuddy.TypeCache$WithInlineExpunction.findOrInsert(TypeCache.java:410)
+	at org.mockito.internal.creation.bytebuddy.TypeCachingBytecodeGenerator.mockClass(TypeCachingBytecodeGenerator.java:75)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMockType(InlineDelegateByteBuddyMockMaker.java:414)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.doCreateMock(InlineDelegateByteBuddyMockMaker.java:373)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.createMock(InlineDelegateByteBuddyMockMaker.java:352)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.createMock(InlineByteBuddyMockMaker.java:56)
+	at org.mockito.internal.util.MockUtil.createMock(MockUtil.java:99)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:84)
+	at org.mockito.Mockito.mock(Mockito.java:2104)
+	at org.mockito.Mockito.mock(Mockito.java:2019)
+	... 4 more
+Caused by: java.lang.TypeNotPresentException: Type com.sun.faces.config.InitFacesContext not present
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.FieldRepository.computeGenericType(FieldRepository.java:90)
+	at java.base/sun.reflect.generics.repository.FieldRepository.getGenericType(FieldRepository.java:82)
+	at java.base/java.lang.reflect.Field.getGenericType(Field.java:294)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection$ForLoadedFieldType.resolve(TypeDescription.java:6685)
+	at net.bytebuddy.description.type.TypeDescription$Generic$LazyProjection.accept(TypeDescription.java:6297)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:200)
+	at net.bytebuddy.description.field.FieldDescription$AbstractBase.asToken(FieldDescription.java:123)
+	at net.bytebuddy.description.field.FieldList$AbstractBase.asTokenList(FieldList.java:64)
+	at net.bytebuddy.dynamic.scaffold.InstrumentedType$Factory$Default$1.represent(InstrumentedType.java:436)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:886)
+	at net.bytebuddy.ByteBuddy.redefine(ByteBuddy.java:861)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.transform(InlineBytecodeGenerator.java:390)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:244)
+	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:610)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses0(Native Method)
+	at java.instrument/sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:225)
+	at org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.triggerRetransformation(InlineBytecodeGenerator.java:281)
+	... 19 more
+Caused by: java.lang.ClassNotFoundException: com.sun.faces.config.InitFacesContext
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	... 42 more
+

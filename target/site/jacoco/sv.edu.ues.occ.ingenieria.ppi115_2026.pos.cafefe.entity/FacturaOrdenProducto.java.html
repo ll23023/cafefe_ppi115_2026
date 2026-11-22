@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacturaOrdenProducto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">FacturaOrdenProducto.java</span></div><h1>FacturaOrdenProducto.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.UUID;
+
+/**
+ *
+ * @author mikelb
+ */
+@Entity
+@Table(name = &quot;factura_orden_producto&quot;, catalog = &quot;pos_ppi115_2026&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;FacturaOrdenProducto.findAll&quot;, query = &quot;SELECT f FROM FacturaOrdenProducto f&quot;),
+    @NamedQuery(name = &quot;FacturaOrdenProducto.findByPrecio&quot;, query = &quot;SELECT f FROM FacturaOrdenProducto f WHERE f.precio = :precio&quot;),
+    @NamedQuery(name = &quot;FacturaOrdenProducto.findByObservaciones&quot;, query = &quot;SELECT f FROM FacturaOrdenProducto f WHERE f.observaciones = :observaciones&quot;)})
+public class FacturaOrdenProducto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = &quot;id_factura_orden_producto&quot;, nullable = false)
+    @Convert(converter = UUIDConverter.class)
+    private UUID idFacturaOrdenProducto;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = &quot;precio&quot;, precision = 8, scale = 2)
+    private BigDecimal precio;
+    @Size(max = 2147483647)
+    @Column(name = &quot;observaciones&quot;, length = 2147483647)
+    private String observaciones;
+    @JoinColumn(name = &quot;id_factura&quot;, referencedColumnName = &quot;id_factura&quot;)
+    @ManyToOne
+    private Factura idFactura;
+    @JoinColumn(name = &quot;id_orden_producto&quot;, referencedColumnName = &quot;id_orden_producto&quot;)
+    @ManyToOne
+    private OrdenProducto idOrdenProducto;
+
+<span class="nc" id="L51">    public FacturaOrdenProducto() {</span>
+<span class="nc" id="L52">    }</span>
+
+<span class="nc" id="L54">    public FacturaOrdenProducto(UUID idFacturaOrdenProducto) {</span>
+<span class="nc" id="L55">        this.idFacturaOrdenProducto = idFacturaOrdenProducto;</span>
+<span class="nc" id="L56">    }</span>
+
+    public UUID getIdFacturaOrdenProducto() {
+<span class="nc" id="L59">        return idFacturaOrdenProducto;</span>
+    }
+
+    public void setIdFacturaOrdenProducto(UUID idFacturaOrdenProducto) {
+<span class="nc" id="L63">        this.idFacturaOrdenProducto = idFacturaOrdenProducto;</span>
+<span class="nc" id="L64">    }</span>
+
+    public BigDecimal getPrecio() {
+<span class="nc" id="L67">        return precio;</span>
+    }
+
+    public void setPrecio(BigDecimal precio) {
+<span class="nc" id="L71">        this.precio = precio;</span>
+<span class="nc" id="L72">    }</span>
+
+    public String getObservaciones() {
+<span class="nc" id="L75">        return observaciones;</span>
+    }
+
+    public void setObservaciones(String observaciones) {
+<span class="nc" id="L79">        this.observaciones = observaciones;</span>
+<span class="nc" id="L80">    }</span>
+
+    public Factura getIdFactura() {
+<span class="nc" id="L83">        return idFactura;</span>
+    }
+
+    public void setIdFactura(Factura idFactura) {
+<span class="nc" id="L87">        this.idFactura = idFactura;</span>
+<span class="nc" id="L88">    }</span>
+
+    public OrdenProducto getIdOrdenProducto() {
+<span class="nc" id="L91">        return idOrdenProducto;</span>
+    }
+
+    public void setIdOrdenProducto(OrdenProducto idOrdenProducto) {
+<span class="nc" id="L95">        this.idOrdenProducto = idOrdenProducto;</span>
+<span class="nc" id="L96">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L100">        int hash = 0;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        hash += (idFacturaOrdenProducto != null ? idFacturaOrdenProducto.hashCode() : 0);</span>
+<span class="nc" id="L102">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (!(object instanceof FacturaOrdenProducto)) {</span>
+<span class="nc" id="L109">            return false;</span>
+        }
+<span class="nc" id="L111">        FacturaOrdenProducto other = (FacturaOrdenProducto) object;</span>
+<span class="nc bnc" id="L112" title="All 8 branches missed.">        if ((this.idFacturaOrdenProducto == null &amp;&amp; other.idFacturaOrdenProducto != null) || (this.idFacturaOrdenProducto != null &amp;&amp; !this.idFacturaOrdenProducto.equals(other.idFacturaOrdenProducto))) {</span>
+<span class="nc" id="L113">            return false;</span>
+        }
+<span class="nc" id="L115">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L120">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.FacturaOrdenProducto[ idFacturaOrdenProducto=&quot; + idFacturaOrdenProducto + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

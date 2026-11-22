@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces" xmlns:f="jakarta.faces.core" xmlns:c="http://xmlns.jcp.org/jsf/composite/components"
+    template="/resources/templates/basic.xhtml">
+    <ui:define name="page_title">Características de Producto</ui:define>
+    <ui:define name="header_title">Administración de Características de Producto</ui:define>
+    <ui:define name="content">
+        <div class="card">
+            <h2>Administración de Características de Producto</h2>
+            <h:form id="frmProductoCaracteristica">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <h:outputLabel for="producto" value="Producto:" />
+                    <p:selectOneMenu id="producto" value="#{productoCaracteristicaModel.registro.idProducto}"
+                        required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{productoCaracteristicaModel.productos}" var="producto"
+                            itemLabel="#{producto.nombre}" itemValue="#{producto}" />
+                    </p:selectOneMenu>
+                    <p:messages for="producto" />
+
+                    <h:outputLabel for="caracteristica" value="Característica:" />
+                    <p:selectOneMenu id="caracteristica"
+                        value="#{productoCaracteristicaModel.registro.idCaracteristica}" required="true">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{productoCaracteristicaModel.caracteristicas}" var="caracteristica"
+                            itemLabel="#{caracteristica.nombre}" itemValue="#{caracteristica}" />
+                    </p:selectOneMenu>
+                    <p:messages for="caracteristica" />
+
+                    <h:outputLabel for="valor" value="Valor:" />
+                    <p:inputTextarea id="valor" value="#{productoCaracteristicaModel.registro.valor}" rows="3" />
+                    <p:messages for="valor" />
+                </h:panelGrid>
+                <c:btnsForm model="#{productoCaracteristicaModel}"
+                    saveUpdate="frmProductoCaracteristica frmTablaProductoCaracteristica"
+                    newUpdate="frmProductoCaracteristica frmTablaProductoCaracteristica" />
+            </h:form>
+        </div>
+
+        <div class="card">
+            <h3>Lista de Características de Producto</h3>
+            <h:form id="frmTablaProductoCaracteristica">
+                <c:tablaDinamica model="#{productoCaracteristicaModel}"
+                    columns="#{productoCaracteristicaModel.columnas}" rowKey="idProductoCaracteristica"
+                    editUpdate="frmProductoCaracteristica"
+                    deleteUpdate="frmTablaProductoCaracteristica frmProductoCaracteristica" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

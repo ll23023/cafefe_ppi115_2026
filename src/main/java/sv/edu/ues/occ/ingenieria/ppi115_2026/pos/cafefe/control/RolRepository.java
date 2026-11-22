@@ -28,7 +28,8 @@ public class RolRepository extends DefaultRepository<Rol, java.util.UUID> {
     }
 
     public List<Rol> findByNombre(String nombre) {
-        return getEntityManager()
+        requireArgument(nombre, "nombre");
+        return requireEntityManager()
                 .createNamedQuery("Rol.findByNombre", Rol.class)
                 .setParameter("nombre", nombre)
                 .getResultList();

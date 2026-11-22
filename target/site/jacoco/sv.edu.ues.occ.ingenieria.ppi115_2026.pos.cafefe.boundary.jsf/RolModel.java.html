@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RolModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">RolModel.java</span></div><h1>RolModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.RolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Empleado;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L25">public class RolModel extends DefaultModel&lt;Rol, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+<span class="nc" id="L29">    private static final Logger LOG = Logger.getLogger(RolModel.class.getName());</span>
+
+    @Inject
+    private RolRepository rolRepository;
+
+    @Inject
+    private EmpleadoRolRepository empleadoRolRepository;
+
+<span class="nc" id="L37">    private boolean soloLectura = false;</span>
+<span class="nc" id="L38">    private List&lt;Empleado&gt; empleadosDelRol = new ArrayList&lt;&gt;();</span>
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public RolRepository getRepository() {
+<span class="nc" id="L43">        return rolRepository;</span>
+    }
+
+    @Override
+    public Rol instanciarRegistro() {
+<span class="nc" id="L48">        Rol r = new Rol(UUID.randomUUID());</span>
+<span class="nc" id="L49">        r.setActivo(Boolean.TRUE);</span>
+<span class="nc" id="L50">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L51">        return r;</span>
+    }
+
+    @Override
+    public Rol getRegistroById(Object id) {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        return id == null ? null : rolRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(Rol dato) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        return dato != null ? dato.getIdRol() : null;</span>
+    }
+
+    @Override
+    public void limpiar() {
+<span class="nc" id="L66">        super.limpiar();</span>
+<span class="nc" id="L67">        this.soloLectura = false;</span>
+<span class="nc" id="L68">        this.empleadosDelRol = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">    }</span>
+
+    // Listener del clic en una fila: muestra el rol y sus empleados.
+    public void onSeleccionar() {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (seleccion != null) {</span>
+<span class="nc" id="L74">            mostrar(seleccion);</span>
+        }
+<span class="nc" id="L76">    }</span>
+
+    public void editar(Rol r) {
+<span class="nc" id="L79">        this.seleccion = r;</span>
+<span class="nc" id="L80">        mostrar(r);</span>
+<span class="nc" id="L81">        this.soloLectura = false;</span>
+<span class="nc" id="L82">        this.estado = ESTADO_CRUD.MODIFICAR;</span>
+<span class="nc" id="L83">    }</span>
+
+    public void cancelar() {
+<span class="nc" id="L86">            limpiar();</span>
+<span class="nc" id="L87">    }</span>
+
+    // No deja borrar un rol que tenga empleados.
+    public void eliminar(Rol r) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (r == null) {</span>
+<span class="nc" id="L92">            return;</span>
+        }
+        try {
+<span class="nc" id="L95">            int asignados = empleadosConRol(r).size();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (asignados &gt; 0) {</span>
+<span class="nc" id="L97">                error(&quot;No se puede eliminar \&quot;&quot; + r.getNombre() + &quot;\&quot;: lo tienen &quot; + asignados</span>
+                        + &quot; empleado(s). Puede marcarlo como inactivo en su lugar.&quot;);
+<span class="nc" id="L99">                return;</span>
+            }
+<span class="nc" id="L101">            rolRepository.eliminar(r);</span>
+<span class="nc" id="L102">            cargarRegistros();</span>
+<span class="nc" id="L103">            limpiar();</span>
+<span class="nc" id="L104">            info(&quot;Rol eliminado.&quot;);</span>
+<span class="nc" id="L105">        } catch (Exception ex) {</span>
+<span class="nc" id="L106">            LOG.log(Level.SEVERE, &quot;Error al eliminar rol&quot;, ex);</span>
+<span class="nc" id="L107">            error(&quot;No se pudo eliminar el rol: &quot; + ex.getMessage());</span>
+<span class="nc" id="L108">        }</span>
+<span class="nc" id="L109">    }</span>
+
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L113" title="All 4 branches missed.">        if (soloLectura || registro == null) {</span>
+<span class="nc" id="L114">            return;</span>
+        }
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        final String nombre = registro.getNombre() == null ? &quot;&quot; : registro.getNombre().trim();</span>
+<span class="nc" id="L117">        registro.setNombre(nombre);</span>
+
+        // El nombre no se puede repetir: en empleados los roles se buscan por nombre
+<span class="nc" id="L120">        boolean repetido = rolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                .anyMatch(o -&gt; o.getNombre() != null</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                &amp;&amp; o.getNombre().trim().equalsIgnoreCase(nombre)</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                &amp;&amp; !o.getIdRol().equals(registro.getIdRol()));</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (repetido) {</span>
+<span class="nc" id="L125">            error(&quot;Ya existe un rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;);</span>
+<span class="nc" id="L126">            return;</span>
+        }
+
+        try {
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            if (estado == ESTADO_CRUD.MODIFICAR) {</span>
+<span class="nc" id="L131">                rolRepository.modificar(registro);</span>
+            } else {
+<span class="nc" id="L133">                rolRepository.crear(registro);</span>
+            }
+<span class="nc" id="L135">            cargarRegistros();</span>
+<span class="nc" id="L136">            limpiar();</span>
+<span class="nc" id="L137">            info(&quot;Rol guardado.&quot;);</span>
+<span class="nc" id="L138">        } catch (Exception ex) {</span>
+<span class="nc" id="L139">            LOG.log(Level.SEVERE, &quot;Error al guardar rol&quot;, ex);</span>
+<span class="nc" id="L140">            error(&quot;No se pudo guardar el rol: &quot; + ex.getMessage());</span>
+<span class="nc" id="L141">        }</span>
+<span class="nc" id="L142">    }</span>
+
+    private void mostrar(Rol r) {
+<span class="nc" id="L145">        Rol fresco = rolRepository.findById(r.getIdRol());</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        this.registro = fresco != null ? fresco : r;</span>
+<span class="nc" id="L147">        this.estado = ESTADO_CRUD.NINGUNO;</span>
+<span class="nc" id="L148">        this.soloLectura = true;</span>
+<span class="nc" id="L149">        this.empleadosDelRol = empleadosConRol(this.registro);</span>
+<span class="nc" id="L150">    }</span>
+
+    // Empleados que tienen asignado el rol, sin repetidos y ordenados por nombre.
+    private List&lt;Empleado&gt; empleadosConRol(Rol r) {
+<span class="nc" id="L154">        return empleadoRolRepository.findAll().stream()</span>
+<span class="nc bnc" id="L155" title="All 4 branches missed.">                .filter(er -&gt; er.getIdRol() != null &amp;&amp; er.getIdEmpleado() != null</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                &amp;&amp; r.getIdRol().equals(er.getIdRol().getIdRol()))</span>
+<span class="nc" id="L157">                .map(EmpleadoRol::getIdEmpleado)</span>
+<span class="nc" id="L158">                .distinct()</span>
+<span class="nc" id="L159">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                b.getNombre() == null ? &quot;&quot; : b.getNombre()))</span>
+<span class="nc" id="L162">                .toList();</span>
+    }
+
+    private void info(String msg) {
+<span class="nc" id="L166">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L168">    }</span>
+
+    private void error(String msg) {
+<span class="nc" id="L171">        FacesContext.getCurrentInstance().addMessage(null,</span>
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L173">    }</span>
+
+    public boolean isSoloLectura() {
+<span class="nc" id="L176">        return soloLectura;</span>
+    }
+
+    public String getTituloFormulario() {
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (soloLectura) {</span>
+<span class="nc" id="L181">            return &quot;Detalle del rol&quot;;</span>
+        }
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        return isEditando() ? &quot;Editar rol&quot; : &quot;Nuevo rol&quot;;</span>
+    }
+
+    public List&lt;Empleado&gt; getEmpleadosDelRol() {
+<span class="nc" id="L187">        return empleadosDelRol;</span>
+    }
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L192">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
+                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
+                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;));
+        }
+<span class="nc" id="L197">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

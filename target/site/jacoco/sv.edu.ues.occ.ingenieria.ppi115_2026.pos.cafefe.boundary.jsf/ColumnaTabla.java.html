@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ColumnaTabla.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">ColumnaTabla.java</span></div><h1>ColumnaTabla.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
+
+/**
+ * Define una columna que puede ser renderizada por{@code tablaDinamica}.
+ * 
+ * @author mikelb
+ */
+public class ColumnaTabla implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private final String property;
+    private final String header;
+    private final FORMATO_COLUMNA format;
+
+    /**
+     * Crea una columna de texto.
+     *
+     * @param property propiedad o ruta de propiedades que se leerá en cada fila
+     * @param header   texto visible en el encabezado
+     */
+    public ColumnaTabla(String property, String header) {
+<span class="nc" id="L30">        this(property, header, FORMATO_COLUMNA.TEXT);</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Crea una columna con formato explícito.
+     *
+     * @param property propiedad o ruta anidada, separada por puntos
+     * @param header   texto visible en el encabezado de la columna.
+     * @param format   formato del texto de la columna; si es {@code null}, se usa
+     *                 {@code TEXT}
+     */
+<span class="nc" id="L41">    public ColumnaTabla(String property, String header, FORMATO_COLUMNA format) {</span>
+<span class="nc" id="L42">        this.property = property;</span>
+<span class="nc" id="L43">        this.header = header;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        this.format = format == null ? FORMATO_COLUMNA.TEXT : format;</span>
+<span class="nc" id="L45">    }</span>
+
+    public String getProperty() {
+<span class="nc" id="L48">        return property;</span>
+    }
+
+    public String getHeader() {
+<span class="nc" id="L52">        return header;</span>
+    }
+
+    public FORMATO_COLUMNA getFormat() {
+<span class="nc" id="L56">        return format;</span>
+    }
+
+    /**
+     * Obtiene y formatea el valor de esta columna para una fila.
+     *
+     * @param row entidad que representa la fila actual
+     * @return texto formateado; devuelve una cadena vacía si algún segmento
+     *         de la ruta es {@code null}
+     * @throws IllegalArgumentException si la ruta no tiene un getter válido
+     */
+    public String getValue(Object row) {
+<span class="nc" id="L68">        Object value = resolveProperty(row);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L70">            return &quot;&quot;;</span>
+        }
+
+<span class="nc bnc" id="L73" title="All 4 branches missed.">        return switch (format) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            case BOOLEAN -&gt; Boolean.TRUE.equals(value) ? &quot;ACTIVO&quot; : &quot;INACTIVO&quot;;</span>
+            // Se fija Locale.US (no Locale.getDefault()) para que siempre se
+            // muestre &quot;$&quot;, sin importar el locale del servidor: con es_SV,
+            // Java usa los datos históricos de esa región y formatea con el
+            // colón salvadoreño (&quot;C&quot;) en vez del dólar.
+<span class="nc" id="L79">            case CURRENCY -&gt; NumberFormat.getCurrencyInstance(Locale.US)</span>
+<span class="nc" id="L80">                    .format((BigDecimal) value);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            case DATE -&gt; value instanceof TemporalAccessor</span>
+<span class="nc" id="L82">                    ? value.toString()</span>
+<span class="nc" id="L83">                    : value.toString();</span>
+<span class="nc" id="L84">            case TEXT -&gt; value.toString();</span>
+        };
+    }
+
+    /**
+     * Resuelve la ruta de propiedades anidadas y obtiene el valor de la propiedad
+     * final.
+     *
+     * @param row entidad que representa la fila actual
+     * @return valor de la propiedad final, o {@code null} si algún segmento es
+     *         {@code null}
+     */
+    private Object resolveProperty(Object row) {
+<span class="nc" id="L97">        Object value = row;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (String part : property.split(&quot;\\.&quot;)) {</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (value == null) {</span>
+<span class="nc" id="L100">                return null;</span>
+            }
+<span class="nc" id="L102">            value = invokeGetter(value, part);</span>
+        }
+<span class="nc" id="L104">        return value;</span>
+    }
+
+    /**
+     * Invoca el getter de una propiedad en un objeto.
+     *
+     * @param target       objeto que contiene la propiedad
+     * @param propertyName nombre de la propiedad
+     * @return valor de la propiedad
+     * @throws IllegalArgumentException si no se puede invocar el getter
+     */
+    private Object invokeGetter(Object target, String propertyName) {
+<span class="nc" id="L116">        String suffix = Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);</span>
+        try {
+<span class="nc" id="L118">            Method getter = target.getClass().getMethod(&quot;get&quot; + suffix);</span>
+<span class="nc" id="L119">            return getter.invoke(target);</span>
+<span class="nc" id="L120">        } catch (ReflectiveOperationException exception) {</span>
+<span class="nc" id="L121">            throw new IllegalArgumentException(&quot;No se pudo leer la propiedad: &quot; + property, exception);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

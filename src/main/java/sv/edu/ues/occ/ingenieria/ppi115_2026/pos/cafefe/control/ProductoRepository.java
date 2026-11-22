@@ -29,7 +29,8 @@ public class ProductoRepository extends DefaultRepository<Producto, UUID> {
     }
 
     public List<Producto> findByNombre(String nombre) {
-        return getEntityManager()
+        requireArgument(nombre, "nombre");
+        return requireEntityManager()
                 .createNamedQuery("Producto.findByNombre", Producto.class)
                 .setParameter("nombre", nombre)
                 .getResultList();

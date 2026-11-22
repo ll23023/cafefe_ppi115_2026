@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrdenProductoModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf</a> &gt; <span class="el_source">OrdenProductoModel.java</span></div><h1>OrdenProductoModel.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf;
+
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
+
+/**
+ *
+ * @author mil
+ */
+@Named
+@ViewScoped
+<span class="nc" id="L24">public class OrdenProductoModel extends DefaultModel&lt;OrdenProducto, UUID&gt; {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private OrdenProductoRepository ordenProductoRepository;
+
+    @Inject
+    private OrdenRepository ordenRepository;
+
+    @Inject
+    private ProductoRepository productoRepository;
+
+    private List&lt;Orden&gt; ordenes;
+    private List&lt;Producto&gt; productos;
+    private List&lt;ColumnaTabla&gt; columnas;
+
+    @Override
+    public OrdenProductoRepository getRepository() {
+<span class="nc" id="L43">        return ordenProductoRepository;</span>
+    }
+
+    @Override
+    public OrdenProducto instanciarRegistro() {
+<span class="nc" id="L48">        OrdenProducto r = new OrdenProducto(UUID.randomUUID());</span>
+<span class="nc" id="L49">        r.setObservaciones(&quot;&quot;);</span>
+<span class="nc" id="L50">        return r;</span>
+    }
+
+    @Override
+    public OrdenProducto getRegistroById(Object id) {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        return id == null ? null : ordenProductoRepository.findById((UUID) id);</span>
+    }
+
+    @Override
+    public Object getIdByRegistro(OrdenProducto dato) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        return dato != null ? dato.getIdOrdenProducto() : null;</span>
+    }
+
+    /**
+     * Validación defensiva: aunque el combo ya solo muestra productos activos,
+     * esto evita guardar si de alguna forma llega uno inactivo.
+     */
+    @Override
+    public void btnGuardarHandler() {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (this.registro != null</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdProducto() != null</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {</span>
+<span class="nc" id="L72">            FacesContext.getCurrentInstance().addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            &quot;No se puede agregar un producto inactivo.&quot;, null));
+<span class="nc" id="L75">            return;</span>
+        }
+<span class="nc" id="L77">        super.btnGuardarHandler();</span>
+<span class="nc" id="L78">    }</span>
+
+    // Carga perezosa para el combo de Orden.
+    public List&lt;Orden&gt; getOrdenes() {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (this.ordenes == null) {</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            this.ordenes = ordenRepository != null ? ordenRepository.findAll() : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L85">        return ordenes;</span>
+    }
+
+    public void setOrdenes(List&lt;Orden&gt; ordenes) {
+<span class="nc" id="L89">        this.ordenes = ordenes;</span>
+<span class="nc" id="L90">    }</span>
+
+    //Solo trae productos activos
+    public List&lt;Producto&gt; getProductos() {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (this.productos == null) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            this.productos = productoRepository != null</span>
+<span class="nc" id="L96">                    ? productoRepository.findAll().stream()</span>
+<span class="nc" id="L97">                            .filter(p -&gt; Boolean.TRUE.equals(p.getActivo()))</span>
+<span class="nc" id="L98">                            .toList()</span>
+<span class="nc" id="L99">                    : new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L101">        return productos;</span>
+    }
+
+    public void setProductos(List&lt;Producto&gt; productos) {
+<span class="nc" id="L105">        this.productos = productos;</span>
+<span class="nc" id="L106">    }</span>
+
+    public List&lt;ColumnaTabla&gt; getColumnas() {
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (columnas == null) {</span>
+<span class="nc" id="L110">            columnas = List.of(</span>
+                    new ColumnaTabla(&quot;idOrden.fechaCreacion&quot;, &quot;Fecha de la orden&quot;, FORMATO_COLUMNA.DATE),
+                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),
+                    new ColumnaTabla(&quot;precio&quot;, &quot;Precio&quot;, FORMATO_COLUMNA.CURRENCY),
+                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+            );
+        }
+<span class="nc" id="L117">        return columnas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
