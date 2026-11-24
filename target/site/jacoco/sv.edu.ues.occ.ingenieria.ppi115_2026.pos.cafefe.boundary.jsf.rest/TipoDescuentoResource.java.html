@@ -1,51 +1,199 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoDescuentoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">TipoDescuentoResource.java</span></div><h1>TipoDescuentoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriInfo;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoDescuentoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 
 @Path(&quot;tipo_descuento&quot;)
-<span class="nc" id="L20">public class TipoDescuentoResource implements Serializable {</span>
-    
+<span class="nc" id="L30">public class TipoDescuentoResource implements Serializable {</span>
+
     @Inject
     TipoDescuentoRepository tdRepo;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response findRange(
-    @QueryParam(&quot;desde&quot;)
-        @DefaultValue(&quot;0&quot;)
-        int desde,
-            
+            @QueryParam(&quot;desde&quot;)
+            @DefaultValue(&quot;1&quot;) int desde,
             @QueryParam(&quot;hasta&quot;)
-        @DefaultValue(&quot;&quot;)
-            int hasta) {
-        
-        try {
-<span class="nc" id="L37">            return Response.ok(tdRepo.findRange(desde, hasta))</span>
-<span class="nc" id="L38">                    .type(MediaType.APPLICATION_JSON)</span>
-<span class="nc" id="L39">                    .build();</span>
-            
-<span class="nc" id="L41">        } catch (Exception e) {</span>
-<span class="nc" id="L42">          Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
-          
-<span class="nc" id="L44">          return Response.status(500)</span>
-<span class="nc" id="L45">                  .header(&quot;App-Error&quot;, e.getMessage())</span>
-<span class="nc" id="L46">                  .build();</span>
+            @DefaultValue(&quot;50&quot;) int hasta) {
+
+<span class="nc bnc" id="L43" title="All 4 branches missed.">        if (0 &lt; desde &amp;&amp; desde &lt; hasta) {</span>
+            try {
+<span class="nc" id="L45">                return Response.ok(tdRepo.findRange(desde, hasta))</span>
+<span class="nc" id="L46">                        .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L47">                        .build();</span>
+
+<span class="nc" id="L49">            } catch (Exception e) {</span>
+<span class="nc" id="L50">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
+
+<span class="nc" id="L52">                return Response.status(500)</span>
+<span class="nc" id="L53">                        .header(&quot;App-Error&quot;, e.getMessage())</span>
+<span class="nc" id="L54">                        .build();</span>
+            }
         }
-    } 
         
+<span class="nc" id="L58">        return Response.status(422)</span>
+<span class="nc" id="L59">                .header(&quot;Wrong-Param&quot;, &quot;cantidad&quot;)</span>
+<span class="nc" id="L60">                .build();</span>
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L70">                TipoDescuento encontrado = tdRepo.findById(id);</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L73">                    return Response.ok(encontrado).type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L74">                            .build();</span>
+
+                } else {
+<span class="nc" id="L77">                    return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L78">                            .header(&quot;Entity-Not-Found&quot;, id)</span>
+<span class="nc" id="L79">                            .build();</span>
+                }
+
+<span class="nc" id="L82">            } catch (Exception e) {</span>
+<span class="nc" id="L83">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
+
+<span class="nc" id="L85">                return Response.status(500)</span>
+<span class="nc" id="L86">                        .header(&quot;App-Error&quot;, e.getMessage())</span>
+<span class="nc" id="L87">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L91">        return Response.status(422)</span>
+<span class="nc" id="L92">                .header(&quot;Wrong-Param&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L93">                .build();</span>
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response nuevo(
+            TipoDescuento td,
+            @Context UriInfo uInf) {
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (td != null) {</span>
+<span class="nc" id="L104">            td.setIdTipoDescuento(UUID.randomUUID());</span>
+<span class="nc" id="L105">            td.setDescuentoList(null);</span>
+
+            try {
+<span class="nc" id="L108">                tdRepo.crear(td);</span>
+
+<span class="nc" id="L110">                UriBuilder uBldr = uInf.getAbsolutePathBuilder();</span>
+<span class="nc" id="L111">                uBldr.path(td.getIdTipoDescuento().toString());</span>
+
+<span class="nc" id="L113">                return Response.created(uBldr.build()).build();</span>
+
+<span class="nc" id="L115">            } catch (Exception e) {</span>
+<span class="nc" id="L116">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
+
+<span class="nc" id="L118">                return Response.status(500)</span>
+<span class="nc" id="L119">                        .header(&quot;App-Error&quot;, e.getMessage())</span>
+<span class="nc" id="L120">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L124">        return Response.status(422)</span>
+<span class="nc" id="L125">                .header(&quot;Wrong-Param&quot;, &quot;TipoDescuento&quot;)</span>
+<span class="nc" id="L126">                .build();</span>
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editar(
+            @PathParam(&quot;id&quot;)
+            UUID id,
+
+            TipoDescuento modificado) {
+
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        if (id != null &amp;&amp; modificado != null) {</span>
+            try {
+<span class="nc" id="L141">                TipoDescuento encontrado = tdRepo.findById(id);</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L144">                    modificado.setIdTipoDescuento(id);</span>
+<span class="nc" id="L145">                    tdRepo.modificar(modificado);</span>
+
+<span class="nc" id="L147">                    return Response.ok(modificado).build();</span>
+                }
+
+<span class="nc" id="L150">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L151">                        .header(&quot;Entity-Not-Found&quot;, id)</span>
+<span class="nc" id="L152">                        .build();</span>
+
+<span class="nc" id="L154">            } catch (Exception e) {</span>
+<span class="nc" id="L155">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
+
+<span class="nc" id="L157">                return Response.status(500)</span>
+<span class="nc" id="L158">                        .header(&quot;App-Error&quot;, e.getMessage())</span>
+<span class="nc" id="L159">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L163">        return Response.status(422)</span>
+<span class="nc" id="L164">                .header(&quot;Wrong-Param&quot;, &quot;TipoDescuento&quot;)</span>
+<span class="nc" id="L165">                .build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    public Response eliminar(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L173">                TipoDescuento encontrado = tdRepo.findById(id);</span>
+
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                if (encontrado != null) {</span>
+<span class="nc" id="L176">                    tdRepo.eliminar(encontrado);</span>
+
+<span class="nc" id="L178">                    return Response.noContent().build();</span>
+                }
+
+<span class="nc" id="L181">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L182">                        .header(&quot;Entity-Not-Found&quot;, id)</span>
+<span class="nc" id="L183">                        .build();</span>
+
+<span class="nc" id="L185">            } catch (Exception e) {</span>
+<span class="nc" id="L186">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);</span>
+
+<span class="nc" id="L188">                return Response.status(500)</span>
+<span class="nc" id="L189">                        .header(&quot;App-Error&quot;, e.getMessage())</span>
+<span class="nc" id="L190">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L194">        return Response.status(422)</span>
+<span class="nc" id="L195">                .header(&quot;Wrong-Param&quot;, &quot;TipoDescuento&quot;)</span>
+<span class="nc" id="L196">                .build();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

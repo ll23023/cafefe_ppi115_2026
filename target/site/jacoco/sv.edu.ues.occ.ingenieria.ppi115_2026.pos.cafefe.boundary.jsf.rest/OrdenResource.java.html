@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrdenResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">OrdenResource.java</span></div><h1>OrdenResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Orden;
+
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.badRequest;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.conflicto;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.notFound;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.serverError;
+
+/**
+ *
+ * @author mil
+ */
+@Path(&quot;orden&quot;)
+<span class="nc" id="L42">public class OrdenResource {</span>
+
+<span class="nc" id="L44">    private static final Logger LOG = Logger.getLogger(OrdenResource.class.getName());</span>
+
+    @Inject
+    OrdenRepository ordenRepository;
+
+    @Inject
+    EmpleadoRolRepository empleadoRolRepository;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max) {
+        try {
+<span class="nc bnc" id="L58" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+<span class="nc" id="L59">                List&lt;Orden&gt; ordenes = ordenRepository.findRange(first, max);</span>
+<span class="nc" id="L60">                Long total = ordenRepository.count();</span>
+<span class="nc" id="L61">                return Response.ok(ordenes)</span>
+<span class="nc" id="L62">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L63">                        .build();</span>
+            }
+<span class="nc" id="L65">            return badRequest(&quot;Los parametros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;);</span>
+<span class="nc" id="L66">        } catch (Exception ex) {</span>
+<span class="nc" id="L67">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L68">            return serverError(ex);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L77">            return badRequest(&quot;id nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L80">            Orden encontrada = ordenRepository.findById(id);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (encontrada != null) {</span>
+<span class="nc" id="L82">                return Response.ok(encontrada).build();</span>
+            }
+<span class="nc" id="L84">            return notFound(id);</span>
+<span class="nc" id="L85">        } catch (Exception ex) {</span>
+<span class="nc" id="L86">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L87">            return serverError(ex);</span>
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response create(OrdenRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if (request == null || request.idEmpleadoRol == null) {</span>
+<span class="nc" id="L97">            return badRequest(&quot;idEmpleadoRol es obligatorio&quot;);</span>
+        }
+        try {
+<span class="nc" id="L100">            EmpleadoRol empleadoRol = empleadoRolRepository.findById(request.idEmpleadoRol);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (empleadoRol == null) {</span>
+<span class="nc" id="L102">                return conflicto(&quot;La asignación de rol no existe: &quot; + request.idEmpleadoRol);</span>
+            }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(empleadoRol.getActivo())) {</span>
+<span class="nc" id="L105">                return conflicto(&quot;No se puede usar una asignación de rol inactiva.&quot;);</span>
+            }
+
+<span class="nc" id="L108">            Orden nueva = new Orden(UUID.randomUUID());</span>
+<span class="nc" id="L109">            nueva.setIdEmpleadoRol(empleadoRol);</span>
+<span class="nc" id="L110">            nueva.setFechaCreacion(new Date());</span>
+<span class="nc" id="L111">            ordenRepository.crear(nueva);</span>
+
+<span class="nc" id="L113">            URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L114">                    .path(String.valueOf(nueva.getIdOrden()))</span>
+<span class="nc" id="L115">                    .build();</span>
+<span class="nc" id="L116">            return Response.created(location).build();</span>
+
+<span class="nc" id="L118">        } catch (Exception ex) {</span>
+<span class="nc" id="L119">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L120">            return serverError(ex);</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, OrdenRequest request) {
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L131">            return badRequest(&quot;ID o cuerpo nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L134">            Orden existente = ordenRepository.findById(id);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L136">                return notFound(id);</span>
+            }
+
+            // Reasignar la orden a otra asignación de rol (opcional)
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            if (request.idEmpleadoRol != null</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdEmpleadoRol() == null</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                    || !request.idEmpleadoRol.equals(existente.getIdEmpleadoRol().getIdEmpleadoRol()))) {</span>
+<span class="nc" id="L143">                EmpleadoRol empleadoRol = empleadoRolRepository.findById(request.idEmpleadoRol);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">                if (empleadoRol == null) {</span>
+<span class="nc" id="L145">                    return conflicto(&quot;La asignación de rol no existe: &quot; + request.idEmpleadoRol);</span>
+                }
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                if (!Boolean.TRUE.equals(empleadoRol.getActivo())) {</span>
+<span class="nc" id="L148">                    return conflicto(&quot;No se puede usar una asignación de rol inactiva.&quot;);</span>
+                }
+<span class="nc" id="L150">                existente.setIdEmpleadoRol(empleadoRol);</span>
+            }
+
+<span class="nc" id="L153">            ordenRepository.modificar(existente);</span>
+<span class="nc" id="L154">            return Response.ok(existente).build();</span>
+
+<span class="nc" id="L156">        } catch (Exception ex) {</span>
+<span class="nc" id="L157">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L158">            return serverError(ex);</span>
+        }
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L167">            return badRequest(&quot;El ID no puede ser nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L170">            Orden encontrada = ordenRepository.findById(id);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (encontrada == null) {</span>
+<span class="nc" id="L172">                return notFound(id);</span>
+            }
+
+            // Revisar lo que impide borrar ANTES de borrar
+<span class="nc" id="L176">            long productos = ordenRepository.countOrdenProductos(id);</span>
+<span class="nc" id="L177">            long facturadas = ordenRepository.countLineasFacturadas(id);</span>
+
+<span class="nc" id="L179">            List&lt;String&gt; partes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">            if (productos &gt; 0) {</span>
+<span class="nc" id="L181">                partes.add(productos + &quot; producto(s) de orden&quot;);</span>
+            }
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if (facturadas &gt; 0) {</span>
+<span class="nc" id="L184">                partes.add(facturadas + &quot; línea(s) de factura&quot;);</span>
+            }
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (!partes.isEmpty()) {</span>
+<span class="nc" id="L187">                return conflicto(&quot;No se pudo eliminar la orden porque está asociada a &quot;</span>
+<span class="nc" id="L188">                        + String.join(&quot; y a &quot;, partes) + &quot;. Elimine primero esos registros.&quot;);</span>
+            }
+
+<span class="nc" id="L191">            ordenRepository.eliminar(encontrada);</span>
+<span class="nc" id="L192">            return Response.noContent().build();</span>
+
+<span class="nc" id="L194">        } catch (Exception ex) {</span>
+<span class="nc" id="L195">            LOG.log(Level.SEVERE, &quot;Error al eliminar orden: &quot; + id, ex);</span>
+<span class="nc" id="L196">            return serverError(ex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

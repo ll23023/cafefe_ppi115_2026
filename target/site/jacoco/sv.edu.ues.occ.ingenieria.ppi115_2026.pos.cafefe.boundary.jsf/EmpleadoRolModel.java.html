@@ -40,12 +40,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
     private List&lt;Rol&gt; roles;
 
 <span class="nc" id="L42">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
-            new ColumnaTabla(&quot;idEmpleadoRol&quot;, &quot;ID&quot;),
-            new ColumnaTabla(&quot;idEmpleado.nombre&quot;, &quot;Empleado&quot;),
-            new ColumnaTabla(&quot;idEmpleado.apellido&quot;, &quot;Apellido&quot;),
-            new ColumnaTabla(&quot;idRol.nombre&quot;, &quot;Rol&quot;),
-            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+<span class="nc" id="L43">            new ColumnaTabla(&quot;idEmpleadoRol&quot;, &quot;ID&quot;),</span>
+<span class="nc" id="L44">            new ColumnaTabla(&quot;idEmpleado.nombre&quot;, &quot;Empleado&quot;),</span>
+<span class="nc" id="L45">            new ColumnaTabla(&quot;idEmpleado.apellido&quot;, &quot;Apellido&quot;),</span>
+<span class="nc" id="L46">            new ColumnaTabla(&quot;idRol.nombre&quot;, &quot;Rol&quot;),</span>
+<span class="nc" id="L47">            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L48">            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)</span>
     );
 
     @Override
@@ -64,7 +64,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
     public void cargarEmpleados() {
 <span class="nc bnc" id="L65" title="All 2 branches missed.">        if (empleadoRepository != null) {</span>
 <span class="nc" id="L66">            this.empleados = empleadoRepository.findAll();</span>
-        } else {
+<span class="nc" id="L67">        } else {</span>
 <span class="nc" id="L68">            this.empleados = new ArrayList&lt;&gt;();</span>
         }
 <span class="nc" id="L70">    }</span>
@@ -73,7 +73,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L73" title="All 2 branches missed.">        if (rolRepository != null) {</span>
             // Todos los roles: la vista deshabilita los inactivos (itemDisabled)
 <span class="nc" id="L75">            this.roles = rolRepository.findAll();</span>
-        } else {
+<span class="nc" id="L76">        } else {</span>
 <span class="nc" id="L77">            this.roles = new ArrayList&lt;&gt;();</span>
         }
 <span class="nc" id="L79">    }</span>
@@ -134,7 +134,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
     private void error(String msg) {
 <span class="nc" id="L136">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L137">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L138">    }</span>
 
     public List&lt;Empleado&gt; getEmpleados() {

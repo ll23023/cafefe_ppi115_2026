@@ -16,19 +16,48 @@ public abstract class DefaultRepository&lt;T,ID&gt; implements RepositoryInterfa
      private final Class&lt;T&gt; entityClass;
 
 <span class="nc" id="L18">    public DefaultRepository(Class&lt;T&gt; entityClass) {</span>
-<span class="nc" id="L19">        this.entityClass = entityClass;</span>
-<span class="nc" id="L20">    }</span>
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (entityClass == null) {</span>
+<span class="nc" id="L20">            throw new IllegalArgumentException(&quot;entityClass no puede ser null&quot;);</span>
+        }
+<span class="nc" id="L22">        this.entityClass = entityClass;</span>
+<span class="nc" id="L23">    }</span>
 
     protected abstract EntityManager getEntityManager();
 
+    protected EntityManager requireEntityManager() {
+<span class="nc" id="L28">        EntityManager em = getEntityManager();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (em == null) {</span>
+<span class="nc" id="L30">            throw new IllegalStateException(&quot;El EntityManager no está disponible&quot;);</span>
+        }
+<span class="nc" id="L32">        return em;</span>
+    }
+
+    protected &lt;V&gt; V requireArgument(V argument, String name) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (argument == null) {</span>
+<span class="nc" id="L37">            throw new IllegalArgumentException(name + &quot; no puede ser null&quot;);</span>
+        }
+<span class="nc" id="L39">        return argument;</span>
+    }
+
+    protected void requirePage(int first, int max) {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (first &lt; 0) {</span>
+<span class="nc" id="L44">            throw new IllegalArgumentException(&quot;first no puede ser negativo&quot;);</span>
+        }
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (max &lt; 0) {</span>
+<span class="nc" id="L47">            throw new IllegalArgumentException(&quot;max no puede ser negativo&quot;);</span>
+        }
+<span class="nc" id="L49">    }</span>
+
     @Override
     public void crear(T entity) {
-<span class="nc" id="L26">        getEntityManager().persist(entity);</span>
-<span class="nc" id="L27">    }</span>
+<span class="nc" id="L53">        requireArgument(entity, &quot;entity&quot;);</span>
+<span class="nc" id="L54">        requireEntityManager().persist(entity);</span>
+<span class="nc" id="L55">    }</span>
 
     @Override
     public T modificar(T entity) {
-<span class="nc" id="L31">        return getEntityManager().merge(entity);</span>
+<span class="nc" id="L59">        requireArgument(entity, &quot;entity&quot;);</span>
+<span class="nc" id="L60">        return requireEntityManager().merge(entity);</span>
     }
 
     /**
@@ -43,58 +72,60 @@ public abstract class DefaultRepository&lt;T,ID&gt; implements RepositoryInterfa
      */
     @Override
     public void eliminar(T entity) {
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (entity == null) {</span>
-<span class="nc" id="L47">            return;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (entity == null) {</span>
+<span class="nc" id="L76">            return;</span>
         }
-<span class="nc" id="L49">        EntityManager em = getEntityManager();</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (em.contains(entity)) {</span>
-<span class="nc" id="L51">            em.remove(entity);</span>
-<span class="nc" id="L52">            return;</span>
+<span class="nc" id="L78">        EntityManager em = requireEntityManager();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (em.contains(entity)) {</span>
+<span class="nc" id="L80">            em.remove(entity);</span>
+<span class="nc" id="L81">            return;</span>
         }
-<span class="nc" id="L54">        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (id == null) {</span>
-<span class="nc" id="L56">            return;</span>
+<span class="nc" id="L83">        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L85">            return;</span>
         }
-<span class="nc" id="L58">        T managed = em.find(entityClass, id);</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (managed != null) {</span>
-<span class="nc" id="L60">            em.remove(managed);</span>
+<span class="nc" id="L87">        T managed = em.find(entityClass, id);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (managed != null) {</span>
+<span class="nc" id="L89">            em.remove(managed);</span>
         }
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L91">    }</span>
 
     @Override
     public T findById(ID id) {
-<span class="nc" id="L66">        return getEntityManager().find(entityClass, id);</span>
+<span class="nc" id="L95">        requireArgument(id, &quot;id&quot;);</span>
+<span class="nc" id="L96">        return requireEntityManager().find(entityClass, id);</span>
     }
 
     @Override
     public List&lt;T&gt; findAll() {
-<span class="nc" id="L71">        EntityManager em = getEntityManager();</span>
-<span class="nc" id="L72">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
-<span class="nc" id="L73">        CriteriaQuery&lt;T&gt; cq = cb.createQuery(entityClass);</span>
-<span class="nc" id="L74">        cq.select(cq.from(entityClass));</span>
-<span class="nc" id="L75">        return em.createQuery(cq).getResultList();</span>
+<span class="nc" id="L101">        EntityManager em = requireEntityManager();</span>
+<span class="nc" id="L102">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
+<span class="nc" id="L103">        CriteriaQuery&lt;T&gt; cq = cb.createQuery(entityClass);</span>
+<span class="nc" id="L104">        cq.select(cq.from(entityClass));</span>
+<span class="nc" id="L105">        return em.createQuery(cq).getResultList();</span>
     }
 
     @Override
     public List&lt;T&gt; findRange(int start, int max) {
-<span class="nc" id="L80">        EntityManager em = getEntityManager();</span>
-<span class="nc" id="L81">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
-<span class="nc" id="L82">        CriteriaQuery&lt;T&gt; cq = cb.createQuery(entityClass);</span>
-<span class="nc" id="L83">        cq.select(cq.from(entityClass));</span>
-<span class="nc" id="L84">        return em.createQuery(cq)</span>
-<span class="nc" id="L85">                 .setFirstResult(start)</span>
-<span class="nc" id="L86">                 .setMaxResults(max)</span>
-<span class="nc" id="L87">                 .getResultList();</span>
+<span class="nc" id="L110">        requirePage(start, max);</span>
+<span class="nc" id="L111">        EntityManager em = requireEntityManager();</span>
+<span class="nc" id="L112">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
+<span class="nc" id="L113">        CriteriaQuery&lt;T&gt; cq = cb.createQuery(entityClass);</span>
+<span class="nc" id="L114">        cq.select(cq.from(entityClass));</span>
+<span class="nc" id="L115">        return em.createQuery(cq)</span>
+<span class="nc" id="L116">                 .setFirstResult(start)</span>
+<span class="nc" id="L117">                 .setMaxResults(max)</span>
+<span class="nc" id="L118">                 .getResultList();</span>
     }
 
     @Override
     public Long count() {
-<span class="nc" id="L92">        EntityManager em = getEntityManager();</span>
-<span class="nc" id="L93">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
-<span class="nc" id="L94">        CriteriaQuery&lt;Long&gt; cq = cb.createQuery(Long.class);</span>
-<span class="nc" id="L95">        Root&lt;T&gt; rt = cq.from(entityClass);</span>
-<span class="nc" id="L96">        cq.select(cb.count(rt));</span>
-<span class="nc" id="L97">        return em.createQuery(cq).getSingleResult();</span>
+<span class="nc" id="L123">        EntityManager em = requireEntityManager();</span>
+<span class="nc" id="L124">        CriteriaBuilder cb = em.getCriteriaBuilder();</span>
+<span class="nc" id="L125">        CriteriaQuery&lt;Long&gt; cq = cb.createQuery(Long.class);</span>
+<span class="nc" id="L126">        Root&lt;T&gt; rt = cq.from(entityClass);</span>
+<span class="nc" id="L127">        cq.select(cb.count(rt));</span>
+<span class="nc" id="L128">        return em.createQuery(cq).getSingleResult();</span>
     }
 
 }

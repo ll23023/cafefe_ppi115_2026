@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Caja.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity</a> &gt; <span class="el_source">Caja.java</span></div><h1>Caja.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -43,80 +44,81 @@ public class Caja implements Serializable {
     @Size(max = 2147483647)
     @Column(name = &quot;observaciones&quot;, length = 2147483647)
     private String observaciones;
+    @JsonbTransient
     @OneToMany(mappedBy = &quot;idCaja&quot;)
     private List&lt;Factura&gt; facturaList;
 
-<span class="nc" id="L49">    public Caja() {</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L51">    public Caja() {</span>
+<span class="nc" id="L52">    }</span>
 
-<span class="nc" id="L52">    public Caja(UUID idCaja) {</span>
-<span class="nc" id="L53">        this.idCaja = idCaja;</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L54">    public Caja(UUID idCaja) {</span>
+<span class="nc" id="L55">        this.idCaja = idCaja;</span>
+<span class="nc" id="L56">    }</span>
 
     public UUID getIdCaja() {
-<span class="nc" id="L57">        return idCaja;</span>
+<span class="nc" id="L59">        return idCaja;</span>
     }
 
     public void setIdCaja(UUID idCaja) {
-<span class="nc" id="L61">        this.idCaja = idCaja;</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L63">        this.idCaja = idCaja;</span>
+<span class="nc" id="L64">    }</span>
 
     public String getNombre() {
-<span class="nc" id="L65">        return nombre;</span>
+<span class="nc" id="L67">        return nombre;</span>
     }
 
     public void setNombre(String nombre) {
-<span class="nc" id="L69">        this.nombre = nombre;</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L71">        this.nombre = nombre;</span>
+<span class="nc" id="L72">    }</span>
 
     public Boolean getActivo() {
-<span class="nc" id="L73">        return activo;</span>
+<span class="nc" id="L75">        return activo;</span>
     }
 
     public void setActivo(Boolean activo) {
-<span class="nc" id="L77">        this.activo = activo;</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L79">        this.activo = activo;</span>
+<span class="nc" id="L80">    }</span>
 
     public String getObservaciones() {
-<span class="nc" id="L81">        return observaciones;</span>
+<span class="nc" id="L83">        return observaciones;</span>
     }
 
     public void setObservaciones(String observaciones) {
-<span class="nc" id="L85">        this.observaciones = observaciones;</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L87">        this.observaciones = observaciones;</span>
+<span class="nc" id="L88">    }</span>
 
     public List&lt;Factura&gt; getFacturaList() {
-<span class="nc" id="L89">        return facturaList;</span>
+<span class="nc" id="L91">        return facturaList;</span>
     }
 
     public void setFacturaList(List&lt;Factura&gt; facturaList) {
-<span class="nc" id="L93">        this.facturaList = facturaList;</span>
-<span class="nc" id="L94">    }</span>
+<span class="nc" id="L95">        this.facturaList = facturaList;</span>
+<span class="nc" id="L96">    }</span>
 
     @Override
     public int hashCode() {
-<span class="nc" id="L98">        int hash = 0;</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        hash += (idCaja != null ? idCaja.hashCode() : 0);</span>
-<span class="nc" id="L100">        return hash;</span>
+<span class="nc" id="L100">        int hash = 0;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        hash += (idCaja != null ? idCaja.hashCode() : 0);</span>
+<span class="nc" id="L102">        return hash;</span>
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (!(object instanceof Caja)) {</span>
-<span class="nc" id="L107">            return false;</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (!(object instanceof Caja)) {</span>
+<span class="nc" id="L109">            return false;</span>
         }
-<span class="nc" id="L109">        Caja other = (Caja) object;</span>
-<span class="nc bnc" id="L110" title="All 8 branches missed.">        if ((this.idCaja == null &amp;&amp; other.idCaja != null) || (this.idCaja != null &amp;&amp; !this.idCaja.equals(other.idCaja))) {</span>
-<span class="nc" id="L111">            return false;</span>
+<span class="nc" id="L111">        Caja other = (Caja) object;</span>
+<span class="nc bnc" id="L112" title="All 8 branches missed.">        if ((this.idCaja == null &amp;&amp; other.idCaja != null) || (this.idCaja != null &amp;&amp; !this.idCaja.equals(other.idCaja))) {</span>
+<span class="nc" id="L113">            return false;</span>
         }
-<span class="nc" id="L113">        return true;</span>
+<span class="nc" id="L115">        return true;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L118">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja[ idCaja=&quot; + idCaja + &quot; ]&quot;;</span>
+<span class="nc" id="L120">        return &quot;sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja[ idCaja=&quot; + idCaja + &quot; ]&quot;;</span>
     }
-    
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

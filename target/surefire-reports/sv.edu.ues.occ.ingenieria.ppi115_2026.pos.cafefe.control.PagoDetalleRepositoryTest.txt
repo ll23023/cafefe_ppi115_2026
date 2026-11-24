@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.PagoDetalleRepositoryTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.PagoDetalleRepositoryTest

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacturaOrdenProductoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">FacturaOrdenProductoResource.java</span></div><h1>FacturaOrdenProductoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaOrdenProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.OrdenProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.FacturaOrdenProducto;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.OrdenProducto;
+
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.badRequest;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.conflicto;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.notFound;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.serverError;
+
+/**
+ *
+ * @author mil
+ */
+@Path(&quot;factura-orden-producto&quot;)
+<span class="nc" id="L43">public class FacturaOrdenProductoResource {</span>
+
+<span class="nc" id="L45">    private static final Logger LOG = Logger.getLogger(FacturaOrdenProductoResource.class.getName());</span>
+<span class="nc" id="L46">    private static final BigDecimal PRECIO_MAX = new BigDecimal(&quot;999999.99&quot;);</span>
+
+    @Inject
+    FacturaOrdenProductoRepository facturaOrdenProductoRepository;
+
+    @Inject
+    FacturaRepository facturaRepository;
+
+    @Inject
+    OrdenProductoRepository ordenProductoRepository;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max,
+            @QueryParam(&quot;idFactura&quot;) UUID idFactura) {
+        try {
+<span class="nc bnc" id="L64" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+                List&lt;FacturaOrdenProducto&gt; lineas;
+                Long total;
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                if (idFactura != null) {</span>
+<span class="nc" id="L68">                    lineas = facturaOrdenProductoRepository.findByFactura(idFactura, first, max);</span>
+<span class="nc" id="L69">                    total = facturaOrdenProductoRepository.countByFactura(idFactura);</span>
+<span class="nc" id="L70">                } else {</span>
+<span class="nc" id="L71">                    lineas = facturaOrdenProductoRepository.findRange(first, max);</span>
+<span class="nc" id="L72">                    total = facturaOrdenProductoRepository.count();</span>
+                }
+<span class="nc" id="L74">                return Response.ok(lineas)</span>
+<span class="nc" id="L75">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L76">                        .build();</span>
+            }
+<span class="nc" id="L78">            return badRequest(&quot;Los parametros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;);</span>
+<span class="nc" id="L79">        } catch (Exception ex) {</span>
+<span class="nc" id="L80">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L81">            return serverError(ex);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L90">            return badRequest(&quot;id nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L93">            FacturaOrdenProducto encontrada = facturaOrdenProductoRepository.findById(id);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (encontrada != null) {</span>
+<span class="nc" id="L95">                return Response.ok(encontrada).build();</span>
+            }
+<span class="nc" id="L97">            return notFound(id);</span>
+<span class="nc" id="L98">        } catch (Exception ex) {</span>
+<span class="nc" id="L99">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L100">            return serverError(ex);</span>
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response create(FacturaOrdenProductoRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L109" title="All 4 branches missed.">        if (request == null || request.idFactura == null) {</span>
+<span class="nc" id="L110">            return badRequest(&quot;idFactura es obligatorio&quot;);</span>
+        }
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (request.idOrdenProducto == null) {</span>
+<span class="nc" id="L113">            return badRequest(&quot;idOrdenProducto es obligatorio&quot;);</span>
+        }
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (request.precio == null) {</span>
+<span class="nc" id="L116">            return badRequest(&quot;El precio es obligatorio&quot;);</span>
+        }
+<span class="nc" id="L118">        Response precioInvalido = validarPrecio(request.precio);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (precioInvalido != null) {</span>
+<span class="nc" id="L120">            return precioInvalido;</span>
+        }
+
+        try {
+<span class="nc" id="L124">            Factura factura = facturaRepository.findById(request.idFactura);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (factura == null) {</span>
+<span class="nc" id="L126">                return conflicto(&quot;La factura no existe: &quot; + request.idFactura);</span>
+            }
+<span class="nc" id="L128">            OrdenProducto ordenProducto = ordenProductoRepository.findById(request.idOrdenProducto);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (ordenProducto == null) {</span>
+<span class="nc" id="L130">                return conflicto(&quot;El producto de orden no existe: &quot; + request.idOrdenProducto);</span>
+            }
+<span class="nc" id="L132">            if (facturaOrdenProductoRepository.countByFacturaAndOrdenProducto(</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">                    request.idFactura, request.idOrdenProducto) &gt; 0) {</span>
+<span class="nc" id="L134">                return conflicto(&quot;Ese producto de orden ya está incluido en la factura.&quot;);</span>
+            }
+
+<span class="nc" id="L137">            FacturaOrdenProducto nueva = new FacturaOrdenProducto(UUID.randomUUID());</span>
+<span class="nc" id="L138">            nueva.setIdFactura(factura);</span>
+<span class="nc" id="L139">            nueva.setIdOrdenProducto(ordenProducto);</span>
+<span class="nc" id="L140">            nueva.setPrecio(request.precio);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            nueva.setObservaciones(request.observaciones != null ? request.observaciones : &quot;&quot;);</span>
+<span class="nc" id="L142">            facturaOrdenProductoRepository.crear(nueva);</span>
+
+<span class="nc" id="L144">            URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L145">                    .path(String.valueOf(nueva.getIdFacturaOrdenProducto()))</span>
+<span class="nc" id="L146">                    .build();</span>
+<span class="nc" id="L147">            return Response.created(location).build();</span>
+
+<span class="nc" id="L149">        } catch (Exception ex) {</span>
+<span class="nc" id="L150">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L151">            return serverError(ex);</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, FacturaOrdenProductoRequest request) {
+<span class="nc bnc" id="L161" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L162">            return badRequest(&quot;ID o cuerpo nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L165">            FacturaOrdenProducto existente = facturaOrdenProductoRepository.findById(id);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L167">                return notFound(id);</span>
+            }
+
+            // La factura y el producto de orden de una línea no se cambian
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (request.idFactura != null</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdFactura() == null</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                    || !request.idFactura.equals(existente.getIdFactura().getIdFactura()))) {</span>
+<span class="nc" id="L174">                return conflicto(&quot;No se puede cambiar la factura de una línea existente; elimínela y cree otra.&quot;);</span>
+            }
+<span class="nc bnc" id="L176" title="All 2 branches missed.">            if (request.idOrdenProducto != null</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdOrdenProducto() == null</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                    || !request.idOrdenProducto.equals(existente.getIdOrdenProducto().getIdOrdenProducto()))) {</span>
+<span class="nc" id="L179">                return conflicto(&quot;No se puede cambiar el producto de orden de una línea existente; elimínela y cree otra.&quot;);</span>
+            }
+
+            // Validar todo ANTES de modificar la entidad
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if (request.precio != null) {</span>
+<span class="nc" id="L184">                Response precioInvalido = validarPrecio(request.precio);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                if (precioInvalido != null) {</span>
+<span class="nc" id="L186">                    return precioInvalido;</span>
+                }
+<span class="nc" id="L188">                existente.setPrecio(request.precio);</span>
+            }
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (request.observaciones != null) {</span>
+<span class="nc" id="L191">                existente.setObservaciones(request.observaciones);</span>
+            }
+
+<span class="nc" id="L194">            facturaOrdenProductoRepository.modificar(existente);</span>
+<span class="nc" id="L195">            return Response.ok(existente).build();</span>
+
+<span class="nc" id="L197">        } catch (Exception ex) {</span>
+<span class="nc" id="L198">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L199">            return serverError(ex);</span>
+        }
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L208">            return badRequest(&quot;El ID no puede ser nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L211">            FacturaOrdenProducto encontrada = facturaOrdenProductoRepository.findById(id);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (encontrada == null) {</span>
+<span class="nc" id="L213">                return notFound(id);</span>
+            }
+            // Ninguna tabla referencia a factura_orden_producto, se puede borrar directo
+<span class="nc" id="L216">            facturaOrdenProductoRepository.eliminar(encontrada);</span>
+<span class="nc" id="L217">            return Response.noContent().build();</span>
+
+<span class="nc" id="L219">        } catch (Exception ex) {</span>
+<span class="nc" id="L220">            LOG.log(Level.SEVERE, &quot;Error al eliminar factura_orden_producto: &quot; + id, ex);</span>
+<span class="nc" id="L221">            return serverError(ex);</span>
+        }
+    }
+
+    /**
+     * @return null si el precio es válido, o la respuesta 400 si no lo es
+     */
+    private Response validarPrecio(BigDecimal precio) {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        if (precio.signum() &lt; 0) {</span>
+<span class="nc" id="L230">            return badRequest(&quot;El precio no puede ser negativo&quot;);</span>
+        }
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        if (precio.stripTrailingZeros().scale() &gt; 2) {</span>
+<span class="nc" id="L233">            return badRequest(&quot;El precio admite máximo 2 decimales&quot;);</span>
+        }
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        if (precio.compareTo(PRECIO_MAX) &gt; 0) {</span>
+<span class="nc" id="L236">            return badRequest(&quot;El precio no puede superar &quot; + PRECIO_MAX);</span>
+        }
+<span class="nc" id="L238">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

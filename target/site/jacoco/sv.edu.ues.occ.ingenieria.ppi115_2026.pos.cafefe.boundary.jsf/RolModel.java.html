@@ -105,7 +105,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L105">        } catch (Exception ex) {</span>
 <span class="nc" id="L106">            LOG.log(Level.SEVERE, &quot;Error al eliminar rol&quot;, ex);</span>
 <span class="nc" id="L107">            error(&quot;No se pudo eliminar el rol: &quot; + ex.getMessage());</span>
-<span class="nc" id="L108">        }</span>
+        }
 <span class="nc" id="L109">    }</span>
 
     @Override
@@ -129,7 +129,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
         try {
 <span class="nc bnc" id="L130" title="All 2 branches missed.">            if (estado == ESTADO_CRUD.MODIFICAR) {</span>
 <span class="nc" id="L131">                rolRepository.modificar(registro);</span>
-            } else {
+<span class="nc" id="L132">            } else {</span>
 <span class="nc" id="L133">                rolRepository.crear(registro);</span>
             }
 <span class="nc" id="L135">            cargarRegistros();</span>
@@ -138,7 +138,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L138">        } catch (Exception ex) {</span>
 <span class="nc" id="L139">            LOG.log(Level.SEVERE, &quot;Error al guardar rol&quot;, ex);</span>
 <span class="nc" id="L140">            error(&quot;No se pudo guardar el rol: &quot; + ex.getMessage());</span>
-<span class="nc" id="L141">        }</span>
+        }
 <span class="nc" id="L142">    }</span>
 
     private void mostrar(Rol r) {
@@ -164,12 +164,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
     private void info(String msg) {
 <span class="nc" id="L166">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L167">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L168">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L171">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L172">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L173">    }</span>
 
     public boolean isSoloLectura() {
@@ -190,9 +190,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L191" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L192">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
-                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;));
+<span class="nc" id="L193">                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),</span>
+<span class="nc" id="L194">                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L195">                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;));</span>
         }
 <span class="nc" id="L197">        return columnas;</span>
     }

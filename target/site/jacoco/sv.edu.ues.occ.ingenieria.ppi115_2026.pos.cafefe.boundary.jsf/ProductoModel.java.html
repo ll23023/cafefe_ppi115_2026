@@ -375,7 +375,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L375" title="All 2 branches missed.">            boolean nuevo = estado != ESTADO_CRUD.MODIFICAR;</span>
 <span class="nc bnc" id="L376" title="All 2 branches missed.">            if (nuevo) {</span>
 <span class="nc" id="L377">                productoRepository.crear(registro);</span>
-            } else {
+<span class="nc" id="L378">            } else {</span>
 <span class="nc" id="L379">                productoRepository.modificar(registro);</span>
             }
 <span class="nc" id="L381">            Producto productoGuardado = productoRepository.findById(registro.getIdProducto());</span>
@@ -391,7 +391,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L391" title="All 2 branches missed.">            if (guardado != null) {</span>
 <span class="nc" id="L392">                this.seleccion = guardado;</span>
 <span class="nc" id="L393">                mostrar(guardado);</span>
-            } else {
+<span class="nc" id="L394">            } else {</span>
 <span class="nc" id="L395">                limpiar();</span>
             }
 <span class="nc" id="L397">            mensaje(FacesMessage.SEVERITY_INFO, &quot;Producto guardado correctamente.&quot;);</span>
@@ -399,7 +399,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L399">            LOG.log(Level.SEVERE, &quot;Error al guardar producto y sus relaciones&quot;, exception);</span>
 <span class="nc" id="L400">            mensaje(FacesMessage.SEVERITY_ERROR,</span>
 <span class="nc" id="L401">                    &quot;No se pudo guardar el producto: &quot; + exception.getMessage());</span>
-<span class="nc" id="L402">        }</span>
+        }
 <span class="nc" id="L403">    }</span>
 
     private void cargarListasRelacionadas() {
@@ -507,11 +507,11 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
             }
 <span class="nc bnc" id="L508" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
 <span class="nc" id="L509">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;No se puede asignar un tipo de característica inactivo: &quot;
+<span class="nc" id="L510">                        &quot;No se puede asignar un tipo de característica inactivo: &quot;</span>
 <span class="nc" id="L511">                        + fila.getTipo().getNombre());</span>
 <span class="nc" id="L512">                return false;</span>
             }
-<span class="nc" id="L514">        }</span>
+        }
 <span class="nc bnc" id="L515" title="All 2 branches missed.">        for (DescuentoFila fila : filasDescuentos) {</span>
 <span class="nc bnc" id="L516" title="All 2 branches missed.">            if (fila.isPersistida()) {</span>
 <span class="nc" id="L517">                continue;</span>
@@ -532,7 +532,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc bnc" id="L533" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
 <span class="nc" id="L534">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;No se puede asignar un tipo de descuento inactivo: &quot;
+<span class="nc" id="L535">                        &quot;No se puede asignar un tipo de descuento inactivo: &quot;</span>
 <span class="nc" id="L536">                        + fila.getTipo().getNombre());</span>
 <span class="nc" id="L537">                return false;</span>
             }
@@ -547,16 +547,16 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
             }
 
 <span class="nc bnc" id="L549" title="All 2 branches missed.">            if (descuento.getIdTipoDescuento() == null</span>
-<span class="nc bnc" id="L550" title="All 2 branches missed.">                    || !fila.getTipo().getIdTipoDescuento().equals(</span>
-<span class="nc" id="L551">                            descuento.getIdTipoDescuento().getIdTipoDescuento())) {</span>
+<span class="nc" id="L550">                    || !fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">                            descuento.getIdTipoDescuento().getIdTipoDescuento())) {</span>
 <span class="nc" id="L552">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;El descuento seleccionado no corresponde al tipo indicado.&quot;);
+<span class="nc" id="L553">                        &quot;El descuento seleccionado no corresponde al tipo indicado.&quot;);</span>
 <span class="nc" id="L554">                return false;</span>
             }
 
 <span class="nc bnc" id="L557" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(descuento.getIdTipoDescuento().getActivo())) {</span>
 <span class="nc" id="L558">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;No se puede asignar un descuento cuyo tipo está inactivo: &quot;
+<span class="nc" id="L559">                        &quot;No se puede asignar un descuento cuyo tipo está inactivo: &quot;</span>
 <span class="nc" id="L560">                        + descuento.getNombre());</span>
 <span class="nc" id="L561">                return false;</span>
             }
@@ -565,17 +565,17 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc bnc" id="L566" title="All 2 branches missed.">            if (maximo == null) {</span>
 <span class="nc" id="L567">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;El tipo de descuento seleccionado no tiene un máximo definido.&quot;);
+<span class="nc" id="L568">                        &quot;El tipo de descuento seleccionado no tiene un máximo definido.&quot;);</span>
 <span class="nc" id="L569">                return false;</span>
             }
 
 <span class="nc bnc" id="L572" title="All 2 branches missed.">            if (fila.getValor() &gt; maximo) {</span>
 <span class="nc" id="L573">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
 <span class="nc" id="L574">                        &quot;El valor del descuento \&quot;&quot; + descuento.getNombre()</span>
-                        + &quot;\&quot; no puede ser mayor a &quot; + maximo + &quot;%.&quot;);
+<span class="nc" id="L575">                        + &quot;\&quot; no puede ser mayor a &quot; + maximo + &quot;%.&quot;);</span>
 <span class="nc" id="L576">                return false;</span>
             }
-<span class="nc" id="L578">        }</span>
+        }
 
 <span class="nc bnc" id="L580" title="All 2 branches missed.">        for (CaracteristicaFila fila : filasCaracteristicas) {</span>
 <span class="nc bnc" id="L581" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getCaracteristicaNombre() == null</span>
@@ -591,7 +591,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc bnc" id="L592" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(caracteristica.getActivo())) {</span>
 <span class="nc" id="L593">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;No se puede asignar una característica inactiva: &quot;
+<span class="nc" id="L594">                        &quot;No se puede asignar una característica inactiva: &quot;</span>
 <span class="nc" id="L595">                        + caracteristica.getNombre());</span>
 <span class="nc" id="L596">                return false;</span>
             }
@@ -610,7 +610,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
                 try {
 <span class="nc bnc" id="L611" title="All 2 branches missed.">                    if (!Pattern.matches(expresionRegular, valor)) {</span>
 <span class="nc" id="L612">                        mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                                &quot;El valor \&quot;&quot; + valor + &quot;\&quot; de la característica \&quot;&quot;
+<span class="nc" id="L613">                                &quot;El valor \&quot;&quot; + valor + &quot;\&quot; de la característica \&quot;&quot;</span>
 <span class="nc" id="L614">                                + caracteristica.getNombre()</span>
                                 + &quot;\&quot; no cumple con la expresión regular del tipo \&quot;&quot;
 <span class="nc" id="L616">                                + fila.getTipo().getNombre() + &quot;\&quot;.&quot;);</span>
@@ -618,12 +618,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
                     }
 <span class="nc" id="L619">                } catch (PatternSyntaxException ex) {</span>
 <span class="nc" id="L620">                    mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                            &quot;La expresión regular del tipo de característica \&quot;&quot;
+<span class="nc" id="L621">                            &quot;La expresión regular del tipo de característica \&quot;&quot;</span>
 <span class="nc" id="L622">                            + fila.getTipo().getNombre() + &quot;\&quot; no es válida.&quot;);</span>
 <span class="nc" id="L623">                    return false;</span>
-<span class="nc" id="L624">                }</span>
+                }
             }
-<span class="nc" id="L626">        }</span>
+        }
 
 <span class="nc bnc" id="L628" title="All 2 branches missed.">        for (TipoProductoFila fila : filasTiposProducto) {</span>
 <span class="nc bnc" id="L629" title="All 2 branches missed.">            if (fila.getTipo() == null) {</span>
@@ -631,11 +631,11 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
             }
 <span class="nc bnc" id="L632" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(fila.getTipo().getActivo())) {</span>
 <span class="nc" id="L633">                mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                        &quot;No se puede asignar un tipo de producto inactivo: &quot;
+<span class="nc" id="L634">                        &quot;No se puede asignar un tipo de producto inactivo: &quot;</span>
 <span class="nc" id="L635">                        + fila.getTipo().getNombre());</span>
 <span class="nc" id="L636">                return false;</span>
             }
-<span class="nc" id="L638">        }</span>
+        }
 <span class="nc" id="L639">        return true;</span>
     }
 
@@ -659,7 +659,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc" id="L660">            fila.setTipo(tipo);</span>
 <span class="nc" id="L661">            fila.setCaracteristica(caracteristica);</span>
-<span class="nc" id="L662">        }</span>
+        }
 
 <span class="nc bnc" id="L664" title="All 2 branches missed.">        for (TipoProductoFila fila : filasTiposProducto) {</span>
 <span class="nc bnc" id="L665" title="All 4 branches missed.">            if (fila.getTipoNombre() == null || fila.getTipoNombre().isBlank()) {</span>
@@ -678,7 +678,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
             }
 
 <span class="nc" id="L680">            fila.setTipo(tipo);</span>
-<span class="nc" id="L681">        }</span>
+        }
 
 <span class="nc bnc" id="L683" title="All 2 branches missed.">        for (DescuentoFila fila : filasDescuentos) {</span>
 <span class="nc bnc" id="L684" title="All 4 branches missed.">            if (fila.getTipo() == null || fila.getDescuentoNombre() == null</span>
@@ -691,8 +691,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L691" title="All 2 branches missed.">                    &amp;&amp; d.getNombre().equalsIgnoreCase(fila.getDescuentoNombre().trim())</span>
 <span class="nc bnc" id="L692" title="All 2 branches missed.">                    &amp;&amp; d.getIdTipoDescuento() != null</span>
 <span class="nc bnc" id="L693" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento() != null</span>
-<span class="nc bnc" id="L694" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
-<span class="nc" id="L695">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
+<span class="nc" id="L694">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc bnc" id="L695" title="All 2 branches missed.">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
 <span class="nc" id="L696">                    .findFirst().orElse(null);</span>
 <span class="nc bnc" id="L697" title="All 2 branches missed.">            if (descuento == null) {</span>
 <span class="nc" id="L698">                descuento = new Descuento(UUID.randomUUID());</span>
@@ -711,7 +711,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
             }
 
 <span class="nc" id="L713">            fila.setDescuentoNombre(descuento.getNombre());</span>
-<span class="nc" id="L714">        }</span>
+        }
 <span class="nc" id="L715">    }</span>
 
     private Caracteristica buscarCaracteristica(String nombre) {
@@ -733,9 +733,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc" id="L734">        return caracteristicaRepository.findAll().stream()</span>
 <span class="nc bnc" id="L735" title="All 2 branches missed.">                .filter(caracteristica -&gt; caracteristica.getIdTipoCaracteristica() != null</span>
-<span class="nc bnc" id="L736" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(</span>
+<span class="nc" id="L736">                &amp;&amp; idTipo.equals(</span>
 <span class="nc" id="L737">                        caracteristica.getIdTipoCaracteristica()</span>
-<span class="nc" id="L738">                                .getIdTipoCaracteristica()))</span>
+<span class="nc bnc" id="L738" title="All 2 branches missed.">                                .getIdTipoCaracteristica()))</span>
 <span class="nc" id="L739">                .toList();</span>
     }
 
@@ -747,12 +747,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L747">        return caracteristicaRepository.findAll().stream()</span>
 <span class="nc bnc" id="L748" title="All 2 branches missed.">                .filter(caracteristica -&gt; caracteristica != null</span>
 <span class="nc bnc" id="L749" title="All 2 branches missed.">                &amp;&amp; caracteristica.getIdTipoCaracteristica() != null</span>
-<span class="nc" id="L750">                &amp;&amp; caracteristica.getIdTipoCaracteristica()</span>
-<span class="nc bnc" id="L751" title="All 2 branches missed.">                        .getIdTipoCaracteristica() != null</span>
-<span class="nc bnc" id="L752" title="All 2 branches missed.">                &amp;&amp; tipoId.equals(</span>
+<span class="nc bnc" id="L750" title="All 2 branches missed.">                &amp;&amp; caracteristica.getIdTipoCaracteristica()</span>
+<span class="nc" id="L751">                        .getIdTipoCaracteristica() != null</span>
+<span class="nc" id="L752">                &amp;&amp; tipoId.equals(</span>
 <span class="nc" id="L753">                        caracteristica.getIdTipoCaracteristica()</span>
 <span class="nc" id="L754">                                .getIdTipoCaracteristica()</span>
-<span class="nc" id="L755">                                .toString()))</span>
+<span class="nc bnc" id="L755" title="All 2 branches missed.">                                .toString()))</span>
 <span class="nc" id="L756">                .toList();</span>
     }
 
@@ -767,8 +767,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L767">            tipo = tiposCaracteristica.stream()</span>
 <span class="nc bnc" id="L768" title="All 2 branches missed.">                    .filter(t -&gt; t != null</span>
 <span class="nc bnc" id="L769" title="All 2 branches missed.">                    &amp;&amp; t.getIdTipoCaracteristica() != null</span>
-<span class="nc bnc" id="L770" title="All 2 branches missed.">                    &amp;&amp; fila.getTipoId().equals(</span>
-<span class="nc" id="L771">                            t.getIdTipoCaracteristica().toString()))</span>
+<span class="nc" id="L770">                    &amp;&amp; fila.getTipoId().equals(</span>
+<span class="nc bnc" id="L771" title="All 2 branches missed.">                            t.getIdTipoCaracteristica().toString()))</span>
 <span class="nc" id="L772">                    .findFirst()</span>
 <span class="nc" id="L773">                    .orElse(null);</span>
         }
@@ -802,7 +802,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L802">            relacion.setValor(fila.getValor());</span>
 <span class="nc" id="L803">            productoCaracteristicaRepository.crear(relacion);</span>
 <span class="nc" id="L804">            fila.setPersistida(true);</span>
-<span class="nc" id="L805">        }</span>
+        }
 <span class="nc" id="L806">    }</span>
 
     private void sincronizarTiposProducto(Producto producto) {
@@ -820,7 +820,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L820">            relacion.setIdTipoProducto(fila.getTipo());</span>
 <span class="nc" id="L821">            productoTipoProductoRepository.crear(relacion);</span>
 <span class="nc" id="L822">            fila.setPersistida(true);</span>
-<span class="nc" id="L823">        }</span>
+        }
 <span class="nc" id="L824">    }</span>
 
     private void sincronizarDescuentos(Producto producto) {
@@ -834,12 +834,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L834" title="All 2 branches missed.">                    &amp;&amp; d.getIdTipoDescuento() != null</span>
 <span class="nc bnc" id="L835" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo() != null</span>
 <span class="nc bnc" id="L836" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento() != null</span>
-<span class="nc bnc" id="L837" title="All 2 branches missed.">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
-<span class="nc" id="L838">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
+<span class="nc" id="L837">                    &amp;&amp; fila.getTipo().getIdTipoDescuento().equals(</span>
+<span class="nc bnc" id="L838" title="All 2 branches missed.">                            d.getIdTipoDescuento().getIdTipoDescuento()))</span>
 <span class="nc" id="L839">                    .findFirst().orElse(null);</span>
 <span class="nc bnc" id="L840" title="All 2 branches missed.">            if (descuento == null) {</span>
 <span class="nc" id="L841">                throw new IllegalStateException(</span>
-                        &quot;No se pudo resolver el descuento &quot;
+<span class="nc" id="L842">                        &quot;No se pudo resolver el descuento &quot;</span>
 <span class="nc" id="L843">                        + fila.getDescuentoNombre() + &quot;para el tipo seleccionado.&quot;);</span>
             }
 <span class="nc" id="L845">            DescuentoProducto relacion = new DescuentoProducto(UUID.randomUUID());</span>
@@ -850,7 +850,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L850">            relacion.setFechaHasta(fila.getFechaHasta());</span>
 <span class="nc" id="L851">            descuentoProductoRepository.crear(relacion);</span>
 <span class="nc" id="L852">            fila.setPersistida(true);</span>
-<span class="nc" id="L853">        }</span>
+        }
 <span class="nc" id="L854">    }</span>
 
     public void agregarCaracteristica() {
@@ -935,7 +935,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
         }
 <span class="nc bnc" id="L936" title="All 2 branches missed.">        if (!Boolean.TRUE.equals(nuevoDescuento.getIdTipoDescuento().getActivo())) {</span>
 <span class="nc" id="L937">            mensaje(FacesMessage.SEVERITY_ERROR,</span>
-                    &quot;No se puede crear un descuento con un tipo de descuento inactivo: &quot;
+<span class="nc" id="L938">                    &quot;No se puede crear un descuento con un tipo de descuento inactivo: &quot;</span>
 <span class="nc" id="L939">                    + nuevoDescuento.getIdTipoDescuento().getNombre());</span>
 <span class="nc" id="L940">            return;</span>
         }
@@ -1020,10 +1020,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L1021" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L1022">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
-                    new ColumnaTabla(&quot;precioSugerido&quot;, &quot;Precio sugerido&quot;, FORMATO_COLUMNA.CURRENCY),
-                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));
+<span class="nc" id="L1023">                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),</span>
+<span class="nc" id="L1024">                    new ColumnaTabla(&quot;precioSugerido&quot;, &quot;Precio sugerido&quot;, FORMATO_COLUMNA.CURRENCY),</span>
+<span class="nc" id="L1025">                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L1026">                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));</span>
         }
 <span class="nc" id="L1028">        return columnas;</span>
     }

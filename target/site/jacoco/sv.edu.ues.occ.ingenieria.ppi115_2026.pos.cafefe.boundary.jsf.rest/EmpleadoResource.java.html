@@ -73,7 +73,7 @@ import jakarta.persistence.PersistenceException;
             } else {
 <span class="nc" id="L74">                return Response.status(Response.Status.BAD_REQUEST)</span>
 <span class="nc" id="L75">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(),</span>
-                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)
+<span class="nc" id="L76">                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)</span>
 <span class="nc" id="L77">                        .build();</span>
             }
 <span class="nc" id="L79">        } catch (Exception ex) {</span>
@@ -140,7 +140,7 @@ import jakarta.persistence.PersistenceException;
 <span class="nc bnc" id="L140" title="All 2 branches missed.">            if (repetido) {</span>
 <span class="nc" id="L141">                return Response.status(Response.Status.CONFLICT)</span>
 <span class="nc" id="L142">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
-                                &quot;Ya existe un empleado con ese nombre y apellido.&quot;)
+<span class="nc" id="L143">                                &quot;Ya existe un empleado con ese nombre y apellido.&quot;)</span>
 <span class="nc" id="L144">                        .build();</span>
             }
 
@@ -207,7 +207,7 @@ import jakarta.persistence.PersistenceException;
 <span class="nc bnc" id="L207" title="All 6 branches missed.">            if (!asignacionesActuales.isEmpty() &amp;&amp; request.roles != null &amp;&amp; !request.roles.isEmpty()) {</span>
 <span class="nc" id="L208">                return Response.status(Response.Status.CONFLICT)</span>
 <span class="nc" id="L209">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
-                                &quot;El empleado ya tiene un rol asignado; no se pueden agregar más.&quot;)
+<span class="nc" id="L210">                                &quot;El empleado ya tiene un rol asignado; no se pueden agregar más.&quot;)</span>
 <span class="nc" id="L211">                        .build();</span>
             }
 
@@ -258,7 +258,7 @@ import jakarta.persistence.PersistenceException;
             // Eliminar roles
 <span class="nc bnc" id="L259" title="All 2 branches missed.">            for (EmpleadoRol er : obtenerAsignaciones(encontrado)) {</span>
 <span class="nc" id="L260">                empleadoRolRepository.eliminar(er);</span>
-<span class="nc" id="L261">            }</span>
+            }
 
             // Eliminar al empleado
 <span class="nc" id="L264">            empleadoRepository.eliminar(encontrado);</span>
@@ -282,7 +282,7 @@ import jakarta.persistence.PersistenceException;
 <span class="nc bnc" id="L282" title="All 2 branches missed.">            if (esErrorDeIntegridad) {</span>
 <span class="nc" id="L283">                return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
 <span class="nc" id="L284">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(),</span>
-                                &quot;No se puede eliminar el empleado porque tiene registros asociados (facturas, órdenes, etc.).&quot;)
+<span class="nc" id="L285">                                &quot;No se puede eliminar el empleado porque tiene registros asociados (facturas, órdenes, etc.).&quot;)</span>
 <span class="nc" id="L286">                        .build();</span>
             }
 
@@ -308,14 +308,14 @@ import jakarta.persistence.PersistenceException;
 <span class="nc bnc" id="L308" title="All 2 branches missed.">            if (r.getNombre() != null) {</span>
 <span class="nc" id="L309">                rolesPorNombre.putIfAbsent(r.getNombre().trim().toLowerCase(Locale.ROOT), r);</span>
             }
-<span class="nc" id="L311">        }</span>
+        }
 
 <span class="nc" id="L313">        Set&lt;String&gt; yaAsignados = new HashSet&lt;&gt;();</span>
 <span class="nc bnc" id="L314" title="All 2 branches missed.">        for (EmpleadoRol er : obtenerAsignaciones(emp)) {</span>
 <span class="nc bnc" id="L315" title="All 4 branches missed.">            if (er.getIdRol() != null &amp;&amp; er.getIdRol().getNombre() != null) {</span>
 <span class="nc" id="L316">                yaAsignados.add(er.getIdRol().getNombre().trim().toLowerCase(Locale.ROOT));</span>
             }
-<span class="nc" id="L318">        }</span>
+        }
 
 <span class="nc bnc" id="L320" title="All 2 branches missed.">        for (String nombreRol : nombresRoles) {</span>
 <span class="nc" id="L321">            String clave = nombreRol.trim().toLowerCase(Locale.ROOT);</span>
@@ -348,7 +348,7 @@ import jakarta.persistence.PersistenceException;
 <span class="nc" id="L348">            er.setActivo(Boolean.TRUE);</span>
 <span class="nc" id="L349">            er.setObservaciones(&quot;&quot;);</span>
 <span class="nc" id="L350">            empleadoRolRepository.crear(er);</span>
-<span class="nc" id="L351">        }</span>
+        }
 <span class="nc" id="L352">    }</span>
 
 }

@@ -3,6 +3,7 @@
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 import java.util.UUID;
 import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.FacturaOrdenProducto;
 
@@ -17,12 +18,51 @@ public class FacturaOrdenProductoRepository extends DefaultRepository&lt;Factura
     private EntityManager em;
 
     public FacturaOrdenProductoRepository() {
-<span class="nc" id="L20">        super(FacturaOrdenProducto.class);</span>
-<span class="nc" id="L21">    }</span>
+<span class="nc" id="L21">        super(FacturaOrdenProducto.class);</span>
+<span class="nc" id="L22">    }</span>
 
     @Override
     protected EntityManager getEntityManager() {
-<span class="nc" id="L25">        return em;</span>
+<span class="nc" id="L26">        return em;</span>
+    }
+
+    /**
+     * Líneas de una factura, paginadas.
+     */
+    public List&lt;FacturaOrdenProducto&gt; findByFactura(UUID idFactura, int first, int max) {
+<span class="nc" id="L33">        requireArgument(idFactura, &quot;idFactura&quot;);</span>
+<span class="nc" id="L34">        requirePage(first, max);</span>
+<span class="nc" id="L35">        return requireEntityManager()</span>
+<span class="nc" id="L36">                .createQuery(&quot;SELECT f FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id&quot;, FacturaOrdenProducto.class)</span>
+<span class="nc" id="L37">                .setParameter(&quot;id&quot;, idFactura)</span>
+<span class="nc" id="L38">                .setFirstResult(first)</span>
+<span class="nc" id="L39">                .setMaxResults(max)</span>
+<span class="nc" id="L40">                .getResultList();</span>
+    }
+
+    /**
+     * Cantidad de líneas de una factura.
+     */
+    public Long countByFactura(UUID idFactura) {
+<span class="nc" id="L47">        requireArgument(idFactura, &quot;idFactura&quot;);</span>
+<span class="nc" id="L48">        return requireEntityManager()</span>
+<span class="nc" id="L49">                .createQuery(&quot;SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id&quot;, Long.class)</span>
+<span class="nc" id="L50">                .setParameter(&quot;id&quot;, idFactura)</span>
+<span class="nc" id="L51">                .getSingleResult();</span>
+    }
+
+    /**
+     * Cuántas veces ya está incluido un orden_producto en una factura.
+     */
+    public long countByFacturaAndOrdenProducto(UUID idFactura, UUID idOrdenProducto) {
+<span class="nc" id="L58">        requireArgument(idFactura, &quot;idFactura&quot;);</span>
+<span class="nc" id="L59">        requireArgument(idOrdenProducto, &quot;idOrdenProducto&quot;);</span>
+<span class="nc" id="L60">        return requireEntityManager()</span>
+<span class="nc" id="L61">                .createQuery(&quot;SELECT COUNT(f) FROM FacturaOrdenProducto f &quot;</span>
+<span class="nc" id="L62">                        + &quot;WHERE f.idFactura.idFactura = :fac AND f.idOrdenProducto.idOrdenProducto = :op&quot;, Long.class)</span>
+<span class="nc" id="L63">                .setParameter(&quot;fac&quot;, idFactura)</span>
+<span class="nc" id="L64">                .setParameter(&quot;op&quot;, idOrdenProducto)</span>
+<span class="nc" id="L65">                .getSingleResult();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

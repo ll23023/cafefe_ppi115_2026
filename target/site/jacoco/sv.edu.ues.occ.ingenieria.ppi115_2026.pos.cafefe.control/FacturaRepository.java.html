@@ -26,5 +26,27 @@ public class FacturaRepository extends DefaultRepository&lt;Factura, UUID&gt; {
     public EntityManager getEntityManager() {
 <span class="nc" id="L27">        return em;</span>
     }
+
+    /**
+     * Cantidad de pagos de la factura.
+     */
+    public long countPagos(UUID idFactura) {
+<span class="nc" id="L34">        requireArgument(idFactura, &quot;idFactura&quot;);</span>
+<span class="nc" id="L35">        return requireEntityManager()</span>
+<span class="nc" id="L36">                .createQuery(&quot;SELECT COUNT(p) FROM Pago p WHERE p.idFactura.idFactura = :id&quot;, Long.class)</span>
+<span class="nc" id="L37">                .setParameter(&quot;id&quot;, idFactura)</span>
+<span class="nc" id="L38">                .getSingleResult();</span>
+    }
+
+    /**
+     * Cantidad de líneas (factura_orden_producto) de la factura.
+     */
+    public long countLineas(UUID idFactura) {
+<span class="nc" id="L45">        requireArgument(idFactura, &quot;idFactura&quot;);</span>
+<span class="nc" id="L46">        return requireEntityManager()</span>
+<span class="nc" id="L47">                .createQuery(&quot;SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idFactura.idFactura = :id&quot;, Long.class)</span>
+<span class="nc" id="L48">                .setParameter(&quot;id&quot;, idFactura)</span>
+<span class="nc" id="L49">                .getSingleResult();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

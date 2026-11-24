@@ -106,16 +106,16 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L106" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdProducto() != null</span>
 <span class="nc bnc" id="L107" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {</span>
 <span class="nc" id="L108">            FacesContext.getCurrentInstance().addMessage(null,</span>
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            &quot;No se puede configurar un producto inactivo.&quot;, null));
+<span class="nc" id="L109">                    new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L110">                            &quot;No se puede configurar un producto inactivo.&quot;, null));</span>
 <span class="nc" id="L111">            return;</span>
         }
 <span class="nc bnc" id="L113" title="All 2 branches missed.">        if (this.registro != null</span>
 <span class="nc bnc" id="L114" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdTipoProducto() != null</span>
 <span class="nc bnc" id="L115" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdTipoProducto().getActivo())) {</span>
 <span class="nc" id="L116">            FacesContext.getCurrentInstance().addMessage(null,</span>
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            &quot;No se puede asignar un tipo de producto inactivo.&quot;, null));
+<span class="nc" id="L117">                    new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L118">                            &quot;No se puede asignar un tipo de producto inactivo.&quot;, null));</span>
 <span class="nc" id="L119">            return;</span>
         }
 <span class="nc" id="L121">        super.btnGuardarHandler();</span>
@@ -124,10 +124,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L125" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L126">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),
-                    new ColumnaTabla(&quot;idTipoProducto.nombre&quot;, &quot;Tipo&quot;),
-                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE),
-                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+<span class="nc" id="L127">                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),</span>
+<span class="nc" id="L128">                    new ColumnaTabla(&quot;idTipoProducto.nombre&quot;, &quot;Tipo&quot;),</span>
+<span class="nc" id="L129">                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE),</span>
+<span class="nc" id="L130">                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)</span>
             );
         }
 <span class="nc" id="L133">        return columnas;</span>

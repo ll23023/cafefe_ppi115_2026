@@ -38,7 +38,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc" id="L38">    private static final DateTimeFormatter FORMATO_FECHA_HORA = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy HH:mm&quot;);</span>
 
     private static final int DESCUENTO_MAXIMO_MIN = 5;
-    private static final int DESCUENTO_MAXIMO_MAX = 90;
+<span class="nc" id="L41">    private static final int DESCUENTO_MAXIMO_MAX = 90;</span>
 
     @Inject
     private TipoDescuentoRepository tipoDescuentoRepository;
@@ -51,9 +51,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc" id="L51">    private List&lt;Descuento&gt; descuentosDelTipo = new ArrayList&lt;&gt;();</span>
 
 <span class="nc" id="L53">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
-            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
-            new ColumnaTabla(&quot;descuentoMaximo&quot;, &quot;Máximo (%)&quot;),
-            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN)
+<span class="nc" id="L54">            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),</span>
+<span class="nc" id="L55">            new ColumnaTabla(&quot;descuentoMaximo&quot;, &quot;Máximo (%)&quot;),</span>
+<span class="nc" id="L56">            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN)</span>
     );
 
     @Override
@@ -123,7 +123,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
     public void cancelar() {
 <span class="nc bnc" id="L124" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
 <span class="nc" id="L125">            mostrar(seleccion);</span>
-        } else {
+<span class="nc" id="L126">        } else {</span>
 <span class="nc" id="L127">            limpiar();</span>
         }
 <span class="nc" id="L129">    }</span>
@@ -147,7 +147,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc" id="L147">        } catch (Exception ex) {</span>
 <span class="nc" id="L148">            LOG.log(Level.SEVERE, &quot;Error al eliminar tipo de descuento&quot;, ex);</span>
 <span class="nc" id="L149">            error(&quot;No se pudo eliminar el tipo de descuento: &quot; + ex.getMessage());</span>
-<span class="nc" id="L150">        }</span>
+        }
 <span class="nc" id="L151">    }</span>
 
     @Override
@@ -179,7 +179,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
         try {
 <span class="nc bnc" id="L180" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L181">                tipoDescuentoRepository.crear(registro);</span>
-            } else {
+<span class="nc" id="L182">            } else {</span>
 <span class="nc" id="L183">                tipoDescuentoRepository.modificar(registro);</span>
             }
 <span class="nc" id="L185">            UUID id = registro.getIdTipoDescuento();</span>
@@ -190,14 +190,14 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc bnc" id="L190" title="All 2 branches missed.">            if (guardado != null) {</span>
 <span class="nc" id="L191">                this.seleccion = guardado;</span>
 <span class="nc" id="L192">                mostrar(guardado);</span>
-            } else {
+<span class="nc" id="L193">            } else {</span>
 <span class="nc" id="L194">                limpiar();</span>
             }
 <span class="nc bnc" id="L196" title="All 2 branches missed.">            info(esNuevo ? &quot;Tipo de descuento creado.&quot; : &quot;Tipo de descuento modificado.&quot;);</span>
 <span class="nc" id="L197">        } catch (Exception ex) {</span>
 <span class="nc" id="L198">            LOG.log(Level.SEVERE, &quot;Error al guardar tipo de descuento&quot;, ex);</span>
 <span class="nc" id="L199">            error(&quot;No se pudo guardar el tipo de descuento: &quot; + ex.getMessage());</span>
-<span class="nc" id="L200">        }</span>
+        }
 <span class="nc" id="L201">    }</span>
 
     private void mostrar(TipoDescuento t) {
@@ -217,7 +217,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc bnc" id="L217" title="All 2 branches missed.">                if (perteneceAlTipo(d, idTipo)) {</span>
 <span class="nc" id="L218">                    lista.add(d);</span>
                 }
-<span class="nc" id="L220">            }</span>
+            }
 <span class="nc" id="L221">            lista.sort((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
 <span class="nc bnc" id="L222" title="All 2 branches missed.">                    a.getNombre() == null ? &quot;&quot; : a.getNombre(),</span>
 <span class="nc bnc" id="L223" title="All 2 branches missed.">                    b.getNombre() == null ? &quot;&quot; : b.getNombre()));</span>
@@ -242,7 +242,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc bnc" id="L242" title="All 2 branches missed.">            if (perteneceAlTipo(d, idTipo)) {</span>
 <span class="nc" id="L243">                n++;</span>
             }
-<span class="nc" id="L245">        }</span>
+        }
 <span class="nc" id="L246">        return n;</span>
     }
 
@@ -297,12 +297,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 
     private void info(String msg) {
 <span class="nc" id="L299">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L300">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L301">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L304">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L305">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L306">    }</span>
 
     public boolean isSoloLectura() {

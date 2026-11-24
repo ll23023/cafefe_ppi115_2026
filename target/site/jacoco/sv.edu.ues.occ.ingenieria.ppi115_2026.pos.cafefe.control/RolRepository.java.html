@@ -28,10 +28,11 @@ public class RolRepository extends DefaultRepository&lt;Rol, java.util.UUID&gt; 
     }
 
     public List&lt;Rol&gt; findByNombre(String nombre) {
-<span class="nc" id="L31">        return getEntityManager()</span>
-<span class="nc" id="L32">                .createNamedQuery(&quot;Rol.findByNombre&quot;, Rol.class)</span>
-<span class="nc" id="L33">                .setParameter(&quot;nombre&quot;, nombre)</span>
-<span class="nc" id="L34">                .getResultList();</span>
+<span class="nc" id="L31">        requireArgument(nombre, &quot;nombre&quot;);</span>
+<span class="nc" id="L32">        return requireEntityManager()</span>
+<span class="nc" id="L33">                .createNamedQuery(&quot;Rol.findByNombre&quot;, Rol.class)</span>
+<span class="nc" id="L34">                .setParameter(&quot;nombre&quot;, nombre)</span>
+<span class="nc" id="L35">                .getResultList();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

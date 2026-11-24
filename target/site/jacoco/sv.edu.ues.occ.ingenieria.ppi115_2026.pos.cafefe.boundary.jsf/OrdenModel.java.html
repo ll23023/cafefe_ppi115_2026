@@ -229,7 +229,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
     public void cancelar() {
 <span class="nc bnc" id="L230" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
 <span class="nc" id="L231">            mostrar(seleccion);</span>
-        } else {
+<span class="nc" id="L232">        } else {</span>
 <span class="nc" id="L233">            limpiar();</span>
         }
 <span class="nc" id="L235">    }</span>
@@ -241,7 +241,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
         try {
 <span class="nc bnc" id="L242" title="All 2 branches missed.">            for (OrdenProducto op : asignacionesDe(o)) {</span>
 <span class="nc" id="L243">                ordenProductoRepository.eliminar(op);</span>
-<span class="nc" id="L244">            }</span>
+            }
 <span class="nc" id="L245">            ordenRepository.eliminar(o);</span>
 <span class="nc" id="L246">            cargarRegistros();</span>
 <span class="nc" id="L247">            limpiar();</span>
@@ -249,7 +249,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc" id="L249">        } catch (Exception ex) {</span>
 <span class="nc" id="L250">            LOG.log(Level.SEVERE, &quot;Error al eliminar orden&quot;, ex);</span>
 <span class="nc" id="L251">            error(&quot;No se pudo eliminar la orden: &quot; + ex.getMessage());</span>
-<span class="nc" id="L252">        }</span>
+        }
 <span class="nc" id="L253">    }</span>
 
     public void agregarFila() {
@@ -322,7 +322,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
         try {
 <span class="nc bnc" id="L323" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L324">                crearConProductos();</span>
-            } else {
+<span class="nc" id="L325">            } else {</span>
 <span class="nc" id="L326">                ordenRepository.modificar(registro);</span>
             }
 
@@ -334,14 +334,14 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L334" title="All 2 branches missed.">            if (guardada != null) {</span>
 <span class="nc" id="L335">                this.seleccion = guardada;</span>
 <span class="nc" id="L336">                mostrar(guardada);</span>
-            } else {
+<span class="nc" id="L337">            } else {</span>
 <span class="nc" id="L338">                limpiar();</span>
             }
 <span class="nc" id="L340">            info(&quot;Orden guardada.&quot;);</span>
 <span class="nc" id="L341">        } catch (Exception ex) {</span>
 <span class="nc" id="L342">            LOG.log(Level.SEVERE, &quot;Error al guardar orden&quot;, ex);</span>
 <span class="nc" id="L343">            error(&quot;No se pudo guardar la orden: &quot; + ex.getMessage());</span>
-<span class="nc" id="L344">        }</span>
+        }
 <span class="nc" id="L345">    }</span>
 
     private void crearConProductos() {
@@ -352,10 +352,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc" id="L352">        } catch (RuntimeException ex) {</span>
 <span class="nc bnc" id="L353" title="All 2 branches missed.">            for (OrdenProducto op : asignacionesDe(ord)) {</span>
 <span class="nc" id="L354">                ordenProductoRepository.eliminar(op);</span>
-<span class="nc" id="L355">            }</span>
+            }
 <span class="nc" id="L356">            ordenRepository.eliminar(ord);</span>
 <span class="nc" id="L357">            throw ex;</span>
-<span class="nc" id="L358">        }</span>
+        }
 <span class="nc" id="L359">    }</span>
 
     private void combinarFechaHora() {
@@ -388,7 +388,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L388" title="All 2 branches missed.">            if (p.getNombre() != null) {</span>
 <span class="nc" id="L389">                porNombre.putIfAbsent(clave(p.getNombre()), p);</span>
             }
-<span class="nc" id="L391">        }</span>
+        }
 <span class="nc" id="L392">        return porNombre;</span>
     }
 
@@ -421,8 +421,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
                             + &quot;). Quite ese producto de la orden y vuelva a agregarlo, o cambie la fecha.&quot;);
 <span class="nc" id="L422">                    return false;</span>
                 }
-<span class="nc" id="L424">            }</span>
-<span class="nc" id="L425">        }</span>
+            }
+        }
 <span class="nc" id="L426">        return true;</span>
     }
 
@@ -446,7 +446,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L446" title="All 2 branches missed.">                    + (dp.getIdProducto() == null ? &quot; (todos los productos)&quot; : &quot;&quot;)</span>
 <span class="nc bnc" id="L447" title="All 2 branches missed.">                    + (aplica ? &quot;&quot; : &quot; - no aplica en la fecha de la orden&quot;);</span>
 <span class="nc" id="L448">            opciones.add(new OpcionDescuento(dp.getIdDescuentoProducto().toString(), etiqueta, aplica));</span>
-<span class="nc" id="L449">        }</span>
+        }
 <span class="nc" id="L450">        opciones.sort((a, b) -&gt; {</span>
 <span class="nc bnc" id="L451" title="All 2 branches missed.">            if (a.isAplicable() != b.isAplicable()) {</span>
 <span class="nc bnc" id="L452" title="All 2 branches missed.">                return a.isAplicable() ? -1 : 1;</span>
@@ -505,7 +505,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L505" title="All 2 branches missed.">        if (this.descuentosProducto == null) {</span>
 <span class="nc bnc" id="L506" title="All 2 branches missed.">            if (descuentoProductoRepository != null) {</span>
 <span class="nc" id="L507">                this.descuentosProducto = descuentoProductoRepository.findAll();</span>
-            } else {
+<span class="nc" id="L508">            } else {</span>
 <span class="nc" id="L509">                this.descuentosProducto = new ArrayList&lt;&gt;();</span>
             }
         }
@@ -520,7 +520,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L520" title="All 4 branches missed.">            if (dp.getIdDescuentoProducto() != null &amp;&amp; id.equals(dp.getIdDescuentoProducto().toString())) {</span>
 <span class="nc" id="L521">                return dp;</span>
             }
-<span class="nc" id="L523">        }</span>
+        }
 <span class="nc" id="L524">        return null;</span>
     }
 
@@ -631,7 +631,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc" id="L631">            op.setPrecio(f.getPrecio());</span>
 <span class="nc bnc" id="L632" title="All 2 branches missed.">            op.setObservaciones(f.getObservaciones() != null ? f.getObservaciones() : &quot;&quot;);</span>
 <span class="nc" id="L633">            ordenProductoRepository.crear(op);</span>
-<span class="nc" id="L634">        }</span>
+        }
 <span class="nc" id="L635">        cargarProductos();</span>
 <span class="nc" id="L636">    }</span>
 
@@ -648,7 +648,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 <span class="nc bnc" id="L648" title="All 2 branches missed.">        for (OrdenProducto op : asignacionesDe(this.registro)) {</span>
 <span class="nc bnc" id="L649" title="All 2 branches missed.">            String nombre = op.getIdProducto() != null ? op.getIdProducto().getNombre() : &quot;&quot;;</span>
 <span class="nc" id="L650">            filas.add(new ProductoFila(op.getIdOrdenProducto(), nombre, op.getPrecio(), op.getObservaciones()));</span>
-<span class="nc" id="L651">        }</span>
+        }
 <span class="nc" id="L652">    }</span>
 
     private List&lt;OrdenProducto&gt; asignacionesDe(Orden o) {
@@ -675,12 +675,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
 
     private void info(String msg) {
 <span class="nc" id="L677">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L678">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L679">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L682">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L683">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L684">    }</span>
 
     public boolean isSoloLectura() {
@@ -742,10 +742,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.RolesOrden;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L743" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L744">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.nombre&quot;, &quot;Empleado&quot;),
-                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.apellido&quot;, &quot;Apellido&quot;),
-                    new ColumnaTabla(&quot;idEmpleadoRol.idRol.nombre&quot;, &quot;Rol&quot;),
-                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE)
+<span class="nc" id="L745">                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.nombre&quot;, &quot;Empleado&quot;),</span>
+<span class="nc" id="L746">                    new ColumnaTabla(&quot;idEmpleadoRol.idEmpleado.apellido&quot;, &quot;Apellido&quot;),</span>
+<span class="nc" id="L747">                    new ColumnaTabla(&quot;idEmpleadoRol.idRol.nombre&quot;, &quot;Rol&quot;),</span>
+<span class="nc" id="L748">                    new ColumnaTabla(&quot;fechaCreacion&quot;, &quot;Fecha&quot;, FORMATO_COLUMNA.DATE)</span>
             );
         }
 <span class="nc" id="L751">        return columnas;</span>

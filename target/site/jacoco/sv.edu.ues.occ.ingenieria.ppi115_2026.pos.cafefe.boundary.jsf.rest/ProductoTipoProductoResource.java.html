@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoTipoProductoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">ProductoTipoProductoResource.java</span></div><h1>ProductoTipoProductoResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.io.Serializable;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.ProductoTipoProductoRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.ProductoTipoProducto;
+
+@Path(&quot;producto_tipo_producto&quot;)
+<span class="nc" id="L24">public class ProductoTipoProductoResource implements Serializable {</span>
+
+    @Inject
+    private ProductoTipoProductoRepository repository;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(@QueryParam(&quot;desde&quot;) @DefaultValue(&quot;0&quot;) int desde,
+            @QueryParam(&quot;hasta&quot;) @DefaultValue(&quot;50&quot;) int hasta) {
+<span class="nc bnc" id="L33" title="All 6 branches missed.">        if (desde &lt; 0 || hasta &lt;= 0 || hasta &gt; 50) {</span>
+<span class="nc" id="L34">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L35">                    .header(ResponseHeaders.WRONG_PARAMETER.toString(), &quot;Parámetros de paginación inválidos&quot;)</span>
+<span class="nc" id="L36">                    .build();</span>
+        }
+        try {
+<span class="nc" id="L39">            return Response.ok(repository.findRange(desde, hasta))</span>
+<span class="nc" id="L40">                    .header(ResponseHeaders.TOTAL_REGISTROS.toString(), repository.count())</span>
+<span class="nc" id="L41">                    .build();</span>
+<span class="nc" id="L42">        } catch (Exception exception) {</span>
+<span class="nc" id="L43">            return error(exception);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (id == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L53">            ProductoTipoProducto entidad = repository.findById(id);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            return entidad == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(entidad).build();</span>
+<span class="nc" id="L55">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response create(ProductoTipoProducto entidad, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (entidad == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L63">            entidad.setIdProductoTipoProducto(UUID.randomUUID());</span>
+<span class="nc" id="L64">            repository.crear(entidad);</span>
+<span class="nc" id="L65">            return Response.created(uriInfo.getAbsolutePathBuilder().path(entidad.getIdProductoTipoProducto().toString()).build()).build();</span>
+<span class="nc" id="L66">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam(&quot;id&quot;) UUID id, ProductoTipoProducto modificado) {
+<span class="nc bnc" id="L74" title="All 4 branches missed.">        if (id == null || modificado == null) return Response.status(422).build();</span>
+        try {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (repository.findById(id) == null) return Response.status(Response.Status.NOT_FOUND).build();</span>
+<span class="nc" id="L77">            modificado.setIdProductoTipoProducto(id);</span>
+<span class="nc" id="L78">            return Response.ok(repository.modificar(modificado)).build();</span>
+<span class="nc" id="L79">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (id == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L87">            ProductoTipoProducto entidad = repository.findById(id);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (entidad == null) return Response.status(Response.Status.NOT_FOUND).build();</span>
+<span class="nc" id="L89">            repository.eliminar(entidad);</span>
+<span class="nc" id="L90">            return Response.noContent().build();</span>
+<span class="nc" id="L91">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    private Response error(Exception exception) {
+<span class="nc" id="L95">        return Response.serverError().header(&quot;App-Error&quot;, exception.getMessage()).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

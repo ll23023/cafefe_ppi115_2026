@@ -57,7 +57,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
             } else {
 <span class="nc" id="L58">                return Response.status(Response.Status.BAD_REQUEST)</span>
 <span class="nc" id="L59">                        .header(ResponseHeaders.WRONG_PARAMETER.toString(),</span>
-                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)
+<span class="nc" id="L60">                                &quot;Los parámetros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;)</span>
 <span class="nc" id="L61">                        .build();</span>
             }
 <span class="nc" id="L63">        } catch (Exception ex) {</span>
@@ -116,7 +116,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L116" title="All 2 branches missed.">                if (repetido) {</span>
 <span class="nc" id="L117">                    return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
 <span class="nc" id="L118">                            .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), </span>
-                                    &quot;Ya existe un rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)
+<span class="nc" id="L119">                                    &quot;Ya existe un rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)</span>
 <span class="nc" id="L120">                            .build();</span>
                 }
 
@@ -165,7 +165,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (repetido) {</span>
 <span class="nc" id="L166">                        return Response.status(Response.Status.CONFLICT) // 409 Conflict</span>
 <span class="nc" id="L167">                                .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), </span>
-                                        &quot;Ya existe otro rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)
+<span class="nc" id="L168">                                        &quot;Ya existe otro rol llamado \&quot;&quot; + nombre + &quot;\&quot;.&quot;)</span>
 <span class="nc" id="L169">                                .build();</span>
                     }
                     

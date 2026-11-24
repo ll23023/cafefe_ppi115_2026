@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacturaResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">FacturaResource.java</span></div><h1>FacturaResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.CajaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.EmpleadoRolRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.FacturaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Caja;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.EmpleadoRol;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Factura;
+
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.badRequest;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.conflicto;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.notFound;
+import static sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest.RestResponses.serverError;
+
+/**
+ *
+ * @author mil
+ */
+@Path(&quot;factura&quot;)
+<span class="nc" id="L44">public class FacturaResource {</span>
+
+<span class="nc" id="L46">    private static final Logger LOG = Logger.getLogger(FacturaResource.class.getName());</span>
+    private static final int CLIENTE_MAX = 155;
+<span class="nc" id="L48">    private static final int ESTADO_MAX = 20;</span>
+
+    @Inject
+    FacturaRepository facturaRepository;
+
+    @Inject
+    EmpleadoRolRepository empleadoRolRepository;
+
+    @Inject
+    CajaRepository cajaRepository;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;max&quot;) @DefaultValue(&quot;50&quot;) int max) {
+        try {
+<span class="nc bnc" id="L65" title="All 6 branches missed.">            if (first &gt;= 0 &amp;&amp; max &gt; 0 &amp;&amp; max &lt;= 50) {</span>
+<span class="nc" id="L66">                List&lt;Factura&gt; facturas = facturaRepository.findRange(first, max);</span>
+<span class="nc" id="L67">                Long total = facturaRepository.count();</span>
+<span class="nc" id="L68">                return Response.ok(facturas)</span>
+<span class="nc" id="L69">                        .header(ResponseHeaders.TOTAL_REGISTROS.toString(), total)</span>
+<span class="nc" id="L70">                        .build();</span>
+            }
+<span class="nc" id="L72">            return badRequest(&quot;Los parametros 'first' debe ser &gt;= 0 y 'max' debe ser &gt; 0 y &lt;= 50&quot;);</span>
+<span class="nc" id="L73">        } catch (Exception ex) {</span>
+<span class="nc" id="L74">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L75">            return serverError(ex);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L84">            return badRequest(&quot;id nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L87">            Factura encontrada = facturaRepository.findById(id);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (encontrada != null) {</span>
+<span class="nc" id="L89">                return Response.ok(encontrada).build();</span>
+            }
+<span class="nc" id="L91">            return notFound(id);</span>
+<span class="nc" id="L92">        } catch (Exception ex) {</span>
+<span class="nc" id="L93">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L94">            return serverError(ex);</span>
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response create(FacturaRequest request, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L103" title="All 4 branches missed.">        if (request == null || request.idEmpleadoRol == null) {</span>
+<span class="nc" id="L104">            return badRequest(&quot;idEmpleadoRol es obligatorio&quot;);</span>
+        }
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (request.idCaja == null) {</span>
+<span class="nc" id="L107">            return badRequest(&quot;idCaja es obligatorio&quot;);</span>
+        }
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        String cliente = request.cliente != null ? request.cliente.trim() : &quot;&quot;;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        String estado = request.estado != null ? request.estado.trim() : null;</span>
+<span class="nc" id="L111">        Response invalido = validarTextos(cliente, estado);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (invalido != null) {</span>
+<span class="nc" id="L113">            return invalido;</span>
+        }
+
+        try {
+<span class="nc" id="L117">            EmpleadoRol empleadoRol = empleadoRolRepository.findById(request.idEmpleadoRol);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (empleadoRol == null) {</span>
+<span class="nc" id="L119">                return conflicto(&quot;La asignación de rol no existe: &quot; + request.idEmpleadoRol);</span>
+            }
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            if (!Boolean.TRUE.equals(empleadoRol.getActivo())) {</span>
+<span class="nc" id="L122">                return conflicto(&quot;No se puede facturar con una asignación de rol inactiva.&quot;);</span>
+            }
+
+<span class="nc" id="L125">            Caja caja = cajaRepository.findById(request.idCaja);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            if (caja == null) {</span>
+<span class="nc" id="L127">                return conflicto(&quot;La caja no existe: &quot; + request.idCaja);</span>
+            }
+
+<span class="nc" id="L130">            Factura nueva = new Factura(UUID.randomUUID());</span>
+<span class="nc" id="L131">            nueva.setIdEmpleadoRol(empleadoRol);</span>
+<span class="nc" id="L132">            nueva.setIdCaja(caja);</span>
+<span class="nc" id="L133">            nueva.setCliente(cliente);</span>
+<span class="nc" id="L134">            nueva.setEstado(estado);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            nueva.setObservaciones(request.observaciones != null ? request.observaciones : &quot;&quot;);</span>
+<span class="nc" id="L136">            nueva.setFechaFacturacion(new Date());</span>
+<span class="nc" id="L137">            facturaRepository.crear(nueva);</span>
+
+<span class="nc" id="L139">            URI location = uriInfo.getAbsolutePathBuilder()</span>
+<span class="nc" id="L140">                    .path(String.valueOf(nueva.getIdFactura()))</span>
+<span class="nc" id="L141">                    .build();</span>
+<span class="nc" id="L142">            return Response.created(location).build();</span>
+
+<span class="nc" id="L144">        } catch (Exception ex) {</span>
+<span class="nc" id="L145">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L146">            return serverError(ex);</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@PathParam(&quot;id&quot;) UUID id, FacturaRequest request) {
+<span class="nc bnc" id="L156" title="All 4 branches missed.">        if (id == null || request == null) {</span>
+<span class="nc" id="L157">            return badRequest(&quot;ID o cuerpo nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L160">            Factura existente = facturaRepository.findById(id);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (existente == null) {</span>
+<span class="nc" id="L162">                return notFound(id);</span>
+            }
+
+            // Quién emitió la factura y en qué caja no se cambia
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            if (request.idEmpleadoRol != null</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdEmpleadoRol() == null</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                    || !request.idEmpleadoRol.equals(existente.getIdEmpleadoRol().getIdEmpleadoRol()))) {</span>
+<span class="nc" id="L169">                return conflicto(&quot;No se puede cambiar la asignación de rol de una factura existente.&quot;);</span>
+            }
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (request.idCaja != null</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                    &amp;&amp; (existente.getIdCaja() == null</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                    || !request.idCaja.equals(existente.getIdCaja().getIdCaja()))) {</span>
+<span class="nc" id="L174">                return conflicto(&quot;No se puede cambiar la caja de una factura existente.&quot;);</span>
+            }
+
+            // Validar todo ANTES de modificar la entidad
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            String cliente = request.cliente != null ? request.cliente.trim() : null;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            String estado = request.estado != null ? request.estado.trim() : null;</span>
+<span class="nc" id="L180">            Response invalido = validarTextos(cliente, estado);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (invalido != null) {</span>
+<span class="nc" id="L182">                return invalido;</span>
+            }
+
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (cliente != null) {</span>
+<span class="nc" id="L186">                existente.setCliente(cliente);</span>
+            }
+<span class="nc bnc" id="L188" title="All 2 branches missed.">            if (estado != null) {</span>
+<span class="nc" id="L189">                existente.setEstado(estado);</span>
+            }
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            if (request.observaciones != null) {</span>
+<span class="nc" id="L192">                existente.setObservaciones(request.observaciones);</span>
+            }
+
+<span class="nc" id="L195">            facturaRepository.modificar(existente);</span>
+<span class="nc" id="L196">            return Response.ok(existente).build();</span>
+
+<span class="nc" id="L198">        } catch (Exception ex) {</span>
+<span class="nc" id="L199">            LOG.log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L200">            return serverError(ex);</span>
+        }
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    @Transactional
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L209">            return badRequest(&quot;El ID no puede ser nulo&quot;);</span>
+        }
+        try {
+<span class="nc" id="L212">            Factura encontrada = facturaRepository.findById(id);</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (encontrada == null) {</span>
+<span class="nc" id="L214">                return notFound(id);</span>
+            }
+
+            // Revisar lo que impide borrar ANTES de borrar
+<span class="nc" id="L218">            long pagos = facturaRepository.countPagos(id);</span>
+<span class="nc" id="L219">            long lineas = facturaRepository.countLineas(id);</span>
+
+<span class="nc" id="L221">            List&lt;String&gt; partes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (pagos &gt; 0) {</span>
+<span class="nc" id="L223">                partes.add(pagos + &quot; pago(s)&quot;);</span>
+            }
+<span class="nc bnc" id="L225" title="All 2 branches missed.">            if (lineas &gt; 0) {</span>
+<span class="nc" id="L226">                partes.add(lineas + &quot; línea(s) de orden&quot;);</span>
+            }
+<span class="nc bnc" id="L228" title="All 2 branches missed.">            if (!partes.isEmpty()) {</span>
+<span class="nc" id="L229">                return conflicto(&quot;No se pudo eliminar la factura&quot; + describirCliente(encontrada)</span>
+<span class="nc" id="L230">                        + &quot; porque está asociada a &quot; + String.join(&quot; y a &quot;, partes)</span>
+                        + &quot;. Elimine primero esos registros.&quot;);
+            }
+
+<span class="nc" id="L234">            facturaRepository.eliminar(encontrada);</span>
+<span class="nc" id="L235">            return Response.noContent().build();</span>
+
+<span class="nc" id="L237">        } catch (Exception ex) {</span>
+<span class="nc" id="L238">            LOG.log(Level.SEVERE, &quot;Error al eliminar factura: &quot; + id, ex);</span>
+<span class="nc" id="L239">            return serverError(ex);</span>
+        }
+    }
+
+    private String describirCliente(Factura f) {
+<span class="nc bnc" id="L244" title="All 4 branches missed.">        if (f.getCliente() == null || f.getCliente().isBlank()) {</span>
+<span class="nc" id="L245">            return &quot;&quot;;</span>
+        }
+<span class="nc" id="L247">        return &quot; del cliente '&quot; + f.getCliente() + &quot;'&quot;;</span>
+    }
+
+    /**
+     * @return null si los textos son válidos, o la respuesta 400 si no lo son
+     */
+    private Response validarTextos(String cliente, String estado) {
+<span class="nc bnc" id="L254" title="All 4 branches missed.">        if (cliente != null &amp;&amp; cliente.length() &gt; CLIENTE_MAX) {</span>
+<span class="nc" id="L255">            return badRequest(&quot;El cliente no puede superar &quot; + CLIENTE_MAX + &quot; caracteres&quot;);</span>
+        }
+<span class="nc bnc" id="L257" title="All 4 branches missed.">        if (estado != null &amp;&amp; estado.length() &gt; ESTADO_MAX) {</span>
+<span class="nc" id="L258">            return badRequest(&quot;El estado no puede superar &quot; + ESTADO_MAX + &quot; caracteres&quot;);</span>
+        }
+<span class="nc" id="L260">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

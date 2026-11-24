@@ -25,14 +25,15 @@ public class DescuentoRepository extends DefaultRepository&lt;Descuento, UUID&gt
     }
 
     public List&lt;Descuento&gt; findAllWithTipo() {
-<span class="nc" id="L28">        return em.createNamedQuery(&quot;Descuento.findAllWithTipo&quot;, Descuento.class)</span>
+<span class="nc" id="L28">        return requireEntityManager().createNamedQuery(&quot;Descuento.findAllWithTipo&quot;, Descuento.class)</span>
 <span class="nc" id="L29">                .getResultList();</span>
     }
 
     public List&lt;Descuento&gt; findByTipoDescuento(UUID idTipoDescuento) {
-<span class="nc" id="L33">        return em.createNamedQuery(&quot;Descuento.findByTipoDescuento&quot;, Descuento.class)</span>
-<span class="nc" id="L34">                .setParameter(&quot;idTipoDescuento&quot;, idTipoDescuento)</span>
-<span class="nc" id="L35">                .getResultList();</span>
+<span class="nc" id="L33">        requireArgument(idTipoDescuento, &quot;idTipoDescuento&quot;);</span>
+<span class="nc" id="L34">        return requireEntityManager().createNamedQuery(&quot;Descuento.findByTipoDescuento&quot;, Descuento.class)</span>
+<span class="nc" id="L35">                .setParameter(&quot;idTipoDescuento&quot;, idTipoDescuento)</span>
+<span class="nc" id="L36">                .getResultList();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

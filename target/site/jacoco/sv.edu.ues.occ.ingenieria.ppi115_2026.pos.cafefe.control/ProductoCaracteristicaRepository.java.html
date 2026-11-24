@@ -25,9 +25,10 @@ public class ProductoCaracteristicaRepository extends DefaultRepository&lt;Produ
     }
 
     public List&lt;ProductoCaracteristica&gt; findByProducto(UUID idProducto) {
-<span class="nc" id="L28">        return em.createNamedQuery(&quot;ProductoCaracteristica.findByProducto&quot;, ProductoCaracteristica.class)</span>
-<span class="nc" id="L29">                .setParameter(&quot;idProducto&quot;, idProducto)</span>
-<span class="nc" id="L30">                .getResultList();</span>
+<span class="nc" id="L28">        requireArgument(idProducto, &quot;idProducto&quot;);</span>
+<span class="nc" id="L29">        return requireEntityManager().createNamedQuery(&quot;ProductoCaracteristica.findByProducto&quot;, ProductoCaracteristica.class)</span>
+<span class="nc" id="L30">                .setParameter(&quot;idProducto&quot;, idProducto)</span>
+<span class="nc" id="L31">                .getResultList();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

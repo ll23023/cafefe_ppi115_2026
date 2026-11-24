@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoCaracteristicaResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cafefe-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest</a> &gt; <span class="el_source">TipoCaracteristicaResource.java</span></div><h1>TipoCaracteristicaResource.java</h1><pre class="source lang-java linenums">package sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.boundary.jsf.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
+import java.io.Serializable;
+import java.util.UUID;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.TipoCaracteristicaRepository;
+import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristica;
+
+@Path(&quot;tipo_caracteristica&quot;)
+<span class="nc" id="L24">public class TipoCaracteristicaResource implements Serializable {</span>
+
+    @Inject
+    private TipoCaracteristicaRepository repository;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRange(@QueryParam(&quot;desde&quot;) @DefaultValue(&quot;1&quot;) int desde,
+            @QueryParam(&quot;hasta&quot;) @DefaultValue(&quot;50&quot;) int hasta) {
+<span class="nc bnc" id="L33" title="All 4 branches missed.">        if (!(0 &lt; desde &amp;&amp; desde &lt; hasta)) return Response.status(422).header(&quot;Wrong-Param&quot;, &quot;cantidad&quot;).build();</span>
+<span class="nc" id="L34">        try { return Response.ok(repository.findRange(desde, hasta)).build(); }</span>
+<span class="nc" id="L35">        catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @GET
+    @Path(&quot;{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (id == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L44">            TipoCaracteristica entidad = repository.findById(id);</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            return entidad == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(entidad).build();</span>
+<span class="nc" id="L46">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response create(TipoCaracteristica entidad, @Context UriInfo uriInfo) {
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (entidad == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L54">            entidad.setIdTipoCaracteristica(UUID.randomUUID());</span>
+<span class="nc" id="L55">            entidad.setCaracteristicaList(null);</span>
+<span class="nc" id="L56">            repository.crear(entidad);</span>
+<span class="nc" id="L57">            return Response.created(uriInfo.getAbsolutePathBuilder().path(entidad.getIdTipoCaracteristica().toString()).build()).build();</span>
+<span class="nc" id="L58">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @PUT
+    @Path(&quot;{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam(&quot;id&quot;) UUID id, TipoCaracteristica modificado) {
+<span class="nc bnc" id="L66" title="All 4 branches missed.">        if (id == null || modificado == null) return Response.status(422).build();</span>
+        try {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (repository.findById(id) == null) return Response.status(Response.Status.NOT_FOUND).build();</span>
+<span class="nc" id="L69">            modificado.setIdTipoCaracteristica(id);</span>
+<span class="nc" id="L70">            modificado.setCaracteristicaList(null);</span>
+<span class="nc" id="L71">            return Response.ok(repository.modificar(modificado)).build();</span>
+<span class="nc" id="L72">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    @DELETE
+    @Path(&quot;{id}&quot;)
+    public Response delete(@PathParam(&quot;id&quot;) UUID id) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (id == null) return Response.status(422).build();</span>
+        try {
+<span class="nc" id="L80">            TipoCaracteristica entidad = repository.findById(id);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (entidad == null) return Response.status(Response.Status.NOT_FOUND).build();</span>
+<span class="nc" id="L82">            repository.eliminar(entidad);</span>
+<span class="nc" id="L83">            return Response.noContent().build();</span>
+<span class="nc" id="L84">        } catch (Exception exception) { return error(exception); }</span>
+    }
+
+    private Response error(Exception exception) {
+<span class="nc" id="L88">        return Response.serverError().header(&quot;App-Error&quot;, exception.getMessage()).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

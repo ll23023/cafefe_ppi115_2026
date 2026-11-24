@@ -70,8 +70,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
 <span class="nc bnc" id="L70" title="All 2 branches missed.">                &amp;&amp; this.registro.getIdProducto() != null</span>
 <span class="nc bnc" id="L71" title="All 2 branches missed.">                &amp;&amp; !Boolean.TRUE.equals(this.registro.getIdProducto().getActivo())) {</span>
 <span class="nc" id="L72">            FacesContext.getCurrentInstance().addMessage(null,</span>
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            &quot;No se puede agregar un producto inactivo.&quot;, null));
+<span class="nc" id="L73">                    new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L74">                            &quot;No se puede agregar un producto inactivo.&quot;, null));</span>
 <span class="nc" id="L75">            return;</span>
         }
 <span class="nc" id="L77">        super.btnGuardarHandler();</span>
@@ -108,10 +108,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Producto;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L109" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L110">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;idOrden.fechaCreacion&quot;, &quot;Fecha de la orden&quot;, FORMATO_COLUMNA.DATE),
-                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),
-                    new ColumnaTabla(&quot;precio&quot;, &quot;Precio&quot;, FORMATO_COLUMNA.CURRENCY),
-                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+<span class="nc" id="L111">                    new ColumnaTabla(&quot;idOrden.fechaCreacion&quot;, &quot;Fecha de la orden&quot;, FORMATO_COLUMNA.DATE),</span>
+<span class="nc" id="L112">                    new ColumnaTabla(&quot;idProducto.nombre&quot;, &quot;Producto&quot;),</span>
+<span class="nc" id="L113">                    new ColumnaTabla(&quot;precio&quot;, &quot;Precio&quot;, FORMATO_COLUMNA.CURRENCY),</span>
+<span class="nc" id="L114">                    new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)</span>
             );
         }
 <span class="nc" id="L117">        return columnas;</span>

@@ -35,7 +35,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
 <span class="nc" id="L36">    private static final Logger LOG = Logger.getLogger(EmpleadoModel.class.getName());</span>
 
-    private static final boolean CREAR_ROLES_AL_MODIFICAR = true;
+<span class="nc" id="L38">    private static final boolean CREAR_ROLES_AL_MODIFICAR = true;</span>
 
     public static class RolFila implements Serializable {
 
@@ -141,7 +141,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
         try {
 <span class="nc bnc" id="L142" title="All 2 branches missed.">            for (EmpleadoRol er : asignacionesDe(e)) {</span>
 <span class="nc" id="L143">                empleadoRolRepository.eliminar(er);</span>
-<span class="nc" id="L144">            }</span>
+            }
 <span class="nc" id="L145">            empleadoRepository.eliminar(e);</span>
 <span class="nc" id="L146">            cargarRegistros();</span>
 <span class="nc" id="L147">            limpiar();</span>
@@ -149,7 +149,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L149">        } catch (Exception ex) {</span>
 <span class="nc" id="L150">            LOG.log(Level.SEVERE, &quot;Error al eliminar empleado&quot;, ex);</span>
 <span class="nc" id="L151">            error(&quot;No se pudo eliminar el empleado: &quot; + ex.getMessage());</span>
-<span class="nc" id="L152">        }</span>
+        }
 <span class="nc" id="L153">    }</span>
 
     public boolean isPuedeAgregarRoles() {
@@ -191,7 +191,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
         try {
 <span class="nc bnc" id="L192" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L193">                crearConRoles();</span>
-            } else {
+<span class="nc" id="L194">            } else {</span>
 <span class="nc" id="L195">                modificarConRoles();</span>
             }
 
@@ -203,7 +203,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L203" title="All 2 branches missed.">            if (guardado != null) {</span>
 <span class="nc" id="L204">                this.seleccion = guardado;</span>
 <span class="nc" id="L205">                mostrar(guardado);</span>
-            } else {
+<span class="nc" id="L206">            } else {</span>
 <span class="nc" id="L207">                limpiar();</span>
             }
 <span class="nc" id="L209">            cargarRoles();</span>
@@ -211,7 +211,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L211">        } catch (Exception ex) {</span>
 <span class="nc" id="L212">            LOG.log(Level.SEVERE, &quot;Error al guardar empleado&quot;, ex);</span>
 <span class="nc" id="L213">            error(&quot;No se pudo guardar el empleado: &quot; + ex.getMessage());</span>
-<span class="nc" id="L214">        }</span>
+        }
 <span class="nc" id="L215">    }</span>
 
     private void crearConRoles() {
@@ -225,7 +225,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L225">            deshacer(asignacionesCreadas, rolesCreados);</span>
 <span class="nc" id="L226">            empleadoRepository.eliminar(emp);</span>
 <span class="nc" id="L227">            throw ex;</span>
-<span class="nc" id="L228">        }</span>
+        }
 <span class="nc" id="L229">    }</span>
 
     private void modificarConRoles() {
@@ -238,16 +238,16 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L238">        } catch (RuntimeException ex) {</span>
 <span class="nc" id="L239">            deshacer(asignacionesCreadas, rolesCreados);</span>
 <span class="nc" id="L240">            throw ex;</span>
-<span class="nc" id="L241">        }</span>
+        }
 <span class="nc" id="L242">    }</span>
 
     private void deshacer(List&lt;EmpleadoRol&gt; asignaciones, List&lt;Rol&gt; rolesCreados) {
 <span class="nc bnc" id="L245" title="All 2 branches missed.">        for (EmpleadoRol er : asignaciones) {</span>
 <span class="nc" id="L246">            empleadoRolRepository.eliminar(er);</span>
-<span class="nc" id="L247">        }</span>
+        }
 <span class="nc bnc" id="L248" title="All 2 branches missed.">        for (Rol r : rolesCreados) {</span>
 <span class="nc" id="L249">            rolRepository.eliminar(r);</span>
-<span class="nc" id="L250">        }</span>
+        }
 <span class="nc" id="L251">    }</span>
 
     private Map&lt;String, String&gt; rolesDeseados() {
@@ -260,7 +260,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L260" title="All 2 branches missed.">            if (!n.isEmpty()) {</span>
 <span class="nc" id="L261">                deseados.putIfAbsent(clave(n), n);</span>
             }
-<span class="nc" id="L263">        }</span>
+        }
 <span class="nc" id="L264">        return deseados;</span>
     }
 
@@ -270,7 +270,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L270" title="All 2 branches missed.">            if (r.getNombre() != null) {</span>
 <span class="nc" id="L271">                porNombre.putIfAbsent(clave(r.getNombre()), r);</span>
             }
-<span class="nc" id="L273">        }</span>
+        }
 <span class="nc" id="L274">        return porNombre;</span>
     }
 
@@ -280,14 +280,14 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L280" title="All 4 branches missed.">            if (er.getIdRol() != null &amp;&amp; er.getIdRol().getNombre() != null) {</span>
 <span class="nc" id="L281">                asignados.add(clave(er.getIdRol().getNombre()));</span>
             }
-<span class="nc" id="L283">        }</span>
+        }
 <span class="nc" id="L284">        return asignados;</span>
     }
 
     private boolean rolesValidos(boolean esNuevo) {
 <span class="nc" id="L288">        Map&lt;String, Rol&gt; porNombre = rolesPorNombre();</span>
 <span class="nc bnc" id="L289" title="All 2 branches missed.">        Set&lt;String&gt; yaAsignados = esNuevo ? new HashSet&lt;String&gt;() : rolesYaAsignados(registro);</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        boolean puedeCrearRoles = esNuevo || CREAR_ROLES_AL_MODIFICAR;</span>
+<span class="nc" id="L290">        boolean puedeCrearRoles = esNuevo || CREAR_ROLES_AL_MODIFICAR;</span>
 
         // NUEVO: si ya tiene rol, no se permite agregar otro
 <span class="nc bnc" id="L293" title="All 6 branches missed.">        if (!esNuevo &amp;&amp; !yaAsignados.isEmpty() &amp;&amp; !rolesDeseados().isEmpty()) {</span>
@@ -314,7 +314,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L314">                error(&quot;No se puede asignar un rol inactivo: &quot; + r.getNombre());</span>
 <span class="nc" id="L315">                return false;</span>
             }
-<span class="nc" id="L317">        }</span>
+        }
 <span class="nc" id="L318">        return true;</span>
     }
 
@@ -338,7 +338,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc" id="L338">            er.setObservaciones(&quot;&quot;);</span>
 <span class="nc" id="L339">            empleadoRolRepository.crear(er);</span>
 <span class="nc" id="L340">            asignacionesCreadas.add(er);</span>
-<span class="nc" id="L341">        }</span>
+        }
 <span class="nc" id="L342">    }</span>
 
     private void mostrar(Empleado e) {
@@ -351,7 +351,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 <span class="nc bnc" id="L351" title="All 2 branches missed.">            if (er.getIdRol() != null) {</span>
 <span class="nc" id="L352">                filas.add(new RolFila(er.getIdRol().getNombre(), true));</span>
             }
-<span class="nc" id="L354">        }</span>
+        }
 <span class="nc" id="L355">    }</span>
 
     private List&lt;EmpleadoRol&gt; asignacionesDe(Empleado e) {
@@ -377,12 +377,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
 
     private void info(String msg) {
 <span class="nc" id="L379">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L380">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L381">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L384">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L385">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L386">    }</span>
 
     public boolean isSoloLectura() {
@@ -407,10 +407,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.Rol;
     public List&lt;ColumnaTabla&gt; getColumnas() {
 <span class="nc bnc" id="L408" title="All 2 branches missed.">        if (columnas == null) {</span>
 <span class="nc" id="L409">            columnas = List.of(</span>
-                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombres&quot;),
-                    new ColumnaTabla(&quot;apellido&quot;, &quot;Apellidos&quot;),
-                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));
+<span class="nc" id="L410">                    new ColumnaTabla(&quot;nombre&quot;, &quot;Nombres&quot;),</span>
+<span class="nc" id="L411">                    new ColumnaTabla(&quot;apellido&quot;, &quot;Apellidos&quot;),</span>
+<span class="nc" id="L412">                    new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L413">                    new ColumnaTabla(&quot;comentarios&quot;, &quot;Comentarios&quot;));</span>
         }
 <span class="nc" id="L415">        return columnas;</span>
     }

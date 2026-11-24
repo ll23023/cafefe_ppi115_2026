@@ -32,30 +32,33 @@ public class EmpleadoRolRepository extends DefaultRepository&lt;EmpleadoRol, UUI
      * Asignaciones de rol que tiene un empleado.
      */
     public List&lt;EmpleadoRol&gt; findByEmpleado(UUID idEmpleado) {
-<span class="nc" id="L35">        return getEntityManager()</span>
-<span class="nc" id="L36">                .createQuery(&quot;SELECT er FROM EmpleadoRol er WHERE er.idEmpleado.idEmpleado = :id&quot;, EmpleadoRol.class)</span>
-<span class="nc" id="L37">                .setParameter(&quot;id&quot;, idEmpleado)</span>
-<span class="nc" id="L38">                .getResultList();</span>
+<span class="nc" id="L35">        requireArgument(idEmpleado, &quot;idEmpleado&quot;);</span>
+<span class="nc" id="L36">        return requireEntityManager()</span>
+<span class="nc" id="L37">                .createQuery(&quot;SELECT er FROM EmpleadoRol er WHERE er.idEmpleado.idEmpleado = :id&quot;, EmpleadoRol.class)</span>
+<span class="nc" id="L38">                .setParameter(&quot;id&quot;, idEmpleado)</span>
+<span class="nc" id="L39">                .getResultList();</span>
     }
 
     /**
      * Cantidad de facturas que referencian esta asignación.
      */
     public long countFacturas(UUID idEmpleadoRol) {
-<span class="nc" id="L45">        return getEntityManager()</span>
-<span class="nc" id="L46">                .createQuery(&quot;SELECT COUNT(f) FROM Factura f WHERE f.idEmpleadoRol.idEmpleadoRol = :id&quot;, Long.class)</span>
-<span class="nc" id="L47">                .setParameter(&quot;id&quot;, idEmpleadoRol)</span>
-<span class="nc" id="L48">                .getSingleResult();</span>
+<span class="nc" id="L46">        requireArgument(idEmpleadoRol, &quot;idEmpleadoRol&quot;);</span>
+<span class="nc" id="L47">        return requireEntityManager()</span>
+<span class="nc" id="L48">                .createQuery(&quot;SELECT COUNT(f) FROM Factura f WHERE f.idEmpleadoRol.idEmpleadoRol = :id&quot;, Long.class)</span>
+<span class="nc" id="L49">                .setParameter(&quot;id&quot;, idEmpleadoRol)</span>
+<span class="nc" id="L50">                .getSingleResult();</span>
     }
 
     /**
      * Cantidad de órdenes que referencian esta asignación.
      */
     public long countOrdenes(UUID idEmpleadoRol) {
-<span class="nc" id="L55">        return getEntityManager()</span>
-<span class="nc" id="L56">                .createQuery(&quot;SELECT COUNT(o) FROM Orden o WHERE o.idEmpleadoRol.idEmpleadoRol = :id&quot;, Long.class)</span>
-<span class="nc" id="L57">                .setParameter(&quot;id&quot;, idEmpleadoRol)</span>
-<span class="nc" id="L58">                .getSingleResult();</span>
+<span class="nc" id="L57">        requireArgument(idEmpleadoRol, &quot;idEmpleadoRol&quot;);</span>
+<span class="nc" id="L58">        return requireEntityManager()</span>
+<span class="nc" id="L59">                .createQuery(&quot;SELECT COUNT(o) FROM Orden o WHERE o.idEmpleadoRol.idEmpleadoRol = :id&quot;, Long.class)</span>
+<span class="nc" id="L60">                .setParameter(&quot;id&quot;, idEmpleadoRol)</span>
+<span class="nc" id="L61">                .getSingleResult();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

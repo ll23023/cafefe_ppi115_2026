@@ -24,7 +24,7 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
 
     protected abstract EntityManager getEntityManager();
 
-    protected final EntityManager requireEntityManager() {
+    protected EntityManager requireEntityManager() {
         EntityManager em = getEntityManager();
         if (em == null) {
             throw new IllegalStateException("El EntityManager no está disponible");
@@ -32,14 +32,14 @@ public abstract class DefaultRepository<T,ID> implements RepositoryInterface<T, 
         return em;
     }
 
-    protected final <V> V requireArgument(V argument, String name) {
+    protected <V> V requireArgument(V argument, String name) {
         if (argument == null) {
             throw new IllegalArgumentException(name + " no puede ser null");
         }
         return argument;
     }
 
-    protected final void requirePage(int first, int max) {
+    protected void requirePage(int first, int max) {
         if (first < 0) {
             throw new IllegalArgumentException("first no puede ser negativo");
         }

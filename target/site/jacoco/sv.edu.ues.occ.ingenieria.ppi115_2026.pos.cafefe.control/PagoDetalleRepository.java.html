@@ -32,22 +32,25 @@ public class PagoDetalleRepository extends DefaultRepository&lt;PagoDetalle, UUI
      * Detalles de un pago, paginados.
      */
     public List&lt;PagoDetalle&gt; findByPago(UUID idPago, int first, int max) {
-<span class="nc" id="L35">        return getEntityManager()</span>
-<span class="nc" id="L36">                .createQuery(&quot;SELECT d FROM PagoDetalle d WHERE d.idPago.idPago = :id&quot;, PagoDetalle.class)</span>
-<span class="nc" id="L37">                .setParameter(&quot;id&quot;, idPago)</span>
-<span class="nc" id="L38">                .setFirstResult(first)</span>
-<span class="nc" id="L39">                .setMaxResults(max)</span>
-<span class="nc" id="L40">                .getResultList();</span>
+<span class="nc" id="L35">        requireArgument(idPago, &quot;idPago&quot;);</span>
+<span class="nc" id="L36">        requirePage(first, max);</span>
+<span class="nc" id="L37">        return requireEntityManager()</span>
+<span class="nc" id="L38">                .createQuery(&quot;SELECT d FROM PagoDetalle d WHERE d.idPago.idPago = :id&quot;, PagoDetalle.class)</span>
+<span class="nc" id="L39">                .setParameter(&quot;id&quot;, idPago)</span>
+<span class="nc" id="L40">                .setFirstResult(first)</span>
+<span class="nc" id="L41">                .setMaxResults(max)</span>
+<span class="nc" id="L42">                .getResultList();</span>
     }
 
     /**
      * Cantidad de detalles de un pago.
      */
     public Long countByPago(UUID idPago) {
-<span class="nc" id="L47">        return getEntityManager()</span>
-<span class="nc" id="L48">                .createQuery(&quot;SELECT COUNT(d) FROM PagoDetalle d WHERE d.idPago.idPago = :id&quot;, Long.class)</span>
-<span class="nc" id="L49">                .setParameter(&quot;id&quot;, idPago)</span>
-<span class="nc" id="L50">                .getSingleResult();</span>
+<span class="nc" id="L49">        requireArgument(idPago, &quot;idPago&quot;);</span>
+<span class="nc" id="L50">        return requireEntityManager()</span>
+<span class="nc" id="L51">                .createQuery(&quot;SELECT COUNT(d) FROM PagoDetalle d WHERE d.idPago.idPago = :id&quot;, Long.class)</span>
+<span class="nc" id="L52">                .setParameter(&quot;id&quot;, idPago)</span>
+<span class="nc" id="L53">                .getSingleResult();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

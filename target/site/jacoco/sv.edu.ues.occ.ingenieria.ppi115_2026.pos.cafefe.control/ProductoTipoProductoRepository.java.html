@@ -29,9 +29,10 @@ public class ProductoTipoProductoRepository extends DefaultRepository&lt;Product
     }
 
     public List&lt;ProductoTipoProducto&gt; findByProducto(UUID idProducto) {
-<span class="nc" id="L32">        return em.createNamedQuery(&quot;ProductoTipoProducto.findByProducto&quot;, ProductoTipoProducto.class)</span>
-<span class="nc" id="L33">                .setParameter(&quot;idProducto&quot;, idProducto)</span>
-<span class="nc" id="L34">                .getResultList();</span>
+<span class="nc" id="L32">        requireArgument(idProducto, &quot;idProducto&quot;);</span>
+<span class="nc" id="L33">        return requireEntityManager().createNamedQuery(&quot;ProductoTipoProducto.findByProducto&quot;, ProductoTipoProducto.class)</span>
+<span class="nc" id="L34">                .setParameter(&quot;idProducto&quot;, idProducto)</span>
+<span class="nc" id="L35">                .getResultList();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

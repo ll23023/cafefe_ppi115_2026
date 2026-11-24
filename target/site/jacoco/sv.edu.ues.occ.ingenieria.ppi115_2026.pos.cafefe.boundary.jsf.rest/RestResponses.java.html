@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Respuestas HTTP comunes para los resources REST. El mensaje completo va en
- * el body; en el header va sin tildes porque los headers HTTP deben ser ASCII.
  *
  * @author mil
  */
@@ -18,35 +16,35 @@ public final class RestResponses {
     }
 
     public static Response conflicto(String mensaje) {
-<span class="nc" id="L21">        return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L22">                .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ascii(mensaje))</span>
-<span class="nc" id="L23">                .entity(Map.of(&quot;error&quot;, mensaje))</span>
-<span class="nc" id="L24">                .type(MediaType.APPLICATION_JSON)</span>
-<span class="nc" id="L25">                .build();</span>
+<span class="nc" id="L19">        return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L20">                .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), ascii(mensaje))</span>
+<span class="nc" id="L21">                .entity(Map.of(&quot;error&quot;, mensaje))</span>
+<span class="nc" id="L22">                .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L23">                .build();</span>
     }
 
     public static Response badRequest(String mensaje) {
-<span class="nc" id="L29">        return Response.status(Response.Status.BAD_REQUEST)</span>
-<span class="nc" id="L30">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), ascii(mensaje))</span>
-<span class="nc" id="L31">                .entity(Map.of(&quot;error&quot;, mensaje))</span>
-<span class="nc" id="L32">                .type(MediaType.APPLICATION_JSON)</span>
-<span class="nc" id="L33">                .build();</span>
+<span class="nc" id="L27">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L28">                .header(ResponseHeaders.WRONG_PARAMETER.toString(), ascii(mensaje))</span>
+<span class="nc" id="L29">                .entity(Map.of(&quot;error&quot;, mensaje))</span>
+<span class="nc" id="L30">                .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L31">                .build();</span>
     }
 
     public static Response notFound(UUID id) {
-<span class="nc" id="L37">        return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L38">                .header(ResponseHeaders.NOT_FOUND.toString(), &quot;id: &quot; + id)</span>
-<span class="nc" id="L39">                .build();</span>
+<span class="nc" id="L35">        return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L36">                .header(ResponseHeaders.NOT_FOUND.toString(), &quot;id: &quot; + id)</span>
+<span class="nc" id="L37">                .build();</span>
     }
 
     public static Response serverError(Exception ex) {
-<span class="nc" id="L43">        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L44">                .header(ResponseHeaders.PROCESS_ERROR.toString(), ascii(String.valueOf(ex.getMessage())))</span>
-<span class="nc" id="L45">                .build();</span>
+<span class="nc" id="L41">        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L42">                .header(ResponseHeaders.PROCESS_ERROR.toString(), ascii(String.valueOf(ex.getMessage())))</span>
+<span class="nc" id="L43">                .build();</span>
     }
 
     public static String ascii(String texto) {
-<span class="nc" id="L49">        return Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll(&quot;\\p{M}&quot;, &quot;&quot;);</span>
+<span class="nc" id="L47">        return Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll(&quot;\\p{M}&quot;, &quot;&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -43,9 +43,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L43">    private List&lt;Producto&gt; productosDelTipo = new ArrayList&lt;&gt;();</span>
 
 <span class="nc" id="L45">    private List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
-            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
-            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+<span class="nc" id="L46">            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),</span>
+<span class="nc" id="L47">            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L48">            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)</span>
     );
 
     @Override
@@ -110,7 +110,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
     public void cancelar() {
 <span class="nc bnc" id="L111" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
 <span class="nc" id="L112">            mostrar(seleccion);</span>
-        } else {
+<span class="nc" id="L113">        } else {</span>
 <span class="nc" id="L114">            limpiar();</span>
         }
 <span class="nc" id="L116">    }</span>
@@ -128,7 +128,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc bnc" id="L129" title="All 2 branches missed.">            if (cantidad &gt; 0) {</span>
 <span class="nc" id="L130">                error(&quot;No se puede eliminar \&quot;&quot; + t.getNombre() + &quot;\&quot;: tiene &quot;</span>
-                        + cantidad
+<span class="nc" id="L131">                        + cantidad</span>
 <span class="nc bnc" id="L132" title="All 2 branches missed.">                        + (cantidad == 1</span>
 <span class="nc" id="L133">                        ? &quot; producto asociado.&quot;</span>
 <span class="nc" id="L134">                        : &quot; productos asociados.&quot;)</span>
@@ -144,7 +144,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L144">        } catch (Exception ex) {</span>
 <span class="nc" id="L145">            LOG.log(Level.SEVERE, &quot;Error al eliminar tipo de producto&quot;, ex);</span>
 <span class="nc" id="L146">            error(&quot;No se pudo eliminar el tipo de producto: &quot; + ex.getMessage());</span>
-<span class="nc" id="L147">        }</span>
+        }
 <span class="nc" id="L148">    }</span>
 
     @Override
@@ -187,7 +187,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
         try {
 <span class="nc bnc" id="L188" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L189">                tipoProductoRepository.crear(registro);</span>
-            } else {
+<span class="nc" id="L190">            } else {</span>
 <span class="nc" id="L191">                tipoProductoRepository.modificar(registro);</span>
             }
 
@@ -203,7 +203,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L203" title="All 2 branches missed.">            if (guardado != null) {</span>
 <span class="nc" id="L204">                this.seleccion = guardado;</span>
 <span class="nc" id="L205">                mostrar(guardado);</span>
-            } else {
+<span class="nc" id="L206">            } else {</span>
 <span class="nc" id="L207">                limpiar();</span>
             }
 
@@ -213,10 +213,10 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
 <span class="nc" id="L214">        } catch (Exception ex) {</span>
 <span class="nc" id="L215">            LOG.log(Level.SEVERE,</span>
-                    &quot;Error al guardar tipo de producto&quot;, ex);
+<span class="nc" id="L216">                    &quot;Error al guardar tipo de producto&quot;, ex);</span>
 <span class="nc" id="L217">            error(&quot;No se pudo guardar el tipo de producto: &quot;</span>
 <span class="nc" id="L218">                    + ex.getMessage());</span>
-<span class="nc" id="L219">        }</span>
+        }
 <span class="nc" id="L220">    }</span>
 
     /**
@@ -241,8 +241,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc" id="L241">        List&lt;Producto&gt; lista = new ArrayList&lt;&gt;();</span>
 
 <span class="nc bnc" id="L243" title="All 2 branches missed.">        if (tipo == null</span>
-<span class="nc bnc" id="L244" title="All 4 branches missed.">                || tipo.getIdTipoProducto() == null</span>
-                || productoTipoProductoRepository == null) {
+<span class="nc bnc" id="L244" title="All 2 branches missed.">                || tipo.getIdTipoProducto() == null</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">                || productoTipoProductoRepository == null) {</span>
 <span class="nc" id="L246">            return lista;</span>
         }
 
@@ -252,8 +252,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 <span class="nc bnc" id="L252" title="All 2 branches missed.">                .filter(relacion -&gt; relacion != null</span>
 <span class="nc bnc" id="L253" title="All 2 branches missed.">                &amp;&amp; relacion.getIdTipoProducto() != null</span>
 <span class="nc bnc" id="L254" title="All 2 branches missed.">                &amp;&amp; relacion.getIdProducto() != null</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">                &amp;&amp; idTipo.equals(</span>
-<span class="nc" id="L256">                        relacion.getIdTipoProducto().getIdTipoProducto()))</span>
+<span class="nc" id="L255">                &amp;&amp; idTipo.equals(</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">                        relacion.getIdTipoProducto().getIdTipoProducto()))</span>
 <span class="nc" id="L257">                .map(ProductoTipoProducto::getIdProducto)</span>
 <span class="nc" id="L258">                .distinct()</span>
 <span class="nc" id="L259">                .sorted((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
@@ -270,7 +270,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
     private void refrescarProductos() {
 <span class="nc bnc" id="L271" title="All 2 branches missed.">        if (seleccion != null) {</span>
 <span class="nc" id="L272">            this.productosDelTipo = productosConTipo(seleccion);</span>
-        } else {
+<span class="nc" id="L273">        } else {</span>
 <span class="nc" id="L274">            this.productosDelTipo = new ArrayList&lt;&gt;();</span>
         }
 <span class="nc" id="L276">    }</span>
@@ -281,12 +281,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoProducto;
 
     private void info(String msg) {
 <span class="nc" id="L283">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L284">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L285">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L288">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L289">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L290">    }</span>
 
     public boolean isSoloLectura() {

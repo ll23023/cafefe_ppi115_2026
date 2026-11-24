@@ -26,5 +26,27 @@ public class OrdenRepository extends DefaultRepository&lt;Orden, UUID&gt; {
     public EntityManager getEntityManager() {
 <span class="nc" id="L27">        return em;</span>
     }
+
+    /**
+     * Cantidad de productos (orden_producto) que tiene la orden.
+     */
+    public long countOrdenProductos(UUID idOrden) {
+<span class="nc" id="L34">        requireArgument(idOrden, &quot;idOrden&quot;);</span>
+<span class="nc" id="L35">        return requireEntityManager()</span>
+<span class="nc" id="L36">                .createQuery(&quot;SELECT COUNT(op) FROM OrdenProducto op WHERE op.idOrden.idOrden = :id&quot;, Long.class)</span>
+<span class="nc" id="L37">                .setParameter(&quot;id&quot;, idOrden)</span>
+<span class="nc" id="L38">                .getSingleResult();</span>
+    }
+
+    /**
+     * Cantidad de líneas de factura que facturan productos de esta orden.
+     */
+    public long countLineasFacturadas(UUID idOrden) {
+<span class="nc" id="L45">        requireArgument(idOrden, &quot;idOrden&quot;);</span>
+<span class="nc" id="L46">        return requireEntityManager()</span>
+<span class="nc" id="L47">                .createQuery(&quot;SELECT COUNT(f) FROM FacturaOrdenProducto f WHERE f.idOrdenProducto.idOrden.idOrden = :id&quot;, Long.class)</span>
+<span class="nc" id="L48">                .setParameter(&quot;id&quot;, idOrden)</span>
+<span class="nc" id="L49">                .getSingleResult();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

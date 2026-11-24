@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositoryTest
--------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.009 s -- in sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.control.DefaultRepositoryTest

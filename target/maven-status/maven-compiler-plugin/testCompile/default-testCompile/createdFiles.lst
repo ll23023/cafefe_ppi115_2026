@@ -1,3 +1,4 @@
+sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/control/DefaultRepositoryTest$2.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/control/OrdenRepositoryTest.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/converter/ProductoConverterTest.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/converter/FacturaConverterTest.class
@@ -14,6 +15,7 @@ sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/converter/Empleado
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/RolModelTest.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/ColumnaTablaTest.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/entity/UUIDConverterTest.class
+sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/control/DefaultRepositoryTest$3.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/ColumnaTablaTest$Fila.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/control/PagoDetalleRepositoryTest.class
 sv/edu/ues/occ/ingenieria/ppi115_2026/pos/cafefe/boundary/jsf/DefaultModelTest.class

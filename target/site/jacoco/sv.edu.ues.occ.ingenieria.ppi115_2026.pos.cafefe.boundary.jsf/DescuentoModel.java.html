@@ -126,7 +126,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc bnc" id="L126" title="All 2 branches missed.">                            &amp;&amp; idDescuento.equals(dp.getIdDescuento().getIdDescuento())) {</span>
 <span class="nc" id="L127">                        lista.add(dp);</span>
                     }
-<span class="nc" id="L129">                }</span>
+                }
             }
 <span class="nc" id="L131">            lista.sort((a, b) -&gt; String.CASE_INSENSITIVE_ORDER.compare(</span>
 <span class="nc bnc" id="L132" title="All 4 branches missed.">                    a.getIdProducto() == null || a.getIdProducto().getNombre() == null ? &quot;&quot; : a.getIdProducto().getNombre(),</span>
@@ -153,7 +153,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc bnc" id="L153" title="All 4 branches missed.">            if (t.getIdTipoDescuento() != null &amp;&amp; id.equals(t.getIdTipoDescuento().toString())) {</span>
 <span class="nc" id="L154">                return t;</span>
             }
-<span class="nc" id="L156">        }</span>
+        }
 <span class="nc" id="L157">        return null;</span>
     }
 
@@ -203,7 +203,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc" id="L203">            LOG.log(Level.SEVERE, &quot;Error al eliminar descuento&quot;, ex);</span>
 <span class="nc" id="L204">            cargarRegistros();</span>
 <span class="nc" id="L205">            error(&quot;No se pudo eliminar el descuento. Verifique que no esté asignado a ningún producto.&quot;);</span>
-<span class="nc" id="L206">        }</span>
+        }
 <span class="nc" id="L207">    }</span>
 
     @Override
@@ -255,7 +255,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
         try {
 <span class="nc bnc" id="L256" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L257">                getRepository().crear(registro);</span>
-            } else {
+<span class="nc" id="L258">            } else {</span>
 <span class="nc" id="L259">                getRepository().modificar(registro);</span>
             }
 <span class="nc" id="L261">            UUID idGuardado = registro.getIdDescuento();</span>
@@ -267,7 +267,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 <span class="nc" id="L267">        } catch (Exception ex) {</span>
 <span class="nc" id="L268">            LOG.log(Level.SEVERE, &quot;Error al guardar descuento&quot;, ex);</span>
 <span class="nc" id="L269">            error(&quot;No se pudo guardar el descuento: &quot; + ex.getMessage());</span>
-<span class="nc" id="L270">        }</span>
+        }
 <span class="nc" id="L271">    }</span>
 
     public String fechaTexto(Object fecha) {
@@ -311,12 +311,12 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoDescuento;
 
     private void info(String msg) {
 <span class="nc" id="L313">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+<span class="nc" id="L314">                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));</span>
 <span class="nc" id="L315">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L318">        FacesContext.getCurrentInstance().addMessage(null,</span>
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+<span class="nc" id="L319">                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));</span>
 <span class="nc" id="L320">    }</span>
 
     public List&lt;TipoDescuento&gt; getTiposDescuento() {

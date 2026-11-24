@@ -49,13 +49,13 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc" id="L49">    private boolean soloLectura = false;</span>
 
 <span class="nc" id="L51">    private List&lt;Producto&gt; productosDeLaCaracteristica =</span>
-            new ArrayList&lt;&gt;();
+<span class="nc" id="L52">            new ArrayList&lt;&gt;();</span>
 
 <span class="nc" id="L54">    private final List&lt;ColumnaTabla&gt; columnas = Arrays.asList(</span>
-            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),
-            new ColumnaTabla(&quot;idTipoCaracteristica.nombre&quot;, &quot;Tipo&quot;),
-            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),
-            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)
+<span class="nc" id="L55">            new ColumnaTabla(&quot;nombre&quot;, &quot;Nombre&quot;),</span>
+<span class="nc" id="L56">            new ColumnaTabla(&quot;idTipoCaracteristica.nombre&quot;, &quot;Tipo&quot;),</span>
+<span class="nc" id="L57">            new ColumnaTabla(&quot;activo&quot;, &quot;Estado&quot;, FORMATO_COLUMNA.BOOLEAN),</span>
+<span class="nc" id="L58">            new ColumnaTabla(&quot;observaciones&quot;, &quot;Observaciones&quot;)</span>
     );
 
     @Override
@@ -153,7 +153,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
     public void cancelar() {
 <span class="nc bnc" id="L154" title="All 4 branches missed.">        if (estado == ESTADO_CRUD.MODIFICAR &amp;&amp; seleccion != null) {</span>
 <span class="nc" id="L155">            mostrar(seleccion);</span>
-        } else {
+<span class="nc" id="L156">        } else {</span>
 <span class="nc" id="L157">            limpiar();</span>
         }
 <span class="nc" id="L159">    }</span>
@@ -172,7 +172,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 
 <span class="nc bnc" id="L173" title="All 2 branches missed.">            if (cantidad &gt; 0) {</span>
 <span class="nc" id="L174">                error(&quot;No se puede eliminar \&quot;&quot; + c.getNombre()</span>
-                        + &quot;\&quot;: está asociada a &quot; + cantidad
+<span class="nc" id="L175">                        + &quot;\&quot;: está asociada a &quot; + cantidad</span>
 <span class="nc bnc" id="L176" title="All 2 branches missed.">                        + (cantidad == 1</span>
 <span class="nc" id="L177">                        ? &quot; producto.&quot;</span>
 <span class="nc" id="L178">                        : &quot; productos.&quot;)</span>
@@ -189,11 +189,11 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 
 <span class="nc" id="L190">        } catch (Exception ex) {</span>
 <span class="nc" id="L191">            LOG.log(Level.SEVERE,</span>
-                    &quot;Error al eliminar característica&quot;, ex);
+<span class="nc" id="L192">                    &quot;Error al eliminar característica&quot;, ex);</span>
 
 <span class="nc" id="L194">            error(&quot;No se pudo eliminar la característica: &quot;</span>
 <span class="nc" id="L195">                    + ex.getMessage());</span>
-<span class="nc" id="L196">        }</span>
+        }
 <span class="nc" id="L197">    }</span>
 
     @Override
@@ -216,8 +216,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc" id="L216">            return;</span>
         }
 
-<span class="nc bnc" id="L219" title="All 4 branches missed.">        if (isCreando() &amp;&amp; !Boolean.TRUE.equals(</span>
-<span class="nc" id="L220">                registro.getIdTipoCaracteristica().getActivo())) {</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if (isCreando() &amp;&amp; !Boolean.TRUE.equals(</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">                registro.getIdTipoCaracteristica().getActivo())) {</span>
 
 <span class="nc" id="L222">            error(&quot;No se puede asignar un tipo de característica inactivo.&quot;);</span>
 <span class="nc" id="L223">            return;</span>
@@ -234,7 +234,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 
 <span class="nc bnc" id="L235" title="All 2 branches missed.">        if (repetido) {</span>
 <span class="nc" id="L236">            error(&quot;Ya existe una característica llamada \&quot;&quot;</span>
-                    + nombre + &quot;\&quot;.&quot;);
+<span class="nc" id="L237">                    + nombre + &quot;\&quot;.&quot;);</span>
 <span class="nc" id="L238">            return;</span>
         }
 
@@ -251,7 +251,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
         try {
 <span class="nc bnc" id="L252" title="All 2 branches missed.">            if (esNuevo) {</span>
 <span class="nc" id="L253">                caracteristicaRepository.crear(registro);</span>
-            } else {
+<span class="nc" id="L254">            } else {</span>
 <span class="nc" id="L255">                caracteristicaRepository.modificar(registro);</span>
             }
 
@@ -267,7 +267,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc bnc" id="L267" title="All 2 branches missed.">            if (guardada != null) {</span>
 <span class="nc" id="L268">                this.seleccion = guardada;</span>
 <span class="nc" id="L269">                mostrar(guardada);</span>
-            } else {
+<span class="nc" id="L270">            } else {</span>
 <span class="nc" id="L271">                limpiar();</span>
             }
 
@@ -277,18 +277,18 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 
 <span class="nc" id="L278">        } catch (Exception ex) {</span>
 <span class="nc" id="L279">            LOG.log(Level.SEVERE,</span>
-                    &quot;Error al guardar característica&quot;, ex);
+<span class="nc" id="L280">                    &quot;Error al guardar característica&quot;, ex);</span>
 
 <span class="nc" id="L282">            error(&quot;No se pudo guardar la característica: &quot;</span>
 <span class="nc" id="L283">                    + ex.getMessage());</span>
-<span class="nc" id="L284">        }</span>
+        }
 <span class="nc" id="L285">    }</span>
 
     private void mostrar(Caracteristica c) {
-        Caracteristica fresca =
+<span class="nc" id="L288">        Caracteristica fresca =</span>
 <span class="nc bnc" id="L289" title="All 2 branches missed.">                c.getIdCaracteristica() == null</span>
 <span class="nc" id="L290">                ? null</span>
-                : caracteristicaRepository
+<span class="nc" id="L291">                : caracteristicaRepository</span>
 <span class="nc" id="L292">                        .findById(c.getIdCaracteristica());</span>
 
 <span class="nc bnc" id="L294" title="All 2 branches missed.">        this.registro = fresca != null ? fresca : c;</span>
@@ -304,8 +304,8 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc" id="L304">        List&lt;Producto&gt; lista = new ArrayList&lt;&gt;();</span>
 
 <span class="nc bnc" id="L306" title="All 2 branches missed.">        if (c == null</span>
-<span class="nc bnc" id="L307" title="All 4 branches missed.">                || c.getIdCaracteristica() == null</span>
-                || productoCaracteristicaRepository == null) {
+<span class="nc bnc" id="L307" title="All 2 branches missed.">                || c.getIdCaracteristica() == null</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">                || productoCaracteristicaRepository == null) {</span>
 <span class="nc" id="L309">            return lista;</span>
         }
 
@@ -316,9 +316,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc bnc" id="L316" title="All 2 branches missed.">                .filter(relacion -&gt; relacion != null</span>
 <span class="nc bnc" id="L317" title="All 2 branches missed.">                &amp;&amp; relacion.getIdCaracteristica() != null</span>
 <span class="nc bnc" id="L318" title="All 2 branches missed.">                &amp;&amp; relacion.getIdProducto() != null</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">                &amp;&amp; idCaracteristica.equals(</span>
+<span class="nc" id="L319">                &amp;&amp; idCaracteristica.equals(</span>
 <span class="nc" id="L320">                        relacion.getIdCaracteristica()</span>
-<span class="nc" id="L321">                                .getIdCaracteristica()))</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">                                .getIdCaracteristica()))</span>
 <span class="nc" id="L322">                .map(ProductoCaracteristica::getIdProducto)</span>
 <span class="nc" id="L323">                .distinct()</span>
 <span class="nc" id="L324">                .sorted((a, b) -&gt;</span>
@@ -338,9 +338,9 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 <span class="nc bnc" id="L338" title="All 2 branches missed.">        if (seleccion != null) {</span>
 <span class="nc" id="L339">            this.productosDeLaCaracteristica =</span>
 <span class="nc" id="L340">                    productosDeLaCaracteristica(seleccion);</span>
-        } else {
+<span class="nc" id="L341">        } else {</span>
 <span class="nc" id="L342">            this.productosDeLaCaracteristica =</span>
-                    new ArrayList&lt;&gt;();
+<span class="nc" id="L343">                    new ArrayList&lt;&gt;();</span>
         }
 <span class="nc" id="L345">    }</span>
 
@@ -352,20 +352,20 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.TipoCaracteristic
 
     private void info(String msg) {
 <span class="nc" id="L354">        FacesContext.getCurrentInstance().addMessage(</span>
-                null,
-                new FacesMessage(
-                        FacesMessage.SEVERITY_INFO,
-                        msg,
-                        null));
+<span class="nc" id="L355">                null,</span>
+<span class="nc" id="L356">                new FacesMessage(</span>
+<span class="nc" id="L357">                        FacesMessage.SEVERITY_INFO,</span>
+<span class="nc" id="L358">                        msg,</span>
+<span class="nc" id="L359">                        null));</span>
 <span class="nc" id="L360">    }</span>
 
     private void error(String msg) {
 <span class="nc" id="L363">        FacesContext.getCurrentInstance().addMessage(</span>
-                null,
-                new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR,
-                        msg,
-                        null));
+<span class="nc" id="L364">                null,</span>
+<span class="nc" id="L365">                new FacesMessage(</span>
+<span class="nc" id="L366">                        FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L367">                        msg,</span>
+<span class="nc" id="L368">                        null));</span>
 <span class="nc" id="L369">    }</span>
 
     public boolean isSoloLectura() {

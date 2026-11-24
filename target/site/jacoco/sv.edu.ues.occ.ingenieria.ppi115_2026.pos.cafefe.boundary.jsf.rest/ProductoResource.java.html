@@ -176,13 +176,13 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.*;
 
             //Revisar asociaciones que impiden borrar ANTES de borrar nada
 <span class="nc" id="L178">            Long totalOrdenes = em.createQuery(</span>
-                    &quot;SELECT COUNT(op) FROM OrdenProducto op WHERE op.idProducto = :p&quot;, Long.class)
+<span class="nc" id="L179">                    &quot;SELECT COUNT(op) FROM OrdenProducto op WHERE op.idProducto = :p&quot;, Long.class)</span>
 <span class="nc" id="L180">                    .setParameter(&quot;p&quot;, encontrado)</span>
 <span class="nc" id="L181">                    .getSingleResult();</span>
 
 <span class="nc bnc" id="L183" title="All 2 branches missed.">            if (totalOrdenes &gt; 0) {</span>
 <span class="nc" id="L184">                String motivo = &quot;No se pudo eliminar el producto '&quot; + encontrado.getNombre()</span>
-                        + &quot;' porque está asociado a &quot; + totalOrdenes + &quot; orden(es).&quot;;
+<span class="nc" id="L185">                        + &quot;' porque está asociado a &quot; + totalOrdenes + &quot; orden(es).&quot;;</span>
 <span class="nc" id="L186">                return Response.status(Response.Status.CONFLICT)</span>
 <span class="nc" id="L187">                        .header(ResponseHeaders.VIOLATES_BUSINESS_RULES.toString(), motivo)</span>
 <span class="nc" id="L188">                        .entity(&quot;{\&quot;error\&quot;:\&quot;&quot; + motivo + &quot;\&quot;}&quot;)</span>
@@ -244,7 +244,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.*;
 <span class="nc" id="L244">            pc.setIdCaracteristica(carac);</span>
 <span class="nc" id="L245">            pc.setValor(dto.valor);</span>
 <span class="nc" id="L246">            productoCaracteristicaRepository.crear(pc);</span>
-<span class="nc" id="L247">        }</span>
+        }
 <span class="nc" id="L248">    }</span>
 
     private void procesarTiposProducto(Producto producto, List&lt;String&gt; tiposNombres) {
@@ -266,7 +266,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.*;
 <span class="nc" id="L266">            ptp.setIdProducto(producto);</span>
 <span class="nc" id="L267">            ptp.setIdTipoProducto(tipo);</span>
 <span class="nc" id="L268">            productoTipoProductoRepository.crear(ptp);</span>
-<span class="nc" id="L269">        }</span>
+        }
 <span class="nc" id="L270">    }</span>
 
     private void procesarDescuentos(Producto producto, List&lt;ProductoRequest.DescuentoDto&gt; dtos) {
@@ -309,7 +309,7 @@ import sv.edu.ues.occ.ingenieria.ppi115_2026.pos.cafefe.entity.*;
 <span class="nc" id="L309">            dp.setFechaDesde(dto.fechaDesde);</span>
 <span class="nc" id="L310">            dp.setFechaHasta(dto.fechaHasta);</span>
 <span class="nc" id="L311">            descuentoProductoRepository.crear(dp);</span>
-<span class="nc" id="L312">        }</span>
+        }
 <span class="nc" id="L313">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
